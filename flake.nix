@@ -1,5 +1,5 @@
 {
-  description = "ft_transcendence's standard django flake (website service)";
+  description = "ft_transcendence"; 
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
