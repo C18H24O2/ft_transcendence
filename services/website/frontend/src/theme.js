@@ -46,4 +46,5 @@ function toggleTheme() {
     updateTheme();
 }
 
+window.getTheme = getTheme;
 window.toggleTheme = toggleTheme;
