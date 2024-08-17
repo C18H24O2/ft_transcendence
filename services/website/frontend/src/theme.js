@@ -13,7 +13,7 @@ const themes = [
 
 document.addEventListener('DOMContentLoaded', updateTheme);
 
-function getTheme() {
+export function getTheme() {
     return localStorage.getItem('theme') || defaultTheme;
 }
 
@@ -30,7 +30,7 @@ function updateTheme() {
         }
     };
 
-    console.log('Loading theme', theme);
+    // console.log('Loading theme', theme);
     document.body.classList.add(`theme-${theme}`);
 }
 
@@ -46,5 +46,4 @@ function toggleTheme() {
     updateTheme();
 }
 
-window.getTheme = getTheme;
 window.toggleTheme = toggleTheme;
