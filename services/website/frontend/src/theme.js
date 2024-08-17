@@ -13,6 +13,10 @@ const themes = [
 
 document.addEventListener('DOMContentLoaded', updateTheme);
 
+function getTheme() {
+    return localStorage.getItem('theme') || defaultTheme;
+}
+
 function updateTheme() {
     let theme = localStorage.getItem('theme');
     if (!theme) {
@@ -31,8 +35,7 @@ function updateTheme() {
 }
 
 function toggleTheme() {
-    const theme = localStorage.getItem('theme') || defaultTheme;
-
+    const theme = getTheme(); 
     const index = themes.indexOf(theme);
     if (index === -1) {
         return; // Theme not found
