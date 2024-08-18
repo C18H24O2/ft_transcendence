@@ -44,7 +44,7 @@ class Player {
 function renderField2d(ballList, playerList)
 {
 	var colors = flavors[getTheme().split('-').pop()].colors;
-	ctx.fillStyle = colors.overlay0.hex;
+	ctx.fillStyle = colors.surface2.hex;
 	
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ballList.forEach(ball => {
