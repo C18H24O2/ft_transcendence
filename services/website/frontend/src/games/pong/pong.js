@@ -1,6 +1,6 @@
 import '../../shared.js';
 import { getTheme } from '../../theme.js';
-import { flavors, flavorEntries } from '@catppuccin/palette';
+import { flavors } from '@catppuccin/palette';
 
 var canvas = document.getElementById('gameField')
 /** @type {CanvasRenderingContext2D} */
@@ -14,19 +14,63 @@ var paddleWidth = paddleHeight / 9;
 var ballSize = canvas.height / 50 * 1.5;
 var ballDisplace = ballSize / 2;
 
-function renderField2d(ballX, ballY, p1, p2)
+document.addEventListener('DOMContentLoaded', init);
+
+//Going for an oop approach, not too sure of how it works in js yet
+
+class Ball { 
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+	}
+	draw() {
+		ctx.fillRect(this.x - ballDisplace, this.y - ballDisplace , ballSize, ballSize);
+	}
+}
+
+class Player {
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+	}
+	draw() {
+		ctx.fillRect(this.x - paddleWidth / 2, this.y - paddleHeight / 2, paddleWidth, paddleHeight);
+	}
+
+}
+
+//this makes it easier to scale more than 2 players if we do it
+
+function renderField2d(ballList, playerList)
 {
-	ballX = (typeof ballX === undefined) ? middleX : ballX;
-	ballY = (typeof ballY === undefined) ? middleY : ballY;
-	
-	p1 = (typeof p1 === undefined) ? middleY : p1;
-	p2 = (typeof p2 === undefined) ? middleY : p2;
 	var colors = flavors[getTheme().split('-').pop()].colors;
 	ctx.fillStyle = colors.overlay0.hex;
 	
-	ctx.fillRect(0, p1 - paddleHeight / 2, paddleWidth, paddleHeight);
-	ctx.fillRect(canvas.width - paddleWidth, p2 - paddleHeight / 2, paddleWidth, paddleHeight);
-	ctx.fillRect(ballX - ballDisplace, ballY - ballDisplace , ballSize, ballSize);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ballList.forEach(ball => {
+		ball.draw();
+	});
+	playerList.forEach(player => {
+		player.draw();
+	})
 }
 
-window.render = renderField2d;
+//I have no clue on how I'm going to get controls to work but hey now it renders something at least
+
+function gameLoop(players, balls)
+{
+	renderField2d(balls, players);
+	requestAnimationFrame(() => gameLoop(players, balls));
+}
+
+function init(){
+	const players = [
+		new Player(paddleWidth / 2, middleY),
+		new Player(canvas.width - paddleWidth / 2, middleY),
+	]
+
+	const balls = [
+		new Ball(middleX, middleY)
+	]
+	gameLoop(players, balls);
+}
