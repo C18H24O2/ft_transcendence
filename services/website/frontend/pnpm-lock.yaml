@@ -11,6 +11,9 @@ importers:
       '@fontsource-variable/urbanist':
         specifier: ^5.0.21
         version: 5.0.21
+      earcut:
+        specifier: ^3.0.0
+        version: 3.0.0
       feather-icons:
         specifier: ^4.29.2
         version: 4.29.2
@@ -530,6 +533,9 @@ packages:
 
   dot-case@3.0.4:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
+
+  earcut@3.0.0:
+    resolution: {integrity: sha512-41Fs7Q/PLq1SDbqjsgcY7GA42T0jvaCNGXgGtsNdvg+Yv8eIu06bxv4/PoREkZ9nMDNwnUSG9OFB9+yv8eKhDg==}
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -1418,6 +1424,8 @@ snapshots:
     dependencies:
       no-case: 3.0.4
       tslib: 2.6.3
+
+  earcut@3.0.0: {}
 
   eastasianwidth@0.2.0: {}
 
