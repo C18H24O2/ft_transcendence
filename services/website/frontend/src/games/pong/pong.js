@@ -38,10 +38,9 @@ class Polygon {
 		for (var i = 1; i < this.verticeList.length; i++) {
 			ctx.lineTo(this.verticeList[i][0], this.verticeList[i][1]);
 		}
-		ctx.fill();
 		ctx.closePath();
 		ctx.stroke();
-
+		ctx.fill();
 	}
 }
 
@@ -95,7 +94,7 @@ function boundingBox(vertList)
 	return { minX, minY, maxX, maxY };
 }
 
-function BoundingBoxCollide(bBoxA, bBoxB)
+function boundingBoxCollide(bBoxA, bBoxB)
 {
 	var A_Left_B = bBoxA.maxX < bBoxB.minX;
 	var A_Right_B = bBoxA.minX > bBox.maxX;
