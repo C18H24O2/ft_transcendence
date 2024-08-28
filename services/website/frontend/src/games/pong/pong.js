@@ -40,42 +40,89 @@ class Polygon {
 		}
 		ctx.closePath();
 		ctx.stroke();
-		ctx.fill();
+		ctx.fill('evenodd');
+	}
+	//Xmove an Ymove correspond to the amount in each direction to move
+	//eg: [-1, +2] moves all the vertices 1 left and 2 down
+	moveVertices(Xmove, Ymove){
+		this.verticeList.forEach(vertice => {
+			vertice[0] += Xmove;
+			vertice[1] += Ymove;
+		});
+	}
+
+	//rotates all the vertices from a given pivot point. takes value in degrees
+	rotateVertices(angle, pivotX, pivotY) {
+		angle = angle * (Math.PI / 180);
+		
+		var cos = Math.cos(angle);
+		var sin = Math.sin(angle);
+		this.verticeList = this.verticeList.map(([x, y]) => {
+			var dx = x - pivotX;
+			var dy = y - pivotY;
+
+			return ([pivotX + (dx * cos - dy * sin), pivotY + (dx * sin + dy * cos)]);
+		})
 	}
 }
 
 //some default shapes to make my life easier (maybe)
 
 class ShapeMaker {
-	static makeTriangle(pointA, pointB, pointC) {}
-	static makeRectangle(x, y ,width, height) {
+	static makeRectangle(x, y, width, height) {
 		return new Polygon([[x, y],[x + width, y],[x + width, y + height],[x, y + height]]);
 	}
-	static makePolygon(x, y, radius, vertNum) {}
-	static makePolygon(vertList) {}
+	
+	static makeRectangle_mid(x, y ,width, height) {
+
+		return new Polygon([[x - width / 2, y - height / 2],[x + width / 2, y - height / 2],[x + width / 2, y + height / 2],[x - width / 2, y + height / 2]]);
+	}
+	static makePolygon(x, y, radius, vertNum) {
+
+	}
+	static makeShape(verticeList) {
+		return new Polygon(verticeList);
+	}
 }
 
-class Ball { 
-	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-		this.shape = ShapeMaker.makeRectangle(this.x - ballDisplace, this.y - ballDisplace, ballSize, ballSize);
+class GameObject {
+	constructor(x, y, shapeList) {
+		this.x = x || 0;
+		this.y = y || 0;
+		this.shapes = shapeList || [];
 	}
+
+	//renders all shapes in the object
 	draw() {
-		this.shape.render();
+		this.shapes.forEach(shape => {
+			shape.render();
+		});
+	}
+	//moves all the shapes in the object by Xmove & Ymove, eg: move(-50, +25) moves the object 50 to the left and 25 down
+	move(Xmove, Ymove) {
+		this.shapes.forEach( shape => {
+			shape.moveVertices(Xmove, Ymove);
+		})
+	}
+	//rotates all the shapes in the object, takes value in degrees
+	rotate(angle) {
+		this.shapes.forEach( shape => {
+			shape.rotateVertices(angle, this.x, this.y);
+		})
 	}
 }
 
-class Player {
-	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-		this.shape = ShapeMaker.makeRectangle(this.x - paddleWidth / 2, this.y - paddleHeight / 2, paddleWidth, paddleHeight);
+class Ball extends GameObject {
+	constructor(x, y, shapeList) {
+		super(x, y, shapeList);
 	}
-	draw() {
-		this.shape.render();
-	}
+}
 
+class Player extends GameObject {
+
+	constructor(x, y, shapeList) {
+		super(x, y, shapeList);
+	}
 }
 
 //start for what should be an SAT collision detection system
@@ -140,12 +187,13 @@ function gameLoop(players, balls)
 
 function init(){
 	const players = [
-		new Player(paddleWidth / 2, middleY),
-		new Player(canvas.width - paddleWidth / 2, middleY),
+		new Player(paddleWidth / 2, middleY, [ShapeMaker.makeRectangle_mid(paddleWidth / 2, middleY, paddleWidth, paddleHeight)]),
+		new Player(canvas.width - paddleWidth / 2, middleY, [ShapeMaker.makeRectangle_mid(canvas.width - paddleWidth / 2, middleY, paddleWidth, paddleHeight)]),
 	]
 
 	const balls = [
-		new Ball(middleX, middleY)
+		new Ball(middleX, middleY, [ShapeMaker.makeRectangle_mid(middleX, middleY, ballSize, ballSize)])
 	]
+	balls[0].rotate(45);
 	gameLoop(players, balls);
 }
