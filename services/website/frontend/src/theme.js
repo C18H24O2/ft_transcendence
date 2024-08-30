@@ -3,6 +3,7 @@ const defaultDark = 'catppuccin-mocha';
 
 // Check user system preference 
 const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? defaultDark : defaultLight;
+const themeKey = 'ft.theme';
 
 const themes = [
     'catppuccin-latte',
@@ -14,13 +15,13 @@ const themes = [
 document.addEventListener('DOMContentLoaded', updateTheme);
 
 export function getTheme() {
-    return localStorage.getItem('theme') || defaultTheme;
+    return localStorage.getItem(themeKey) || defaultTheme;
 }
 
-function updateTheme() {
-    let theme = localStorage.getItem('theme');
+export function updateTheme() {
+    let theme = localStorage.getItem(themeKey);
     if (!theme) {
-        localStorage.setItem('theme', defaultTheme);
+        localStorage.setItem(themeKey, defaultTheme);
         theme = defaultTheme;
     }
 
@@ -34,15 +35,15 @@ function updateTheme() {
     document.body.classList.add(`theme-${theme}`);
 }
 
-function toggleTheme() {
+export function toggleTheme() {
     const theme = getTheme(); 
     const index = themes.indexOf(theme);
     if (index === -1) {
-        return; // Theme not found
+		theme = defaultTheme;
     }
 
     const nextIndex = (index + 1) % themes.length;
-    localStorage.setItem('theme', themes[nextIndex]);
+    localStorage.setItem(themeKey, themes[nextIndex]);
     updateTheme();
 }
 
