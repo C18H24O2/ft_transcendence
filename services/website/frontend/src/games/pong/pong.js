@@ -15,8 +15,6 @@ var paddleWidth = paddleHeight / 9;
 var ballSize = canvas.height / 50 * 1.25;
 var ballDisplace = ballSize / 2;
 
-document.addEventListener('DOMContentLoaded', init);
-
 //Going for an oop approach, not too sure of how it works in js yet 
 
 function removeDuplicatePoints(a) {
@@ -26,19 +24,32 @@ function removeDuplicatePoints(a) {
     });
 }
 
+function generateTriangles(instructions, verticeList)
+{
+	var triangleList = [];
+	
+	for (var i = 0; i < instructions.length; i++)
+	{
+		triangleList[i] = verticeList[instructions[i]];
+	}
+	return (triangleList);
+}
+
 class Polygon {
 	constructor(verticeList, holeIndice) {
 		removeDuplicatePoints(verticeList);
 		this.verticeList = verticeList;
-		this.instructions = earcut(verticeList.flat(), holeIndice, 2);
-	}
-	getVertices() { return this.verticeList}
+		this.instructions = earcut(verticeList.flat(), holeIndice, 2)
+		this.trianglesList = generateTriangles(this.instructions, this.verticeList);
+		}
+	get vertices() { return this.verticeList }
+	get triangles() { return this.trianglesList }
 	render() {
-		for (var i = 0; i < this.instructions.length; i += 3) {
+		for (var i = 0; i < this.trianglesList.length; i += 3) {
 			ctx.beginPath();
-			ctx.moveTo(this.verticeList[this.instructions[i]][0], this.verticeList[this.instructions[i]][1]);
-			ctx.lineTo(this.verticeList[this.instructions[i + 1]][0], this.verticeList[this.instructions[i + 1]][1]);
-			ctx.lineTo(this.verticeList[this.instructions[i + 2]][0], this.verticeList[this.instructions[i + 2]][1]);
+			ctx.moveTo(this.trianglesList[i][0], this.trianglesList[i][1]);
+			ctx.lineTo(this.trianglesList[i + 1][0], this.trianglesList[i + 1][1]);
+			ctx.lineTo(this.trianglesList[i + 2][0], this.trianglesList[i + 2][1]);
 			ctx.closePath();
 			ctx.stroke();
 			ctx.fill('evenodd');
@@ -47,9 +58,9 @@ class Polygon {
 	//Xmove an Ymove correspond to the amount in each direction to move
 	//eg: [-1, +2] moves all the vertices 1 left and 2 down
 	moveVertices(Xmove, Ymove){
-		this.verticeList.forEach(vertice => {
-			vertice[0] += Xmove;
-			vertice[1] += Ymove;
+		console.log(Xmove, Ymove);
+		this.trianglesList = this.trianglesList.map(([x, y]) => {
+			return ([x + Xmove, y + Ymove]);
 		});
 	}
 
@@ -59,7 +70,7 @@ class Polygon {
 		
 		var cos = Math.cos(angle);
 		var sin = Math.sin(angle);
-		this.verticeList = this.verticeList.map(([x, y]) => {
+		this.trianglesList = this.trianglesList.map(([x, y]) => {
 			var dx = x - pivotX;
 			var dy = y - pivotY;
 
@@ -105,6 +116,8 @@ class GameObject {
 		this.shapes.forEach( shape => {
 			shape.moveVertices(Xmove, Ymove);
 		})
+		this.x += Xmove;
+		this.y += Ymove;
 	}
 	//rotates all the shapes in the object, takes value in degrees
 	rotate(angle) {
@@ -157,9 +170,9 @@ function checkCollision(PolygonA, PolygonB)
 
 	if (!boundingBoxCollide(boundingBox(PolygonA), boundingBox(PolygonB)))
 		return false;
-	var trianglesA = earcut(PolygonA.getVertices);
-
-	
+	var trianglesA =  PolygonA.triangles;
+	var trianglesB = PolygonB.triangles;
+	//WIP
 }
 
 //this makes it easier to scale more than 2 players if we do it
@@ -174,9 +187,8 @@ function renderField2d()
 	canvas.objects.forEach(object => {
 		object.draw();
 	})
+	return (true);
 }
-
-//I have no clue on how I'm going to get controls to work but hey now it renders something at least
 
 var playerMove = [
 	false,
@@ -185,12 +197,18 @@ var playerMove = [
 	false
 ]
 
-function gameLoop()
+var lastRender = performance.now();
+
+function gameLoop(timestamp)
 {
+	var deltaT = timestamp - lastRender;
+	movePlayers(deltaT);
 	renderField2d();
-	movePlayers();
-	requestAnimationFrame(() => gameLoop());
+	lastRender = timestamp;
+	requestAnimationFrame(gameLoop);
 }
+
+document.addEventListener('DOMContentLoaded', init);
 
 function init(){
 	const objects = [
@@ -201,21 +219,22 @@ function init(){
 	canvas.objects = objects;
 	document.addEventListener('keydown', keyDown, false);
 	document.addEventListener('keyup', keyUp, false);
-	gameLoop();
+	requestAnimationFrame(gameLoop)
 }
 
-var PlayerSpeed = 10
+var PlayerSpeed = 4; //subject to change
 
-function movePlayers()
+//a simple movemement for now, it shouldn't be dependent on framerate
+function movePlayers(deltaT)
 {
-	if (playerMove[0])
-		canvas.objects[0].move(0, PlayerSpeed);
-	if (playerMove[1])
-		canvas.objects[0].move(0, -PlayerSpeed);
-	if (playerMove[2])
-		canvas.objects[1].move(0, PlayerSpeed);
-	if (playerMove[3])
-		canvas.objects[1].move(0, -PlayerSpeed);
+	if (playerMove[0] && canvas.objects[0].y < canvas.height - paddleHeight / 2)
+		canvas.objects[0].move(0, PlayerSpeed * deltaT / 2);
+	if (playerMove[1] && canvas.objects[0].y > paddleHeight / 2)
+		canvas.objects[0].move(0, -PlayerSpeed * deltaT / 2);
+	if (playerMove[2] && canvas.objects[1].y < canvas.height - paddleHeight / 2)
+		canvas.objects[1].move(0, PlayerSpeed * deltaT / 2);
+	if (playerMove[3] && canvas.objects[1].y > paddleHeight / 2)
+		canvas.objects[1].move(0, -PlayerSpeed * deltaT / 2);
 }
 
 function keyUp(event)
