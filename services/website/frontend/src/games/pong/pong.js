@@ -35,7 +35,6 @@ class Polygon {
 	getVertices() { return this.verticeList}
 	render() {
 		for (var i = 0; i < this.instructions.length; i += 3) {
-			console.log(i);
 			ctx.beginPath();
 			ctx.moveTo(this.verticeList[this.instructions[i]][0], this.verticeList[this.instructions[i]][1]);
 			ctx.lineTo(this.verticeList[this.instructions[i + 1]][0], this.verticeList[this.instructions[i + 1]][1]);
@@ -165,38 +164,94 @@ function checkCollision(PolygonA, PolygonB)
 
 //this makes it easier to scale more than 2 players if we do it
 
-function renderField2d(ballList, playerList)
+function renderField2d()
 {
 	var colors = flavors[getTheme().split('-').pop()].colors;
 	ctx.fillStyle = colors.surface2.hex;
 	ctx.strokeStyle = colors.surface2.hex;
 	
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ballList.forEach(ball => {
-		ball.draw();
-	});
-	playerList.forEach(player => {
-		player.draw();
+	canvas.objects.forEach(object => {
+		object.draw();
 	})
 }
 
 //I have no clue on how I'm going to get controls to work but hey now it renders something at least
 
-function gameLoop(players, balls)
+var playerMove = [
+	false,
+	false,
+	false,
+	false
+]
+
+function gameLoop()
 {
-	renderField2d(balls, players);
-	requestAnimationFrame(() => gameLoop(players, balls));
+	renderField2d();
+	movePlayers();
+	requestAnimationFrame(() => gameLoop());
 }
 
 function init(){
-	const players = [
+	const objects = [
 		new Player(paddleWidth / 2, middleY, [ShapeMaker.makeRectangle_mid(paddleWidth / 2, middleY, paddleWidth, paddleHeight)]),
 		new Player(canvas.width - paddleWidth / 2, middleY, [ShapeMaker.makeRectangle_mid(canvas.width - paddleWidth / 2, middleY, paddleWidth, paddleHeight)]),
-	]
-
-	const balls = [
 		new Ball(middleX, middleY, [ShapeMaker.makeRectangle_mid(middleX, middleY, ballSize, ballSize)])
 	]
-	balls[0].rotate(45);
-	gameLoop(players, balls);
+	canvas.objects = objects;
+	document.addEventListener('keydown', keyDown, false);
+	document.addEventListener('keyup', keyUp, false);
+	gameLoop();
+}
+
+var PlayerSpeed = 10
+
+function movePlayers()
+{
+	if (playerMove[0])
+		canvas.objects[0].move(0, PlayerSpeed);
+	if (playerMove[1])
+		canvas.objects[0].move(0, -PlayerSpeed);
+	if (playerMove[2])
+		canvas.objects[1].move(0, PlayerSpeed);
+	if (playerMove[3])
+		canvas.objects[1].move(0, -PlayerSpeed);
+}
+
+function keyUp(event)
+{
+	switch (event.keyCode)
+	{
+		case 83:
+			playerMove[0] = false;
+			break;
+		case 87:
+			playerMove[1] = false;
+			break;
+		case 40:
+			playerMove[2] = false;
+			break;
+		case 38:
+			playerMove[3] = false;
+			break;
+	}
+}
+
+function keyDown(event)
+{
+	switch (event.keyCode)
+	{
+		case 83:
+			playerMove[0] = true;
+			break;
+		case 87:
+			playerMove[1] = true;
+			break;
+		case 40:
+			playerMove[2] = true;
+			break;
+		case 38:
+			playerMove[3] = true;
+			break;
+	}
 }
