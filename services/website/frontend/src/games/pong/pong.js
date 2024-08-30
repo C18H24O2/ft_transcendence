@@ -27,21 +27,24 @@ function removeDuplicatePoints(a) {
 }
 
 class Polygon {
-	constructor(verticeList) {
+	constructor(verticeList, holeIndice) {
 		removeDuplicatePoints(verticeList);
 		this.verticeList = verticeList;
+		this.instructions = earcut(verticeList.flat(), holeIndice, 2);
 	}
 	getVertices() { return this.verticeList}
 	render() {
-		ctx.beginPath();
-		ctx.moveTo(this.verticeList[0][0], this.verticeList[0][1]);
-		for (var i = 1; i < this.verticeList.length; i++) {
-			ctx.lineTo(this.verticeList[i][0], this.verticeList[i][1]);
+		for (var i = 0; i < this.instructions.length; i += 3) {
+			console.log(i);
+			ctx.beginPath();
+			ctx.moveTo(this.verticeList[this.instructions[i]][0], this.verticeList[this.instructions[i]][1]);
+			ctx.lineTo(this.verticeList[this.instructions[i + 1]][0], this.verticeList[this.instructions[i + 1]][1]);
+			ctx.lineTo(this.verticeList[this.instructions[i + 2]][0], this.verticeList[this.instructions[i + 2]][1]);
+			ctx.closePath();
+			ctx.stroke();
+			ctx.fill('evenodd');
 		}
-		ctx.closePath();
-		ctx.stroke();
-		ctx.fill('evenodd');
-	}
+	};
 	//Xmove an Ymove correspond to the amount in each direction to move
 	//eg: [-1, +2] moves all the vertices 1 left and 2 down
 	moveVertices(Xmove, Ymove){
