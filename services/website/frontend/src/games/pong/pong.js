@@ -12,8 +12,7 @@ var middleX = canvas.width / 2;
 var middleY = canvas.height / 2;
 var paddleHeight = canvas.height / 5;
 var paddleWidth = paddleHeight / 9;
-var ballSize = canvas.height / 50 * 1.25;
-var ballDisplace = ballSize / 2;
+var ballSize = canvas.height / 50;
 
 //Going for an oop approach, not too sure of how it works in js yet 
 
@@ -37,19 +36,17 @@ function generateTriangles(instructions, verticeList)
 
 class Polygon {
 	constructor(verticeList, holeIndice) {
-		removeDuplicatePoints(verticeList);
 		this.verticeList = verticeList;
+		this.holeIndice = holeIndice;
 		this.instructions = earcut(verticeList.flat(), holeIndice, 2)
-		this.trianglesList = generateTriangles(this.instructions, this.verticeList);
 		}
 	get vertices() { return this.verticeList }
-	get triangles() { return this.trianglesList }
 	render() {
-		for (var i = 0; i < this.trianglesList.length; i += 3) {
+		for (var i = 0; i < this.instructions.length; i += 3) {
 			ctx.beginPath();
-			ctx.moveTo(this.trianglesList[i][0], this.trianglesList[i][1]);
-			ctx.lineTo(this.trianglesList[i + 1][0], this.trianglesList[i + 1][1]);
-			ctx.lineTo(this.trianglesList[i + 2][0], this.trianglesList[i + 2][1]);
+			ctx.moveTo(this.verticeList[this.instructions[i]][0], this.verticeList[this.instructions[i]][1]);
+			ctx.lineTo(this.verticeList[this.instructions[i + 1]][0], this.verticeList[this.instructions[i + 1]][1]);
+			ctx.lineTo(this.verticeList[this.instructions[i + 2]][0], this.verticeList[this.instructions[i + 2]][1]);
 			ctx.closePath();
 			ctx.stroke();
 			ctx.fill('evenodd');
@@ -58,8 +55,7 @@ class Polygon {
 	//Xmove an Ymove correspond to the amount in each direction to move
 	//eg: [-1, +2] moves all the vertices 1 left and 2 down
 	moveVertices(Xmove, Ymove){
-		console.log(Xmove, Ymove);
-		this.trianglesList = this.trianglesList.map(([x, y]) => {
+		this.verticeList = this.verticeList.map(([x, y]) => {
 			return ([x + Xmove, y + Ymove]);
 		});
 	}
@@ -70,7 +66,7 @@ class Polygon {
 		
 		var cos = Math.cos(angle);
 		var sin = Math.sin(angle);
-		this.trianglesList = this.trianglesList.map(([x, y]) => {
+		this.verticeList = this.verticeList.map(([x, y]) => {
 			var dx = x - pivotX;
 			var dy = y - pivotY;
 
@@ -172,6 +168,8 @@ function checkCollision(PolygonA, PolygonB)
 		return false;
 	var trianglesA =  PolygonA.triangles;
 	var trianglesB = PolygonB.triangles;
+
+
 	//WIP
 }
 
@@ -222,19 +220,19 @@ function init(){
 	requestAnimationFrame(gameLoop)
 }
 
-var PlayerSpeed = 4; //subject to change
+var PlayerSpeed = 15; //subject to change
 
 //a simple movemement for now, it shouldn't be dependent on framerate
 function movePlayers(deltaT)
 {
 	if (playerMove[0] && canvas.objects[0].y < canvas.height - paddleHeight / 2)
-		canvas.objects[0].move(0, PlayerSpeed * deltaT / 2);
+		canvas.objects[0].move(0, PlayerSpeed * deltaT / 10);
 	if (playerMove[1] && canvas.objects[0].y > paddleHeight / 2)
-		canvas.objects[0].move(0, -PlayerSpeed * deltaT / 2);
+		canvas.objects[0].move(0, -PlayerSpeed * deltaT / 10);
 	if (playerMove[2] && canvas.objects[1].y < canvas.height - paddleHeight / 2)
-		canvas.objects[1].move(0, PlayerSpeed * deltaT / 2);
+		canvas.objects[1].move(0, PlayerSpeed * deltaT / 10);
 	if (playerMove[3] && canvas.objects[1].y > paddleHeight / 2)
-		canvas.objects[1].move(0, -PlayerSpeed * deltaT / 2);
+		canvas.objects[1].move(0, -PlayerSpeed * deltaT / 10);
 }
 
 function keyUp(event)
