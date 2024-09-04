@@ -178,8 +178,8 @@ function checkCollision(PolygonA, PolygonB)
 function renderField2d()
 {
 	var colors = flavors[getTheme().split('-').pop()].colors;
-	ctx.fillStyle = colors.surface2.hex;
-	ctx.strokeStyle = colors.surface2.hex;
+	ctx.fillStyle = colors.text.hex;
+	ctx.strokeStyle = colors.text.hex;
 	
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	canvas.objects.forEach(object => {

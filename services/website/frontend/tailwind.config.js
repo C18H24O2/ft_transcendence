@@ -13,6 +13,9 @@ module.exports = {
         title: ['Urbanist Variable', ...require('tailwindcss/defaultTheme.js').fontFamily.sans],
       },
     },
+	colors: {
+
+	}
   },
   plugins: [
     require('@tailwindcss/typography'),
