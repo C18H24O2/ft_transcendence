@@ -155,7 +155,7 @@ function boundingBox(vertList)
 function boundingBoxCollide(bBoxA, bBoxB)
 {
 	var A_Left_B = bBoxA.maxX < bBoxB.minX;
-	var A_Right_B = bBoxA.minX > bBox.maxX;
+	var A_Right_B = bBoxA.minX > bBoxB.maxX;
 	var A_Above_B = bBoxA.maxY < bBoxB.minY;
 	var A_Below_B = bBoxA.minY > bBoxB.maxY;
 	return !(A_Left_B || A_Right_B || A_Above_B || A_Below_B);
@@ -201,12 +201,15 @@ function gameLoop(timestamp)
 {
 	var deltaT = timestamp - lastRender;
 	movePlayers(deltaT);
+	moveBall(deltaT);
 	renderField2d();
 	lastRender = timestamp;
 	requestAnimationFrame(gameLoop);
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+var ballDirection = 1;
 
 function init(){
 	const objects = [
@@ -218,6 +221,50 @@ function init(){
 	document.addEventListener('keydown', keyDown, false);
 	document.addEventListener('keyup', keyUp, false);
 	requestAnimationFrame(gameLoop)
+}
+
+function ballCollide(ballDirection)
+{
+	var ball = boundingBox(canvas.objects[2].shapes[0].vertices);
+
+	var playerPaddle;
+
+	if (ballDirection === 0) {
+		playerPaddle = boundingBox(canvas.objects[0].shapes[0].vertices);
+	} else {
+		playerPaddle = boundingBox(canvas.objects[1].shapes[0].vertices);
+	}
+
+	if (boundingBoxCollide(ball, playerPaddle))
+		return (true);
+	return (false);
+}
+
+var ballSpeed = 3;
+
+
+function moveBall(deltaT)
+{
+	var ball = canvas.objects[2];
+
+	console.log(ballSpeed);
+	if (ballDirection == 0) {
+		ball.move(-5 * ballSpeed * deltaT / 10, 0);
+		if (ballCollide(ballDirection))
+		{
+			ballDirection = 1;
+			if (ballSpeed < 10)
+				ballSpeed += 0.1;
+		}
+	} else {
+		ball.move(5 * ballSpeed * deltaT / 10, 0);
+		if (ballCollide(ballDirection))
+		{
+			ballDirection = 0;
+			if (ballSpeed < 10)
+				ballSpeed += 0.1;
+		}
+	}
 }
 
 var PlayerSpeed = 15; //subject to change
