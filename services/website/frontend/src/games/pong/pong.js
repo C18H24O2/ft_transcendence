@@ -239,7 +239,7 @@ function ballCollide()
 	var playerPaddleBox;
 	var playerPaddle;
 
-	if (ballDirection < 0) {
+	if (ballSpeedX < 0) {
 		playerPaddleBox = boundingBox(canvas.objects[0].shapes[0].vertices);
 		playerPaddle = canvas.objects[0];
 	} else {
@@ -249,20 +249,25 @@ function ballCollide()
 
 	if (boundingBoxCollide(ballBox, playerPaddleBox))
 	{
-		var relPos = (ball.y - playerPaddle.y) / (paddleHeight / 2);
-		var angle = relPos * 60;
-		var speed = Math.sqrt(ballSpeedX**2 + ballSpeedY**2);
-		ballSpeedX = speed * Math.cos(angle);
+		var relBallY = ball.y - (playerPaddle.y - (paddleHeight / 2));
+
+		var nrmlrelBallY = relBallY / paddleHeight;
+
+		ballSpeedX = -ballSpeedX;
+
+		var maxAngle = Math.PI / 1.5;
+		var angle = nrmlrelBallY * maxAngle - (maxAngle / 2);
+		var speed = Math.sqrt(ballSpeedX ** 2 + ballSpeedY ** 2);
+		ballSpeedX = speed * Math.cos(angle) * Math.sign(ballSpeedX);
 		ballSpeedY = speed * Math.sin(angle);
-		if (ballSpeedX < 0)
+		if (speedMult < 5)
 		{
-			ballSpeedX *= -1;
+			speedMult += 0.1;
 		}
-		ballDirection *= -1;
 	}
 	if (ball.y - ballSize / 2 <= 0 || ball.y + ballSize / 2 >= canvas.height)
 	{
-		ballDirectionY *= -1;
+		ballSpeedY *= -1;
 	}
 	return (false);
 }
@@ -274,39 +279,68 @@ function checkGoal()
 	var ball = canvas.objects[2];
 	if (ball.x < 0 || ball.x > canvas.width)
 	{
-		score += 1;
-		ball.setPos(middleX, middleY);
 		ballSpeedY = 0;
 		ballSpeedX = 4;
+		speedMult = 1;
+		score += 1;
+		ball.setPos(middleX, middleY);
+		canvas.objects[0].setPos(canvas.objects[0].x, middleY);
+		canvas.objects[1].setPos(canvas.objects[1].x, middleY);
 	}
 }
 
 var ballSpeedX = 4;
 var ballSpeedY = 0;
-var ballDirection = 1;
-var ballDirectionY = 1;
+var speedMult = 1;
 
 function moveBall(deltaT)
 {
 	var ball = canvas.objects[2];
 
-	ball.move(ballDirection * ballSpeedX * deltaT / 5, ballSpeedY * ballDirectionY);
+	ball.move(speedMult * ballSpeedX * deltaT / 5, speedMult * ballSpeedY * deltaT / 5);
 	ballCollide();
 }
 
-var PlayerSpeed = 16; //subject to change
+var PlayerSpeed = 20; //subject to change
 
 //a simple movemement for now, it shouldn't be dependent on framerate
 function movePlayers(deltaT)
 {
-	if (playerMove[0] && canvas.objects[0].y < canvas.height - paddleHeight / 2)
+	var topLimit = paddleHeight / 2;
+	var botLimit = canvas.height - paddleHeight / 2;
+
+	if (playerMove[0] && canvas.objects[0].y < botLimit)
+	{
 		canvas.objects[0].move(0, PlayerSpeed * deltaT / 10);
-	if (playerMove[1] && canvas.objects[0].y > paddleHeight / 2)
+		if (canvas.objects[0].y > botLimit)
+		{
+			canvas.objects[0].setPos(canvas.objects[0].x, botLimit);
+		}
+	}
+	if (playerMove[1] && canvas.objects[0].y > topLimit)
+	{
 		canvas.objects[0].move(0, -PlayerSpeed * deltaT / 10);
-	if (playerMove[2] && canvas.objects[1].y < canvas.height - paddleHeight / 2)
+		if (canvas.objects[0].y < topLimit)
+		{
+			canvas.objects[0].setPos(canvas.objects[0].x, topLimit);
+		}
+	}
+	if (playerMove[2] && canvas.objects[1].y < botLimit)
+	{
 		canvas.objects[1].move(0, PlayerSpeed * deltaT / 10);
-	if (playerMove[3] && canvas.objects[1].y > paddleHeight / 2)
+		if (canvas.objects[1].y > botLimit)
+		{
+			canvas.objects[1].setPos(canvas.objects[1].x, botLimit);
+		}
+	}
+	if (playerMove[3] && canvas.objects[1].y > topLimit)
+	{
 		canvas.objects[1].move(0, -PlayerSpeed * deltaT / 10);
+		if (canvas.objects[1].y < topLimit)
+		{
+			canvas.objects[1].setPos(canvas.objects[1].x, topLimit);
+		}
+	}
 }
 
 function keyUp(event)
