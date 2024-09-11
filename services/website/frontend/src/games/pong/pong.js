@@ -121,6 +121,13 @@ class GameObject {
 			shape.rotateVertices(angle, this.x, this.y);
 		})
 	}
+
+	setPos(newX, newY)
+	{
+		var Xmove = this.x - newX;
+		var Ymove = this.y - newY;
+		this.move(-Xmove, -Ymove);
+	}
 }
 
 class Ball extends GameObject {
@@ -202,6 +209,7 @@ function gameLoop(timestamp)
 	var deltaT = timestamp - lastRender;
 	movePlayers(deltaT);
 	moveBall(deltaT);
+	checkGoal();
 	renderField2d();
 	lastRender = timestamp;
 	requestAnimationFrame(gameLoop);
@@ -223,51 +231,70 @@ function init(){
 	requestAnimationFrame(gameLoop)
 }
 
-function ballCollide(ballDirection)
+function ballCollide()
 {
-	var ball = boundingBox(canvas.objects[2].shapes[0].vertices);
+	var ballBox = boundingBox(canvas.objects[2].shapes[0].vertices);
+	var ball = canvas.objects[2];
 
+	var playerPaddleBox;
 	var playerPaddle;
 
-	if (ballDirection === 0) {
-		playerPaddle = boundingBox(canvas.objects[0].shapes[0].vertices);
+	if (ballDirection < 0) {
+		playerPaddleBox = boundingBox(canvas.objects[0].shapes[0].vertices);
+		playerPaddle = canvas.objects[0];
 	} else {
-		playerPaddle = boundingBox(canvas.objects[1].shapes[0].vertices);
+		playerPaddleBox = boundingBox(canvas.objects[1].shapes[0].vertices);
+		playerPaddle = canvas.objects[1];
 	}
 
-	if (boundingBoxCollide(ball, playerPaddle))
-		return (true);
+	if (boundingBoxCollide(ballBox, playerPaddleBox))
+	{
+		var relPos = (ball.y - playerPaddle.y) / (paddleHeight / 2);
+		var angle = relPos * 60;
+		var speed = Math.sqrt(ballSpeedX**2 + ballSpeedY**2);
+		ballSpeedX = speed * Math.cos(angle);
+		ballSpeedY = speed * Math.sin(angle);
+		if (ballSpeedX < 0)
+		{
+			ballSpeedX *= -1;
+		}
+		ballDirection *= -1;
+	}
+	if (ball.y - ballSize / 2 <= 0 || ball.y + ballSize / 2 >= canvas.height)
+	{
+		ballDirectionY *= -1;
+	}
 	return (false);
 }
 
-var ballSpeed = 3;
+var score = 0;
 
+function checkGoal()
+{
+	var ball = canvas.objects[2];
+	if (ball.x < 0 || ball.x > canvas.width)
+	{
+		score += 1;
+		ball.setPos(middleX, middleY);
+		ballSpeedY = 0;
+		ballSpeedX = 4;
+	}
+}
+
+var ballSpeedX = 4;
+var ballSpeedY = 0;
+var ballDirection = 1;
+var ballDirectionY = 1;
 
 function moveBall(deltaT)
 {
 	var ball = canvas.objects[2];
 
-	console.log(ballSpeed);
-	if (ballDirection == 0) {
-		ball.move(-5 * ballSpeed * deltaT / 10, 0);
-		if (ballCollide(ballDirection))
-		{
-			ballDirection = 1;
-			if (ballSpeed < 10)
-				ballSpeed += 0.1;
-		}
-	} else {
-		ball.move(5 * ballSpeed * deltaT / 10, 0);
-		if (ballCollide(ballDirection))
-		{
-			ballDirection = 0;
-			if (ballSpeed < 10)
-				ballSpeed += 0.1;
-		}
-	}
+	ball.move(ballDirection * ballSpeedX * deltaT / 5, ballSpeedY * ballDirectionY);
+	ballCollide();
 }
 
-var PlayerSpeed = 15; //subject to change
+var PlayerSpeed = 16; //subject to change
 
 //a simple movemement for now, it shouldn't be dependent on framerate
 function movePlayers(deltaT)
