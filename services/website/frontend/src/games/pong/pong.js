@@ -3,9 +3,12 @@ import { getTheme } from '../../theme.js';
 import { flavors } from '@catppuccin/palette';
 import earcut from 'earcut';
 
-var canvas = document.getElementById('gameField')
+var canvas = document.getElementById('gameField');
 /** @type {CanvasRenderingContext2D} */
 var ctx = canvas.getContext('2d');
+
+var scoreP1 = document.getElementById('score-player');
+var scoreP2 = document.getElementById('score-opponent');
 
 // some constants for the elements rendering
 var middleX = canvas.width / 2;
@@ -272,17 +275,28 @@ function ballCollide()
 	return (false);
 }
 
-var score = 0;
+var score1 = 0;
+var score2 = 0;
 
 function checkGoal()
 {
 	var ball = canvas.objects[2];
 	if (ball.x < 0 || ball.x > canvas.width)
 	{
+		if (ball.x < 0)
+		{
+			score2 += 1;
+			scoreP2.textContent = String(score2).padStart(3, '0');
+			
+		}
+		if (ball.x > canvas.width)
+		{
+			score1 += 1;
+			scoreP1.textContent = String(score1).padStart(3, '0');
+		}
 		ballSpeedY = 0;
 		ballSpeedX = 4;
 		speedMult = 1;
-		score += 1;
 		ball.setPos(middleX, middleY);
 		canvas.objects[0].setPos(canvas.objects[0].x, middleY);
 		canvas.objects[1].setPos(canvas.objects[1].x, middleY);
