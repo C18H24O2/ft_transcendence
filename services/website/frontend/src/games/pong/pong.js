@@ -3,19 +3,19 @@ import { getTheme } from '../../theme.js';
 import { flavors } from '@catppuccin/palette';
 import earcut from 'earcut';
 
-var canvas = document.getElementById('gameField');
+let canvas = document.getElementById('gameField');
 /** @type {CanvasRenderingContext2D} */
-var ctx = canvas.getContext('2d');
+let ctx = canvas.getContext('2d');
 
-var scoreP1 = document.getElementById('score-player');
-var scoreP2 = document.getElementById('score-opponent');
+let scoreP1 = document.getElementById('score-player');
+let scoreP2 = document.getElementById('score-opponent');
 
 // some constants for the elements rendering
-var middleX = canvas.width / 2;
-var middleY = canvas.height / 2;
-var paddleHeight = canvas.height / 5;
-var paddleWidth = paddleHeight / 9;
-var ballSize = canvas.height / 50;
+let middleX = canvas.width / 2;
+let middleY = canvas.height / 2;
+let paddleHeight = canvas.height / 5;
+let paddleWidth = paddleHeight / 9;
+let ballSize = canvas.height / 50;
 
 //Going for an oop approach, not too sure of how it works in js yet
 
@@ -27,7 +27,7 @@ class Polygon {
 		}
 	get vertices() { return this.verticeList }
 	render() {
-		for (var i = 0; i < this.instructions.length; i += 3) {
+		for (let i = 0; i < this.instructions.length; i += 3) {
 			ctx.beginPath();
 			ctx.moveTo(this.verticeList[this.instructions[i]][0], this.verticeList[this.instructions[i]][1]);
 			ctx.lineTo(this.verticeList[this.instructions[i + 1]][0], this.verticeList[this.instructions[i + 1]][1]);
@@ -49,11 +49,11 @@ class Polygon {
 	rotateVertices(angle, pivotX, pivotY) {
 		angle = angle * (Math.PI / 180);
 		
-		var cos = Math.cos(angle);
-		var sin = Math.sin(angle);
+		let cos = Math.cos(angle);
+		let sin = Math.sin(angle);
 		this.verticeList = this.verticeList.map(([x, y]) => {
-			var dx = x - pivotX;
-			var dy = y - pivotY;
+			let dx = x - pivotX;
+			let dy = y - pivotY;
 
 			return ([pivotX + (dx * cos - dy * sin), pivotY + (dx * sin + dy * cos)]);
 		})
@@ -109,8 +109,8 @@ class GameObject {
 
 	setPos(newX, newY)
 	{
-		var Xmove = this.x - newX;
-		var Ymove = this.y - newY;
+		let Xmove = this.x - newX;
+		let Ymove = this.y - newY;
 		this.move(-Xmove, -Ymove);
 	}
 }
@@ -132,8 +132,8 @@ class Player extends GameObject {
 
 function boundingBox(vertList)
 {
-	var minX = Infinity, minY = Infinity;
-	var maxX = -Infinity, maxY = -Infinity;
+	let minX = Infinity, minY = Infinity;
+	let maxX = -Infinity, maxY = -Infinity;
 
 	vertList.forEach(([x, y]) => {
 		if (x < minX) minX = x;
@@ -146,68 +146,78 @@ function boundingBox(vertList)
 
 function boundingBoxCollide(bBoxA, bBoxB)
 {
-	var A_Left_B = bBoxA.maxX < bBoxB.minX;
-	var A_Right_B = bBoxA.minX > bBoxB.maxX;
-	var A_Above_B = bBoxA.maxY < bBoxB.minY;
-	var A_Below_B = bBoxA.minY > bBoxB.maxY;
+	let A_Left_B = bBoxA.maxX < bBoxB.minX;
+	let A_Right_B = bBoxA.minX > bBoxB.maxX;
+	let A_Above_B = bBoxA.maxY < bBoxB.minY;
+	let A_Below_B = bBoxA.minY > bBoxB.maxY;
 	return !(A_Left_B || A_Right_B || A_Above_B || A_Below_B);
-}
-
-function checkCollision(PolygonA, PolygonB)
-{
-
-	if (!boundingBoxCollide(boundingBox(PolygonA), boundingBox(PolygonB)))
-		return false;
-	var trianglesA =  PolygonA.triangles;
-	var trianglesB = PolygonB.triangles;
-
-
-	//WIP
 }
 
 //this makes it easier to scale more than 2 players if we do it
 
 function renderField2d()
 {
-	var colors = flavors[getTheme().split('-').pop()].colors;
+	let colors = flavors[getTheme().split('-').pop()].colors;
+	ctx.fillStyle = colors.mantle.hex;
+	ctx.strokeStyle = colors.mantle.hex;
+	
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = colors.text.hex;
 	ctx.strokeStyle = colors.text.hex;
-	
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	canvas.objects.forEach(object => {
 		object.draw();
 	})
 	return (true);
 }
 
-var playerMove = [
+let playerMove = [
 	false,
 	false,
 	false,
 	false
 ]
 
-var lastRender = performance.now();
+let lastRender = performance.now();
 
 // info needed to update in remote multiplayer: y player 1; y player 2; ball(x, y); ball velocity (x, y)
 // coordinates vary between 0, 2048
 // speed varies between ~ -25 to +25
 // serializing for performance ? caca
 
+//will have to find how to syncronise, but its a start
+function serverUpdate(p1y, p2y, ballX, ballY, speedX, speedY)
+{
+	let player1 = canvas.objects[0];
+	let player2 = canvas.objects[1];
+	let ball = canvas.objects[2];
+
+	player1.setPos(player1.x, p1y);
+	player2.setPos(player2.x, p2y);
+	ball.setPos(ballX, ballY);
+	ballSpeedX = speedX;
+	ballSpeedY = speedY;
+}
+
 function gameLoop(timestamp)
 {
-	var deltaT = timestamp - lastRender;
-	movePlayers(deltaT); //change for remote
-	moveBall(deltaT); //keep for remote to keep somewhat smooth game
-	checkGoal(); //change for remote to simply delete the ball when a goal is detected?
-	renderField2d(); //keep for remote
+	let deltaT = timestamp - lastRender;
+	if (pauseVal)
+	{
+		movePlayers(deltaT); //change for remote
+		moveBall(deltaT); //keep for remote to keep somewhat smooth game
+		checkGoal(); //change for remote to simply delete the ball when a goal is detected?
+		renderField2d(); //keep for remote
+	}
+	else
+	{
+		renderField2d();
+		renderPauseMenu();
+	}
 	lastRender = timestamp;
 	requestAnimationFrame(gameLoop);
 }
 
 document.addEventListener('DOMContentLoaded', init);
-
-var ballDirection = 1;
 
 function init(){
 	const objects = [
@@ -219,15 +229,48 @@ function init(){
 	document.addEventListener('keydown', keyDown, false);
 	document.addEventListener('keyup', keyUp, false);
 	requestAnimationFrame(gameLoop)
+
+	window.onblur = pause;
+}
+
+let pauseVal = true;
+
+function renderPauseMenu()
+{
+	let colors = flavors[getTheme().split('-').pop()].colors;
+	ctx.fillStyle = colors.mantle.hex;
+	ctx.strokeStyle = colors.mantle.hex;
+
+	ctx.globalAlpha = 0.81;
+	ctx.beginPath();
+	//ctx.roundRect(middleX - (canvas.width / 4), middleY - (canvas.height / 6), canvas.width / 2, canvas.height / 3, canvas.width / 50);
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.stroke();
+	ctx.fill();
+	ctx.globalAlpha = 1;
+	ctx.font = "70px Serif";
+	ctx.fillStyle = colors.text.hex;
+	ctx.strokeStyle = colors.text.hex;
+	ctx.textAlign = "center";
+	ctx.textBaseline = "bottom";
+	ctx.fillText("The game is paused.", middleX, middleY, (canvas.width / 2));
+	ctx.textBaseline = "top";
+	ctx.fillText("Press Space to resume", middleX, middleY, (canvas.width / 2));
+}
+
+function pause()
+{
+	pauseVal = false;
+	renderPauseMenu();
 }
 
 function ballCollide()
 {
-	var ballBox = boundingBox(canvas.objects[2].shapes[0].vertices);
-	var ball = canvas.objects[2];
+	let ballBox = boundingBox(canvas.objects[2].shapes[0].vertices);
+	let ball = canvas.objects[2];
 
-	var playerPaddleBox;
-	var playerPaddle;
+	let playerPaddleBox;
+	let playerPaddle;
 
 	if (ballSpeedX < 0) {
 		playerPaddleBox = boundingBox(canvas.objects[0].shapes[0].vertices);
@@ -239,20 +282,28 @@ function ballCollide()
 
 	if (boundingBoxCollide(ballBox, playerPaddleBox))
 	{
-		var relBallY = ball.y - (playerPaddle.y - (paddleHeight / 2));
+		if (ball.x <= middleX)
+		{
+			ball.setPos(paddleWidth + ballSize / 2, ball.y);
+		}
+		else
+		{
+			ball.setPos(canvas.width - (paddleWidth + ballSize / 2), ball.y);
+		}
+		let relBallY = ball.y - (playerPaddle.y - (paddleHeight / 2));
 
-		var nrmlrelBallY = relBallY / paddleHeight;
+		let nrmlrelBallY = relBallY / paddleHeight;
 
 		ballSpeedX = -ballSpeedX;
 
-		var maxAngle = Math.PI / 1.5;
-		var angle = nrmlrelBallY * maxAngle - (maxAngle / 2);
-		var speed = Math.sqrt(ballSpeedX ** 2 + ballSpeedY ** 2);
+		let maxAngle = Math.PI / 1.5;
+		let angle = nrmlrelBallY * maxAngle - (maxAngle / 2);
+		let speed = Math.sqrt(ballSpeedX ** 2 + ballSpeedY ** 2);
 		ballSpeedX = speed * Math.cos(angle) * Math.sign(ballSpeedX);
 		ballSpeedY = speed * Math.sin(angle);
-		if (speedMult < 5)
+		if (speedMult < 3.5)
 		{
-			speedMult += 0.1;
+			speedMult += 0.5;
 		}
 	}
 	if (ball.y - ballSize / 2 <= 0 || ball.y + ballSize / 2 >= canvas.height)
@@ -262,12 +313,12 @@ function ballCollide()
 	return (false);
 }
 
-var score1 = 0;
-var score2 = 0;
+let score1 = 0;
+let score2 = 0;
 
 function checkGoal()
 {
-	var ball = canvas.objects[2];
+	let ball = canvas.objects[2];
 	if (ball.x < 0 || ball.x > canvas.width)
 	{
 		if (ball.x < 0)
@@ -290,31 +341,29 @@ function checkGoal()
 	}
 }
 
-var ballSpeedX = 4;
-var ballSpeedY = 0;
-var speedMult = 1;
+let ballSpeedX = 4;
+let ballSpeedY = 0;
+let speedMult = 1;
 
 function moveBall(deltaT)
 {
-	var ball = canvas.objects[2];
-
-	console.log("speed X = " + String(speedMult * ballSpeedX));
-	console.log("speed Y = " + String(speedMult * ballSpeedY));
+	let ball = canvas.objects[2];
 	ball.move(speedMult * ballSpeedX * deltaT / 5, speedMult * ballSpeedY * deltaT / 5);
 	ballCollide();
 }
 
-var PlayerSpeed = 20; //subject to change
+let PlayerSpeed = 22; //subject to change
 
 //a simple movemement for now, it shouldn't be dependent on framerate, should be changed quite a bit for remote
 function movePlayers(deltaT)
 {
-	var topLimit = paddleHeight / 2;
-	var botLimit = canvas.height - paddleHeight / 2;
+	let topLimit = paddleHeight / 2;
+	let botLimit = canvas.height - paddleHeight / 2;
+	let pSpeed = PlayerSpeed * (deltaT / 10);
 
 	if (playerMove[0] && canvas.objects[0].y < botLimit)
 	{
-		canvas.objects[0].move(0, PlayerSpeed * deltaT / 10);
+		canvas.objects[0].move(0, pSpeed);
 		if (canvas.objects[0].y > botLimit)
 		{
 			canvas.objects[0].setPos(canvas.objects[0].x, botLimit);
@@ -322,7 +371,7 @@ function movePlayers(deltaT)
 	}
 	if (playerMove[1] && canvas.objects[0].y > topLimit)
 	{
-		canvas.objects[0].move(0, -PlayerSpeed * deltaT / 10);
+		canvas.objects[0].move(0, -pSpeed);
 		if (canvas.objects[0].y < topLimit)
 		{
 			canvas.objects[0].setPos(canvas.objects[0].x, topLimit);
@@ -330,7 +379,7 @@ function movePlayers(deltaT)
 	}
 	if (playerMove[2] && canvas.objects[1].y < botLimit)
 	{
-		canvas.objects[1].move(0, PlayerSpeed * deltaT / 10);
+		canvas.objects[1].move(0, pSpeed);
 		if (canvas.objects[1].y > botLimit)
 		{
 			canvas.objects[1].setPos(canvas.objects[1].x, botLimit);
@@ -338,7 +387,7 @@ function movePlayers(deltaT)
 	}
 	if (playerMove[3] && canvas.objects[1].y > topLimit)
 	{
-		canvas.objects[1].move(0, -PlayerSpeed * deltaT / 10);
+		canvas.objects[1].move(0, -pSpeed);
 		if (canvas.objects[1].y < topLimit)
 		{
 			canvas.objects[1].setPos(canvas.objects[1].x, topLimit);
@@ -381,5 +430,10 @@ function keyDown(event)
 		case 38:
 			playerMove[3] = true;
 			break;
+		case 32:
+			if (pauseVal)
+				renderPauseMenu();
+			pauseVal = !pauseVal;
+			return ;
 	}
 }

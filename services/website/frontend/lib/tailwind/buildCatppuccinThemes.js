@@ -24,7 +24,9 @@ module.exports = function buildCatppuccinThemes(prefix) {
   
     const themes = {};
     flavorEntries.forEach(([_, flavor]) => {
-      themes[prefix + flavor.name.toLowerCase()] = {
+	  let name = prefix + flavor.name.toLowerCase();
+	  name = name.replace('é', 'e');
+      themes[name] = {
         ...mapColors(flavor.colorEntries),
       };
     });
