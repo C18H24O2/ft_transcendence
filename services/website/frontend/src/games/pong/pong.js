@@ -17,25 +17,7 @@ var paddleHeight = canvas.height / 5;
 var paddleWidth = paddleHeight / 9;
 var ballSize = canvas.height / 50;
 
-//Going for an oop approach, not too sure of how it works in js yet 
-
-function removeDuplicatePoints(a) {
-    var seen = {};
-    return a.filter(function(item) {
-        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
-    });
-}
-
-function generateTriangles(instructions, verticeList)
-{
-	var triangleList = [];
-	
-	for (var i = 0; i < instructions.length; i++)
-	{
-		triangleList[i] = verticeList[instructions[i]];
-	}
-	return (triangleList);
-}
+//Going for an oop approach, not too sure of how it works in js yet
 
 class Polygon {
 	constructor(verticeList, holeIndice) {
@@ -207,13 +189,18 @@ var playerMove = [
 
 var lastRender = performance.now();
 
+// info needed to update in remote multiplayer: y player 1; y player 2; ball(x, y); ball velocity (x, y)
+// coordinates vary between 0, 2048
+// speed varies between ~ -25 to +25
+// serializing for performance ? caca
+
 function gameLoop(timestamp)
 {
 	var deltaT = timestamp - lastRender;
-	movePlayers(deltaT);
-	moveBall(deltaT);
-	checkGoal();
-	renderField2d();
+	movePlayers(deltaT); //change for remote
+	moveBall(deltaT); //keep for remote to keep somewhat smooth game
+	checkGoal(); //change for remote to simply delete the ball when a goal is detected?
+	renderField2d(); //keep for remote
 	lastRender = timestamp;
 	requestAnimationFrame(gameLoop);
 }
@@ -311,13 +298,15 @@ function moveBall(deltaT)
 {
 	var ball = canvas.objects[2];
 
+	console.log("speed X = " + String(speedMult * ballSpeedX));
+	console.log("speed Y = " + String(speedMult * ballSpeedY));
 	ball.move(speedMult * ballSpeedX * deltaT / 5, speedMult * ballSpeedY * deltaT / 5);
 	ballCollide();
 }
 
 var PlayerSpeed = 20; //subject to change
 
-//a simple movemement for now, it shouldn't be dependent on framerate
+//a simple movemement for now, it shouldn't be dependent on framerate, should be changed quite a bit for remote
 function movePlayers(deltaT)
 {
 	var topLimit = paddleHeight / 2;
