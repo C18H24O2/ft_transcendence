@@ -301,9 +301,9 @@ function ballCollide()
 		let speed = Math.sqrt(ballSpeedX ** 2 + ballSpeedY ** 2);
 		ballSpeedX = speed * Math.cos(angle) * Math.sign(ballSpeedX);
 		ballSpeedY = speed * Math.sin(angle);
-		if (speedMult < 3.5)
+		if (speedMult < 5)
 		{
-			speedMult += 0.5;
+			speedMult += 0.1;
 		}
 	}
 	if (ball.y - ballSize / 2 <= 0 || ball.y + ballSize / 2 >= canvas.height)
@@ -332,8 +332,8 @@ function checkGoal()
 			score1 += 1;
 			scoreP1.textContent = String(score1).padStart(3, '0');
 		}
-		ballSpeedY = 0;
 		ballSpeedX = 4;
+		ballSpeedY = 0;
 		speedMult = 1;
 		ball.setPos(middleX, middleY);
 		canvas.objects[0].setPos(canvas.objects[0].x, middleY);
