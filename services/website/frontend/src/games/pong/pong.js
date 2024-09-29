@@ -34,7 +34,7 @@ class Polygon {
 			ctx.lineTo(this.verticeList[this.instructions[i + 2]][0], this.verticeList[this.instructions[i + 2]][1]);
 			ctx.closePath();
 			ctx.stroke();
-			ctx.fill('evenodd');
+			ctx.fill();
 		}
 	};
 	//Xmove an Ymove correspond to the amount in each direction to move
@@ -158,10 +158,8 @@ function boundingBoxCollide(bBoxA, bBoxB)
 function renderField2d()
 {
 	let colors = flavors[getTheme().split('-').pop()].colors;
-	ctx.fillStyle = colors.mantle.hex;
-	ctx.strokeStyle = colors.mantle.hex;
 	
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = colors.text.hex;
 	ctx.strokeStyle = colors.text.hex;
 	canvas.objects.forEach(object => {
@@ -182,7 +180,7 @@ let lastRender = performance.now();
 // info needed to update in remote multiplayer: y player 1; y player 2; ball(x, y); ball velocity (x, y)
 // coordinates vary between 0, 2048
 // speed varies between ~ -25 to +25
-// serializing for performance ? caca
+// serializing for performance ?
 
 //will have to find how to syncronise, but its a start
 function serverUpdate(p1y, p2y, ballX, ballY, speedX, speedY)
