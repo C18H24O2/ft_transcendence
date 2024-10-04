@@ -71,9 +71,6 @@ class ShapeMaker {
 
 		return new Polygon([[x - width / 2, y - height / 2],[x + width / 2, y - height / 2],[x + width / 2, y + height / 2],[x - width / 2, y + height / 2]]);
 	}
-	static makePolygon(x, y, radius, vertNum) {
-
-	}
 	static makeShape(verticeList) {
 		return new Polygon(verticeList);
 	}
