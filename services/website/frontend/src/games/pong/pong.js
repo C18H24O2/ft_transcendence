@@ -240,11 +240,7 @@ function renderPauseMenu()
 	ctx.strokeStyle = colors.mantle.hex;
 
 	ctx.globalAlpha = 0.81;
-	ctx.beginPath();
-	//ctx.roundRect(middleX - (canvas.width / 4), middleY - (canvas.height / 6), canvas.width / 2, canvas.height / 3, canvas.width / 50);
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	ctx.stroke();
-	ctx.fill();
 	ctx.globalAlpha = 1;
 	ctx.font = "70px Serif";
 	ctx.fillStyle = colors.text.hex;
