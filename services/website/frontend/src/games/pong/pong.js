@@ -118,6 +118,8 @@ class GameObject {
 class Ball extends GameObject {
 	constructor(x, y, shapeList) {
 		super(x, y, shapeList);
+		this.speedX = 4;
+		this.speedY = 0;
 	}
 }
 
@@ -125,6 +127,7 @@ class Player extends GameObject {
 
 	constructor(x, y, shapeList) {
 		super(x, y, shapeList);
+		this.score = 0;
 	}
 }
 
@@ -153,12 +156,17 @@ function boundingBoxCollide(bBoxA, bBoxB)
 	return !(A_Left_B || A_Right_B || A_Above_B || A_Below_B);
 }
 
-//this makes it easier to scale more than 2 players if we do it
+function getColors()
+{
+	return (flavors[getTheme().split('-').pop()].colors);
+}
 
 function renderField2d()
 {
-	let colors = flavors[getTheme().split('-').pop()].colors;
+	let colors = getColors();
 	
+	ctx.fillStyle = colors.crust.hex;
+	ctx.strokeStyle = colors.crust.hex;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = colors.text.hex;
 	ctx.strokeStyle = colors.text.hex;
@@ -167,13 +175,6 @@ function renderField2d()
 	})
 	return (true);
 }
-
-let playerMove = [
-	false,
-	false,
-	false,
-	false
-]
 
 let lastRender = performance.now();
 
@@ -192,8 +193,8 @@ function serverUpdate(p1y, p2y, ballX, ballY, speedX, speedY)
 	player1.setPos(player1.x, p1y);
 	player2.setPos(player2.x, p2y);
 	ball.setPos(ballX, ballY);
-	ballSpeedX = speedX;
-	ballSpeedY = speedY;
+	ball.speedX = speedX;
+	ball.speedY = speedY;
 }
 
 function gameLoop(timestamp)
@@ -226,20 +227,19 @@ function init(){
 	canvas.objects = objects;
 	document.addEventListener('keydown', keyDown, false);
 	document.addEventListener('keyup', keyUp, false);
-	requestAnimationFrame(gameLoop)
-
 	window.onblur = pause;
+	requestAnimationFrame(gameLoop)
 }
 
-let pauseVal = true;
+let pauseVal = document.hasFocus();
 
 function renderPauseMenu()
 {
-	let colors = flavors[getTheme().split('-').pop()].colors;
+	let colors = getColors();
 	ctx.fillStyle = colors.mantle.hex;
 	ctx.strokeStyle = colors.mantle.hex;
-
-	ctx.globalAlpha = 0.81;
+ 
+	ctx.globalAlpha = 0.80;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	ctx.globalAlpha = 1;
 	ctx.font = "70px Serif";
@@ -260,13 +260,13 @@ function pause()
 
 function ballCollide()
 {
-	let ballBox = boundingBox(canvas.objects[2].shapes[0].vertices);
 	let ball = canvas.objects[2];
+	let ballBox = boundingBox(ball.shapes[0].vertices);
 
 	let playerPaddleBox;
 	let playerPaddle;
 
-	if (ballSpeedX < 0) {
+	if (ball.speedX < 0) {
 		playerPaddleBox = boundingBox(canvas.objects[0].shapes[0].vertices);
 		playerPaddle = canvas.objects[0];
 	} else {
@@ -276,39 +276,34 @@ function ballCollide()
 
 	if (boundingBoxCollide(ballBox, playerPaddleBox))
 	{
+		//avoiding the slight move there is at some speeds that would cause the ball to sometimes phase through one of the paddles
 		if (ball.x <= middleX)
-		{
 			ball.setPos(paddleWidth + ballSize / 2, ball.y);
-		}
 		else
-		{
 			ball.setPos(canvas.width - (paddleWidth + ballSize / 2), ball.y);
-		}
+		
+		ball.speedX = -ball.speedX;
+		
+		//getting the position of the ball relative to the paddle it bounced on
 		let relBallY = ball.y - (playerPaddle.y - (paddleHeight / 2));
-
 		let nrmlrelBallY = relBallY / paddleHeight;
 
-		ballSpeedX = -ballSpeedX;
-
+		//Math to calculate the X and Y speeds after a bounce
 		let maxAngle = Math.PI / 1.5;
 		let angle = nrmlrelBallY * maxAngle - (maxAngle / 2);
-		let speed = Math.sqrt(ballSpeedX ** 2 + ballSpeedY ** 2);
-		ballSpeedX = speed * Math.cos(angle) * Math.sign(ballSpeedX);
-		ballSpeedY = speed * Math.sin(angle);
+		let speed = Math.sqrt(ball.speedX ** 2 + ball.speedY ** 2);
+		ball.speedX = speed * Math.cos(angle) * Math.sign(ball.speedX);
+		ball.speedY = speed * Math.sin(angle);
+		
 		if (speedMult < 5)
-		{
 			speedMult += 0.1;
-		}
 	}
+
+	//top and bottom bounces
 	if (ball.y - ballSize / 2 <= 0 || ball.y + ballSize / 2 >= canvas.height)
-	{
-		ballSpeedY *= -1;
-	}
+		ball.speedY *= -1;
 	return (false);
 }
-
-let score1 = 0;
-let score2 = 0;
 
 function checkGoal()
 {
@@ -317,33 +312,43 @@ function checkGoal()
 	{
 		if (ball.x < 0)
 		{
-			score2 += 1;
-			scoreP2.textContent = String(score2).padStart(3, '0');
+			let player = canvas.objects[1];
+			player.score += 1;
+			scoreP2.textContent = String(player.score).padStart(3, '0');
 			
 		}
 		if (ball.x > canvas.width)
 		{
-			score1 += 1;
-			scoreP1.textContent = String(score1).padStart(3, '0');
+			let player = canvas.objects[0];
+			player.score += 1;
+			scoreP1.textContent = String(player.score).padStart(3, '0');
 		}
-		ballSpeedX = 4;
-		ballSpeedY = 0;
+		ball.speedX = 4;
+		ball.speedY = 0;
 		speedMult = 1;
+		
 		ball.setPos(middleX, middleY);
 		canvas.objects[0].setPos(canvas.objects[0].x, middleY);
 		canvas.objects[1].setPos(canvas.objects[1].x, middleY);
 	}
 }
 
-let ballSpeedX = 4;
-let ballSpeedY = 0;
 let speedMult = 1;
 
 function moveBall(deltaT)
 {
 	let ball = canvas.objects[2];
-	ball.move(speedMult * ballSpeedX * deltaT / 5, speedMult * ballSpeedY * deltaT / 5);
+	ball.move(speedMult * ball.speedX * deltaT / 5, speedMult * ball.speedY * deltaT / 5);
 	ballCollide();
+}
+
+function movePaddle(player, pSpeed, topLimit, botLimit)
+{	
+	player.move(0, pSpeed);
+	if (player.y > botLimit)
+		player.setPos(player.x, botLimit);
+	else if (player.y < topLimit)
+		player.setPos(player.x, topLimit);
 }
 
 let PlayerSpeed = 22; //subject to change
@@ -356,78 +361,42 @@ function movePlayers(deltaT)
 	let pSpeed = PlayerSpeed * (deltaT / 10);
 
 	if (playerMove[0] && canvas.objects[0].y < botLimit)
-	{
-		canvas.objects[0].move(0, pSpeed);
-		if (canvas.objects[0].y > botLimit)
-		{
-			canvas.objects[0].setPos(canvas.objects[0].x, botLimit);
-		}
-	}
+		movePaddle(canvas.objects[0], pSpeed, topLimit, botLimit);
 	if (playerMove[1] && canvas.objects[0].y > topLimit)
-	{
-		canvas.objects[0].move(0, -pSpeed);
-		if (canvas.objects[0].y < topLimit)
-		{
-			canvas.objects[0].setPos(canvas.objects[0].x, topLimit);
-		}
-	}
+		movePaddle(canvas.objects[0], -pSpeed, topLimit, botLimit);
 	if (playerMove[2] && canvas.objects[1].y < botLimit)
-	{
-		canvas.objects[1].move(0, pSpeed);
-		if (canvas.objects[1].y > botLimit)
-		{
-			canvas.objects[1].setPos(canvas.objects[1].x, botLimit);
-		}
-	}
+		movePaddle(canvas.objects[1], pSpeed, topLimit, botLimit);
 	if (playerMove[3] && canvas.objects[1].y > topLimit)
-	{
-		canvas.objects[1].move(0, -pSpeed);
-		if (canvas.objects[1].y < topLimit)
-		{
-			canvas.objects[1].setPos(canvas.objects[1].x, topLimit);
-		}
-	}
+		movePaddle(canvas.objects[1], -pSpeed, topLimit, botLimit);
 }
+
+let playerMove = [
+	false,	//player 1 down
+	false,	//player 1 up
+	false,	//player 2 down
+	false	//player 2 up
+];
+
+const keyMap = {
+	83: 0,	//player 1 down
+	87: 1,	//player 1 up
+	40: 2,	//player 2 down
+	38: 3	//player 2 up
+};
 
 function keyUp(event)
 {
-	switch (event.keyCode)
-	{
-		case 83:
-			playerMove[0] = false;
-			break;
-		case 87:
-			playerMove[1] = false;
-			break;
-		case 40:
-			playerMove[2] = false;
-			break;
-		case 38:
-			playerMove[3] = false;
-			break;
-	}
+	const moveIndex = keyMap[event.keyCode];
+	if (moveIndex !== undefined) playerMove[moveIndex] = false;
 }
-
+  
 function keyDown(event)
 {
-	switch (event.keyCode)
-	{
-		case 83:
-			playerMove[0] = true;
-			break;
-		case 87:
-			playerMove[1] = true;
-			break;
-		case 40:
-			playerMove[2] = true;
-			break;
-		case 38:
-			playerMove[3] = true;
-			break;
-		case 32:
-			if (pauseVal)
-				renderPauseMenu();
-			pauseVal = !pauseVal;
-			return ;
+	const moveIndex = keyMap[event.keyCode];
+	if (moveIndex !== undefined) playerMove[moveIndex] = true;
+	if (event.keyCode === 32) {
+		if (pauseVal) 
+			renderPauseMenu();
+		pauseVal = !pauseVal;
 	}
 }
