@@ -39,9 +39,9 @@ class Polygon {
 	};
 	//Xmove an Ymove correspond to the amount in each direction to move
 	//eg: [-1, +2] moves all the vertices 1 left and 2 down
-	moveVertices(Xmove, Ymove){
+	moveVertices(xMove, yMove){
 		this.verticeList = this.verticeList.map(([x, y]) => {
-			return ([x + Xmove, y + Ymove]);
+			return ([x + xMove, y + yMove]);
 		});
 	}
 
@@ -93,12 +93,12 @@ class GameObject {
 		});
 	}
 	//moves all the shapes in the object by Xmove & Ymove, eg: move(-50, +25) moves the object 50 to the left and 25 down
-	move(Xmove, Ymove) {
+	move(xMove, yMove) {
 		this.shapes.forEach( shape => {
-			shape.moveVertices(Xmove, Ymove);
+			shape.moveVertices(xMove, yMove);
 		})
-		this.x += Xmove;
-		this.y += Ymove;
+		this.x += xMove;
+		this.y += yMove;
 	}
 	//rotates all the shapes in the object, takes value in degrees
 	rotate(angle) {
@@ -109,9 +109,7 @@ class GameObject {
 
 	setPos(newX, newY)
 	{
-		let Xmove = this.x - newX;
-		let Ymove = this.y - newY;
-		this.move(-Xmove, -Ymove);
+		this.move(-(this.x - newX), -(this.y - newY));
 	}
 }
 
