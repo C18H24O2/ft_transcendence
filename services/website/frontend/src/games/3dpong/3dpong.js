@@ -43,8 +43,13 @@ function main()
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	const shaderProgram = initShaders(gl);
 
+	const positions =
+	[
+		0.0, 0.5,
+		-0.5, -0.5,
+		0.5, -0.5
+	]
 	
-
 }
 /**
  * 
