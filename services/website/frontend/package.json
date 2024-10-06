@@ -29,6 +29,7 @@
     "@fontsource-variable/urbanist": "^5.0.21",
     "earcut": "^3.0.0",
     "feather-icons": "^4.29.2",
+    "gl-matrix": "^3.4.3",
     "htmx.org": "2.0.0"
   }
 }
