@@ -42,15 +42,9 @@ function main()
 	gl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	const shaderProgram = initShaders(gl);
-
-	const positions =
-	[
-		0.0, 0.5,
-		-0.5, -0.5,
-		0.5, -0.5
-	]
-	
 }
+
+
 /**
  * 
  * @param {WebGLRenderingContext} gl
@@ -66,4 +60,20 @@ function createNewPositionBuffer(gl, positions)
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 	return positionBuffer;
+}
+
+
+class Shape
+{
+	constructor(gl, shaderProgram, vertices, color)
+	{
+		this.gl = gl;
+		this.shaderProgram = shaderProgram;
+		
+	}
+}
+
+class ShapeFactory
+{
+
 }
