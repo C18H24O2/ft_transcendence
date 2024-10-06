@@ -41,7 +41,7 @@ function main()
 	const bgColor = rgb_to_webgl(colors.crust.rgb);
 	gl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	const shaderProgram = initShaders(gl);
+	const programInfo = initShaders(gl);
 }
 
 

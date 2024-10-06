@@ -4,7 +4,7 @@ import { fsSource } from "./webgl-shaders";
 /**
  * 
  * @param {WebGLRenderingContext} gl 
- * @returns {WebGLProgram}
+ * @returns {ProgramInfo}
  */
 
 function initShaders(gl)
@@ -22,7 +22,18 @@ function initShaders(gl)
 		console.error(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`);
 		return null;
 	}
-	return shaderProgram;
+	
+	const programInfo = {
+		program: shaderProgram,
+		attribLocation: {
+			vertexPosition: gl.getAttribLocation(shaderProgram, "vertPosition"),
+			vertexColor: gl.getAttribLocation(shaderProgram, "vertColor")
+		},
+		uniformLocation: {
+			mtpMatrix: gl.getUniformLocation(shaderProgram, "mtpMatrix")
+		}
+	};
+	return programInfo;
 }
 
 function getWebGLConstantName(gl, value) {
