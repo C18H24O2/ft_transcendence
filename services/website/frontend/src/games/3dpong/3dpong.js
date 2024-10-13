@@ -8,8 +8,6 @@ import { Shape3d } from './webgl-shape.js';
 
 import { mat4 } from 'gl-matrix';
 
-let frameRate = 240;
-
 main();
 
 function getColors()
@@ -150,9 +148,9 @@ function main()
 
 			drawScene(gl, cube, cubeRotation);
 			cubeRotation += deltaTime / 1000;
+			requestAnimationFrame(render);
 		}
-
-		setInterval(render, 1000 / frameRate);
+		requestAnimationFrame(render);
 }
 
 
