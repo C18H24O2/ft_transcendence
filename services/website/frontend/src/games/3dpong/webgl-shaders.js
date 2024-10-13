@@ -11,8 +11,8 @@ const vsSource =
 
 	void main()
 	{
-		gl_Position = vertPosition * mtpMatrix;
-		vColor = vertColor
+		gl_Position = mtpMatrix * vertPosition;
+		vColor = vertColor;
 	}
 `;
 
