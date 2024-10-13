@@ -8,6 +8,8 @@ import { Shape3d } from './webgl-shape.js';
 
 import { mat4 } from 'gl-matrix';
 
+let debug = 0;
+
 main();
 
 function getColors()
