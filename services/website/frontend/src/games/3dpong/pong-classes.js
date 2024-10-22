@@ -1,20 +1,40 @@
-import { Shape2d, Shape3d } from "./webgl-shape";
+import { getTheme } from "../../theme";
+import { Shape3d } from "./webgl-shape";
+import { flavors } from "@catppuccin/palette";
 
 class gameObject
 {
-	constructor(x, y, volumeShape, flatShape) //I cannot for the life of me find a good name for these variables
+	constructor(x, y, ShapeObject) //I cannot for the life of me find a good name for these variables
 	{
 		this.x = x || 0;
 		this.y = y || 0;
 
-		this.volumeShape = volumeShape;
-		this.flatShape = flatShape;
+		this.shapeObject = ShapeObject;
 	}
+}
+
+function getColors()
+{
+	return (flavors[getTheme().split('-').pop()].colors);
+}
+
+/**@type {import('@catppuccin/palette').CatppuccinColors} */
+let colors = getColors();
+
+function rgb_to_webgl(color)
+{
+	return (
+		[
+			color.r / 255, 
+			color.g / 255,
+			color.b / 255,
+		]
+	)
 }
 
 class ShapeMaker
 {
-	static makePaddle(gl, programInfo, projectionMatrix, modelViewMatrix, paddleHeight, paddleWidth, paddleDepth) {
+	static makeShape(gl, programInfo, modelViewMatrix, paddleHeight, paddleWidth, paddleDepth) {
 	
 		const paddleVertices = [
 			// Front face
@@ -54,20 +74,25 @@ class ShapeMaker
 			-paddleWidth / 2, paddleHeight / 2, -paddleDepth / 2,
 		];
 	
+
+		// I LOVE COLOR PICKING ❗❗ I can't be bothered to add a lighting system right now
 		const paddleColors = [
-			[1.0, 1.0, 1.0, 1.0], // Front face: white
-			[1.0, 0.0, 0.0, 1.0], // Back face: red
-			[0.0, 1.0, 0.0, 1.0], // Top face: green
-			[0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-			[1.0, 1.0, 0.0, 1.0], // Right face: yellow
-			[1.0, 0.0, 1.0, 1.0], // Left face: purple
+			rgb_to_webgl(colors.sky.rgb).concat(1), // Front face
+			rgb_to_webgl(colors.sky.rgb).concat(1), // Back face
+			rgb_to_webgl(colors.teal.rgb).concat(1), // Top face
+			rgb_to_webgl(colors.teal.rgb).concat(1), // Bottom face
+			rgb_to_webgl(colors.sapphire.rgb).concat(1), // Right face
+			rgb_to_webgl(colors.sapphire.rgb).concat(1), // Left face
 		];
-		let colors = []
+
+		console
+
+		let vertex_colors = []
 
 		for (var j = 0; j < paddleColors.length; ++j) {
 		const c = paddleColors[j];
 		// Repeat each color four times for the four vertices of the face
-		colors = colors.concat(c, c, c, c);
+		vertex_colors = vertex_colors.concat(c, c, c, c);
 		}
 
 	
@@ -80,7 +105,7 @@ class ShapeMaker
 			20, 21, 22, 20, 22, 23, // left
 		];
 	
-		return new Shape3d(gl, programInfo, paddleVertices, colors, paddleIndices.flat(), projectionMatrix, modelViewMatrix);
+		return new Shape3d(gl, programInfo, paddleVertices, vertex_colors, paddleIndices.flat(),modelViewMatrix);
 	}
 }
 
