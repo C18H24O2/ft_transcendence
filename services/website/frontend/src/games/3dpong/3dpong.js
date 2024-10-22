@@ -6,12 +6,18 @@ import './webgl-shape.js';
 import { Shape2d } from './webgl-shape.js';
 import { Shape3d } from './webgl-shape.js';
 import { mat4 } from 'gl-matrix';
+import { ShapeMaker } from './pong-classes.js';
 
 /**@type {HTMLCanvasElement} */
 const canvas = document.getElementById("gameField");
 
 /**@type {WebGL2RenderingContext} */
 const gl = canvas.getContext("webgl2", {alpha: true});
+
+const fieldOfView = (45 * Math.PI) / 180;
+const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+const zNear = 0.1;
+const zFar = 100.0;
 
 main();
 
@@ -47,139 +53,15 @@ function main()
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	const programInfo = initShaders(gl);
 
-	// const square = new Shape2d(gl, programInfo, [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0], [
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// 	1.0,
-	// ]);
+		let paddleHeight = 1.5;
+		let paddleWidth = 0.15;
+		let paddleDepth = 0.5;		
 
-	const faceColors = [
-		[1.0, 1.0, 1.0, 1.0], // Front face: white
-		[1.0, 0.0, 0.0, 1.0], // Back face: red
-		[0.0, 1.0, 0.0, 1.0], // Top face: green
-		[0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-		[1.0, 1.0, 0.0, 1.0], // Right face: yellow
-		[1.0, 0.0, 1.0, 1.0], // Left face: purple
-	];
+		let projectionMatrix = mat4.create();
 
-	let colors = []
+		let paddle = ShapeMaker.makePaddle(gl, programInfo, projectionMatrix, mat4.create(), paddleHeight, paddleWidth, paddleDepth);
+		let paddle2 = ShapeMaker.makePaddle(gl, programInfo, projectionMatrix, mat4.create(), paddleHeight, paddleWidth, paddleDepth);
 
-	for (var j = 0; j < faceColors.length; ++j) {
-		const c = faceColors[j];
-		// Repeat each color four times for the four vertices of the face
-		colors = colors.concat(c, c, c, c);
-	}
-
-	const indices = [
-		0, 1, 2,
-		0, 2, 3, // front
-		4, 5, 6,
-		4, 6, 7, // back
-		8, 9, 10,
-		8, 10, 11, // top
-		12, 13, 14,
-		12, 14, 15, // bottom
-		16, 17, 18,
-		16, 18, 19, // right
-		20, 21, 22,
-		20, 22, 23, // left
-	];
-
-	const projectionMatrix = mat4.create();
-	const modelViewMatrix = mat4.create();
-
-	const projectionMatrix2 = mat4.create();
-	const modelViewMatrix2 = mat4.create();
-
-	var cube = new Shape3d(gl, programInfo, [
-		// Front face
-		-1.0, -1.0, 1.0,
-		1.0, -1.0, 1.0,
-		1.0, 1.0, 1.0,
-		-1.0, 1.0, 1.0,
-	  
-		// Back face
-		-1.0, -1.0, -1.0,
-		-1.0, 1.0, -1.0,
-		1.0, 1.0, -1.0,
-		1.0, -1.0, -1.0,
-	  
-		// Top face
-		-1.0, 1.0, -1.0,
-		-1.0, 1.0, 1.0,
-		1.0, 1.0, 1.0,
-		1.0, 1.0, -1.0,
-	  
-		// Bottom face
-		-1.0, -1.0, -1.0,
-		1.0, -1.0, -1.0,
-		1.0, -1.0, 1.0,
-		-1.0, -1.0, 1.0,
-	  
-		// Right face
-		1.0, -1.0, -1.0,
-		1.0, 1.0, -1.0,
-		1.0, 1.0, 1.0,
-		1.0, -1.0, 1.0,
-	  
-		// Left face
-		-1.0, -1.0, -1.0,
-		-1.0, -1.0, 1.0,
-		-1.0, 1.0, 1.0,
-		-1.0, 1.0, -1.0,
-		], colors, indices, projectionMatrix, modelViewMatrix);
-
-		var cube2 = new Shape3d(gl, programInfo, [
-			// Front face
-			-1.0, -1.0, 1.0,
-			1.0, -1.0, 1.0,
-			1.0, 1.0, 1.0,
-			-1.0, 1.0, 1.0,
-		  
-			// Back face
-			-1.0, -1.0, -1.0,
-			-1.0, 1.0, -1.0,
-			1.0, 1.0, -1.0,
-			1.0, -1.0, -1.0,
-		  
-			// Top face
-			-1.0, 1.0, -1.0,
-			-1.0, 1.0, 1.0,
-			1.0, 1.0, 1.0,
-			1.0, 1.0, -1.0,
-		  
-			// Bottom face
-			-1.0, -1.0, -1.0,
-			1.0, -1.0, -1.0,
-			1.0, -1.0, 1.0,
-			-1.0, -1.0, 1.0,
-		  
-			// Right face
-			1.0, -1.0, -1.0,
-			1.0, 1.0, -1.0,
-			1.0, 1.0, 1.0,
-			1.0, -1.0, 1.0,
-		  
-			// Left face
-			-1.0, -1.0, -1.0,
-			-1.0, -1.0, 1.0,
-			-1.0, 1.0, 1.0,
-			-1.0, 1.0, -1.0,
-			], colors, indices, projectionMatrix2, modelViewMatrix2);
-		
 		let then = 0;
 		let deltaTime = 0;
 		let cubeRotation = 0.0;
@@ -188,7 +70,7 @@ function main()
 			let now = timestamp * 0.001;
     		deltaTime = now - then;
 			then = now;
-			drawScene(cube, cube2, cubeRotation);
+			drawScene(paddle, paddle2, cubeRotation);
 			cubeRotation += deltaTime;
 			requestAnimationFrame(render);
 		}
@@ -196,11 +78,6 @@ function main()
 }
 
 //constants for the fov
-
-const fieldOfView = (45 * Math.PI) / 180;
-const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-const zNear = 0.1;
-const zFar = 100.0;
 
 function clearScene(gl_to_clear)
 {
@@ -221,16 +98,12 @@ function drawScene(object, object2, cubeRotation)
 	mat4.identity(object2.projectionMatrix);
 
 	mat4.perspective(object.projectionMatrix, fieldOfView, aspect, zNear, zFar);
-	object.translate([-1.0, 1.0, -6.0]);
-	object.rotate(cubeRotation, [0, 0, 1]);
-	object.rotate(cubeRotation * 0.7, [0, 1, 0]);
-	object.rotate(cubeRotation * 0.3, [1, 0, 0]);
+	object.translate([-1.0, 1.3, -5.21]);
+	object.rotate(1, [1, 1, 0]);
 
 	mat4.perspective(object2.projectionMatrix, fieldOfView, aspect, zNear, zFar);
-	object2.translate([1.0, -1.0, -6.0]);
-	object2.rotate(-cubeRotation, [0, 0, 1]);
-	object2.rotate(-cubeRotation * 0.7, [0, 1, 0]);
-	object2.rotate(-cubeRotation * 0.3, [1, 0, 0]);
+	object2.translate([2.0, -1.2, -5.21]);
+
 	object.draw();
 	object2.draw();
 }
