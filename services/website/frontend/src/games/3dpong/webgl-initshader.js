@@ -27,10 +27,13 @@ function initShaders(gl)
 		program: shaderProgram,
 		attribLocation: {
 			vertexPosition: gl.getAttribLocation(shaderProgram, "vertPosition"),
-			vertexColor: gl.getAttribLocation(shaderProgram, "vertColor")
+			textureCoord: gl.getAttribLocation(shaderProgram, "textureCoord"),
+			vertexNormal: gl.getAttribLocation(shaderProgram, "vertNormal"),
 		},
 		uniformLocation: {
-			mtpMatrix: gl.getUniformLocation(shaderProgram, "mtpMatrix")
+			mtpMatrix: gl.getUniformLocation(shaderProgram, "mtpMatrix"),
+			normalMatrix:  gl.getUniformLocation(shaderProgram, "normalMatrix"),
+			Sampler: gl.getUniformLocation(shaderProgram, "uSampler"),
 		}
 	};
 	return programInfo;

@@ -13,17 +13,13 @@ const canvas = document.getElementById("gameField");
 /**@type {WebGL2RenderingContext} */
 const gl = canvas.getContext("webgl2", {alpha: true});
 
-const fieldOfView = (45 * Math.PI) / 180;
-const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-const zNear = 0.1;
-const zFar = 100.0;
-
-main();
-
 function getColors()
 {
 	return (flavors[getTheme().split('-').pop()].colors);
 }
+
+/**@type {import('@catppuccin/palette').CatppuccinColors} */
+let colors = getColors();
 
 function rgb_to_webgl(color)
 {
@@ -36,46 +32,54 @@ function rgb_to_webgl(color)
 	)
 }
 
+function cat_to_rgb(color)
+{
+	return (
+		[
+			color.r, 
+			color.g,
+			color.b,
+		]
+	)
+}
+
+main();
+
 function main()
 {
+	document.addEventListener('keydown', keyDown);
+	document.addEventListener('keyup', keyUp);
 	if (!gl)
 	{
 		console.error('Your browser does not support webgl, consider using a different browser to access this functionnality');
 		return;
 	}
-	
-	/**@type {import('@catppuccin/palette').CatppuccinColors} */
-	const cat_colors = getColors();
 
-	const bgColor = rgb_to_webgl(cat_colors.crust.rgb);
+	const bgColor = rgb_to_webgl(colors.crust.rgb);
 	gl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	const programInfo = initShaders(gl);
 
-	let paddleHeight = 0.45;
+	let paddleHeight = 0.20;
 	let paddleWidth = paddleHeight / 8;
-	let paddleDepth = 0.5;		
+	let paddleDepth = paddleHeight;	
 
 	let projectionMatrix = mat4.create();
 
-	let paddle = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth);
-	let paddle2 = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth);
+	let paddle = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, cat_to_rgb(colors.sapphire.rgb));
+	let paddle2 = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, cat_to_rgb(colors.sapphire.rgb));
 
 	let then = Date.now();
 	let deltaTime = 0;
-	let cubeRotation = 0.0;
 
-		function render() {
-			let now = Date.now();
-    		deltaTime = now - then;
-			then = now;
-			movePlayer(deltaTime);
-			drawScene(paddle, paddle2, projectionMatrix, cubeRotation /1000);
-			cubeRotation += deltaTime;
-		}
-		document.addEventListener('keydown', keyDown);
-		document.addEventListener('keyup', keyUp);
-		setInterval(render, 1000/60);
+	function render() {
+		let now = Date.now();
+    	deltaTime = now - then;
+		then = now;
+		movePlayer(deltaTime);
+		drawScene(paddle, paddle2, projectionMatrix);
+	}
+	setInterval(render, 1000/60);
 }
 
 let paddle1PositionY = 0;
@@ -130,22 +134,26 @@ function clearScene(gl_to_clear)
 	gl_to_clear.clear(gl_to_clear.COLOR_BUFFER_BIT | gl_to_clear.DEPTH_BUFFER_BIT);
 }
 
-let width = gl.canvas.width / 2;
-let height 
+const fieldOfView = (45 * Math.PI) / 180;
+const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+const zNear = 0.1;
+const zFar = 100.0;
 
 //example of a scene draw
-function drawScene(object1, object2, projectionMatrix, cubeRotation)
+function drawScene(object1, object2, projectionMatrix)
 {	
 	clearScene(gl);
-	mat4.identity(projectionMatrix);
-	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-	mat4.identity(object1.modelViewMatrix);
-	object1.translate([-1, paddle1PositionY / gl.canvas.height, -3]);
-	object1.draw(projectionMatrix);
+	const xTranslate = 1.10;
+	const zTranslate = -3;
 
 	mat4.identity(projectionMatrix);
 	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+
+	mat4.identity(object1.modelViewMatrix);
+	object1.translate([-xTranslate, paddle1PositionY / gl.canvas.height, zTranslate]);
+	object1.draw(projectionMatrix);
+
 	mat4.identity(object2.modelViewMatrix);
-	object2.translate([1, paddle2PositionY / gl.canvas.height, -3]);
+	object2.translate([xTranslate, paddle2PositionY / gl.canvas.height, zTranslate]);
 	object2.draw(projectionMatrix);
 }
