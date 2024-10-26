@@ -1,11 +1,10 @@
 import '../../shared.js';
 import { getTheme } from '../../theme.js';
-import { flavors } from '@catppuccin/palette';
 import { initShaders } from './webgl-initshader.js';
-import './webgl-shape.js';
 import { Shape3d } from './webgl-shape.js';
 import { mat4 } from 'gl-matrix';
 import { ShapeMaker } from './pong-classes.js';
+import { getCatppuccinWEBGL } from './colorUtils.js';
 
 /**@type {HTMLCanvasElement} */
 const canvas = document.getElementById("gameField");
@@ -13,34 +12,12 @@ const canvas = document.getElementById("gameField");
 /**@type {WebGL2RenderingContext} */
 const gl = canvas.getContext("webgl2", {alpha: true});
 
-function getColors()
-{
-	return (flavors[getTheme().split('-').pop()].colors);
-}
+let currentTheme = getTheme();
 
-/**@type {import('@catppuccin/palette').CatppuccinColors} */
-let colors = getColors();
-
-function rgb_to_webgl(color)
+function setClearColor(colorName, setgl)
 {
-	return (
-		{
-			r: color.r / 255, 
-			g: color.g / 255,
-			b: color.b / 255,
-		}
-	)
-}
-
-function cat_to_rgb(color)
-{
-	return (
-		[
-			color.r, 
-			color.g,
-			color.b,
-		]
-	)
+	const bgColor = getCatppuccinWEBGL(colorName);
+	setgl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
 }
 
 main();
@@ -55,9 +32,7 @@ function main()
 		return;
 	}
 
-	const bgColor = rgb_to_webgl(colors.crust.rgb);
-	gl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	setClearColor("crust", gl);
 	const programInfo = initShaders(gl);
 
 	let paddleHeight = 0.20;
@@ -66,8 +41,8 @@ function main()
 
 	let projectionMatrix = mat4.create();
 
-	let paddle = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, cat_to_rgb(colors.sapphire.rgb));
-	let paddle2 = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, cat_to_rgb(colors.sapphire.rgb));
+	let paddle1 = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire");
+	let paddle2 = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire");
 
 	let then = Date.now();
 	let deltaTime = 0;
@@ -77,7 +52,14 @@ function main()
     	deltaTime = now - then;
 		then = now;
 		movePlayer(deltaTime);
-		drawScene(paddle, paddle2, projectionMatrix);
+		if (getTheme() != currentTheme)
+		{
+			currentTheme = getTheme();
+			setClearColor("crust", gl);
+			paddle1.updateColor();
+			paddle2.updateColor();
+		}
+		drawScene(paddle1, paddle2, projectionMatrix);
 	}
 	setInterval(render, 1000/60);
 }
@@ -125,6 +107,7 @@ function keyDown(event)
 	if (moveIndex !== undefined) playerMove[moveIndex] = true;
 }
 //constants for the fov
+
 
 function clearScene(gl_to_clear)
 {

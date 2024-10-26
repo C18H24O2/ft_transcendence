@@ -21,8 +21,6 @@ function initBuffers3d(gl, vertices, indices)
  */
 function createNewNormalBuffer(gl, normals)
 {
-	console.log(normals);
-
 	const normalBuffer = gl.createBuffer();
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);

@@ -1,8 +1,10 @@
 import { Shape3d } from "./webgl-shape";
+import { getCatppuccinRGB } from "./colorUtils";
+
 
 class ShapeMaker
 {
-	static makeShape(gl, programInfo, modelViewMatrix, paddleHeight, paddleWidth, paddleDepth, color) {
+	static makeShape(gl, programInfo, modelViewMatrix, paddleHeight, paddleWidth, paddleDepth, colorName) {
 	
 		const paddleVertices = [
 			// Front face
@@ -45,7 +47,7 @@ class ShapeMaker
 		const texture = gl.createTexture();
 
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		const colorPixel = new Uint8Array(color.concat(255));
+		const colorPixel = new Uint8Array(getCatppuccinRGB(colorName).concat(255));
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, colorPixel);
 		gl.generateMipmap(gl.TEXTURE_2D);
 
@@ -58,7 +60,7 @@ class ShapeMaker
 			20, 21, 22, 20, 22, 23, // left
 		];
 	
-		return new Shape3d(gl, programInfo, paddleVertices, texture, paddleIndices, modelViewMatrix);
+		return new Shape3d(gl, programInfo, modelViewMatrix, paddleVertices, paddleIndices, texture, colorName);
 	}
 }
 

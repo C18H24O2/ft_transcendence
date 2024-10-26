@@ -1,5 +1,6 @@
 import { mat4 } from 'gl-matrix'
 import { initBuffers3d } from './webgl-initbuffers';
+import { getCatppuccinRGB } from './colorUtils';
 
 class Shape3d
 {
@@ -10,13 +11,14 @@ class Shape3d
 	 * @param {Array} vertice 
 	 * @param {Array} color 
 	 */
-	constructor(gl, programInfo, vertice, texture, indices, modelViewMatrix)
+	constructor(gl, programInfo, modelViewMatrix, vertice, indices, texture, colorName)
 	{
 		/** @type {WebGL2RenderingContext} */
 		this.gl = gl;
 		this.programInfo = programInfo;
 		this.vertexCount = indices.length;
 		this.texture = texture;
+		this.colorName = colorName || "blue";
 		this.buffers = initBuffers3d(gl, vertice, indices);
 		this.modelViewMatrix = modelViewMatrix || mat4.create();
 		this.normalMatrix = mat4.create();
@@ -69,6 +71,22 @@ class Shape3d
 	scale(vector)
 	{
 		mat4.scale(this.modelViewMatrix,this.modelViewMatrix, vector);
+	}
+	updateColor()
+	{
+		this.gl.deleteTexture(this.texture);
+		const texture = this.gl.createTexture();
+
+		this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+		const colorPixel = new Uint8Array(getCatppuccinRGB(this.colorName).concat(255));
+		this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, colorPixel);
+		this.gl.generateMipmap(this.gl.TEXTURE_2D);
+		this.texture = texture;
+	}
+	changeColor(colorName)
+	{
+		this.colorName = colorName;
+		this.updateColor();
 	}
 }
 
