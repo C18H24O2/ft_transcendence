@@ -1,5 +1,6 @@
 import { Shape3d } from "./webgl-shape";
 import { getCatppuccinRGB } from "./colorUtils";
+import { mat4 } from "gl-matrix";
 
 
 class ShapeMaker
@@ -64,5 +65,35 @@ class ShapeMaker
 	}
 }
 
+class gameObject
+{
+	constructor(shape, x, y, z)
+	{
+		/**@type {Shape3d}*/
+		this.shape = shape;
+		this.x = x || 0;
+		this.y = y || 0;
+		this.z = z || 0;
+	}
+	setPos(coordinates)
+	{
+		this.x = coordinates[0];
+		this.y = coordinates[1];
+		this.z = coordinates[2];
+	}
+	move(vector)
+	{
+		this.x += vector[0];
+		this.y += vector[1];
+		this.z += vector[2];
+	}
+	draw(ProjectionMatrix)
+	{
+		mat4.identity(this.shape.modelViewMatrix);
+		this.shape.translate([this.x, this.y, this.z]);
+		this.shape.draw(ProjectionMatrix);
+	}
+}
 
+export { gameObject };
 export { ShapeMaker };

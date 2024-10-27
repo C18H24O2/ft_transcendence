@@ -3,7 +3,7 @@ import { getTheme } from '../../theme.js';
 import { initShaders } from './webgl-initshader.js';
 import { Shape3d } from './webgl-shape.js';
 import { mat4 } from 'gl-matrix';
-import { ShapeMaker } from './pong-classes.js';
+import { ShapeMaker, gameObject } from './pong-classes.js';
 import { getCatppuccinWEBGL } from './colorUtils.js';
 
 /**@type {HTMLCanvasElement} */
@@ -19,6 +19,8 @@ function setClearColor(colorName, setgl)
 	const bgColor = getCatppuccinWEBGL(colorName);
 	setgl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
 }
+
+let gameObjects = {};
 
 main();
 
@@ -38,11 +40,23 @@ function main()
 	let paddleHeight = 0.20;
 	let paddleWidth = paddleHeight / 8;
 	let paddleDepth = paddleHeight;	
+	let ballSize = 1 / 50;
+	const xTranslate = 1.10;
+	const zTranslate = -3;
 
 	let projectionMatrix = mat4.create();
 
-	let paddle1 = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire");
-	let paddle2 = ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire");
+	let paddle1 = new gameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire"));
+	let paddle2 = new gameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire"));
+	let ball = new gameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), ballSize, ballSize, ballSize, "sapphire"));
+
+	gameObjects.paddle1 = paddle1;
+	gameObjects.paddle2 = paddle2;
+	gameObjects.ball = ball;
+
+	gameObjects.paddle1.setPos([-xTranslate, 0, zTranslate]);
+	gameObjects.paddle2.setPos([xTranslate, 0, zTranslate]);
+	gameObjects.ball.setPos([0, 0, zTranslate]);
 
 	let then = Date.now();
 	let deltaTime = 0;
@@ -59,26 +73,25 @@ function main()
 			paddle1.updateColor();
 			paddle2.updateColor();
 		}
-		drawScene(paddle1, paddle2, projectionMatrix);
+		drawScene(projectionMatrix);
 	}
 	setInterval(render, 1000/60);
 }
 
-let paddle1PositionY = 0;
-let paddle2PositionY = 0;
-
 function movePlayer(deltaTime)
 {
 	const step = 22;
-	const speed = step * (deltaTime / 10);
+	const speed = (step * (deltaTime / 10)) / gl.canvas.height;
+
+	console.log(speed);
 	if (playerMove[0])
-		paddle1PositionY -= speed;
+		gameObjects.paddle1.move([0, -speed, 0]);
 	if (playerMove[1])
-		paddle1PositionY += speed;
+		gameObjects.paddle1.move([0, speed, 0]);
 	if (playerMove[2])
-		paddle2PositionY -= speed;
+		gameObjects.paddle2.move([0, -speed, 0]);
 	if (playerMove[3])
-		paddle2PositionY += speed;
+		gameObjects.paddle2.move([0, speed, 0]);
 }
 
 let playerMove = [
@@ -123,20 +136,14 @@ const zNear = 0.1;
 const zFar = 100.0;
 
 //example of a scene draw
-function drawScene(object1, object2, projectionMatrix)
+function drawScene(projectionMatrix)
 {	
 	clearScene(gl);
-	const xTranslate = 1.10;
-	const zTranslate = -3;
 
 	mat4.identity(projectionMatrix);
 	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
-	mat4.identity(object1.modelViewMatrix);
-	object1.translate([-xTranslate, paddle1PositionY / gl.canvas.height, zTranslate]);
-	object1.draw(projectionMatrix);
-
-	mat4.identity(object2.modelViewMatrix);
-	object2.translate([xTranslate, paddle2PositionY / gl.canvas.height, zTranslate]);
-	object2.draw(projectionMatrix);
+	gameObjects.paddle1.draw(projectionMatrix);
+	gameObjects.paddle2.draw(projectionMatrix);
+	gameObjects.ball.draw(projectionMatrix);
 }
