@@ -42,20 +42,8 @@ function main()
 	const programInfo = initShaders(gl);
 	initShapes(programInfo);
 
-	let projectionMatrix = mat4.create();
-	let viewMatrix = mat4.create();
-
-	const fieldOfView = (90 * Math.PI) / 180;
-	const aspect = width / height;
-	const zNear = 0.1;
-	const zFar = 7000.0;
-
-	const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
-
-	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-	// mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
-	mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
-
+	const projectionMatrix = mat4.create();
+	const viewMatrix = mat4.create();
 	let then = Date.now();
 	let deltaTime = 0;
 	let distance = 0;
@@ -66,10 +54,11 @@ function main()
 		then = now;
 		if (getTheme() != currentTheme)
 		{
+			console.log("changeTheme()");
 			currentTheme = getTheme();
 			setClearColor("crust", gl);
-			paddle1.updateColor();
-			paddle2.updateColor();
+			gameObjects.paddle1.shape.updateColor();
+			gameObjects.paddle2.shape.updateColor();
 		}
 		movePlayers(deltaTime);
 		drawScene(projectionMatrix, viewMatrix);
@@ -84,7 +73,6 @@ const paddleHeight = base;
 const paddleWidth = paddleHeight / 9;
 const paddleDepth = paddleHeight;	
 const ballSize = paddleHeight / 10;
-console.log(paddleHeight);
 
 function initShapes(programInfo)
 {
@@ -106,11 +94,24 @@ function initShapes(programInfo)
 //example of a scene draw
 let projectionViewMatrix = mat4.create();
 
+const fieldOfView = (45 * Math.PI) / 180;
+const aspect = width / height;
+const zNear = 0.1;
+const zFar = 7000.0;
+const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
+
 function drawScene(projectionMatrix, viewMatrix)
 {	
 	clearScene(gl);
 
 	mat4.identity(projectionViewMatrix);
+	mat4.identity(projectionMatrix);
+	mat4.identity(viewMatrix);
+	mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
+	if (keyPress[4])
+		mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+	else
+		mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
 	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 
 	gameObjects.paddle1.draw(projectionViewMatrix, viewMatrix);
@@ -123,7 +124,6 @@ function movePaddle(paddle, speed, limit)
 	paddle.move([0, speed, 0]);
 	if (Math.abs(paddle.y) >= Math.abs(limit))
 		paddle.setPos([paddle.x, limit, paddle.z]);
-	console.log(paddle.y + " " + limit);
 }
 
 function movePlayers(deltaTime)
@@ -132,43 +132,42 @@ function movePlayers(deltaTime)
 	const speed = (step * (deltaTime / 10));
 	const limit = height - paddleHeight;
 
-	if (playerMove[0] && gameObjects.paddle1.y >= -limit)
+	if (keyPress[0] && gameObjects.paddle1.y >= -limit)
 		movePaddle(gameObjects.paddle1, -speed, -limit);
-	if (playerMove[1] && gameObjects.paddle1.y <= limit)
+	if (keyPress[1] && gameObjects.paddle1.y <= limit)
 		movePaddle(gameObjects.paddle1, speed, limit);
-	if (playerMove[2] && gameObjects.paddle2.y >= -limit)
+	if (keyPress[2] && gameObjects.paddle2.y >= -limit)
 		movePaddle(gameObjects.paddle2, -speed, -limit);
-	if (playerMove[3] && gameObjects.paddle2.y <= limit)
+	if (keyPress[3] && gameObjects.paddle2.y <= limit)
 		movePaddle(gameObjects.paddle2, speed, limit);
-
-	// console.log("paddle 1 position: " + gameObjects.paddle1.y);
-	// console.log("paddle 2 position: " + gameObjects.paddle2.y);
 }
 
-let playerMove = [
+let keyPress = [
 	false,	//player 1 down
 	false,	//player 1 up
 	false,	//player 2 down
-	false	//player 2 up
+	false,	//player 2 up
+	false,	//change perspective
 ];
 
 const keyMap = {
 	83: 0,	//player 1 down
 	87: 1,	//player 1 up
 	40: 2,	//player 2 down
-	38: 3	//player 2 up
+	38: 3,	//player 2 up
+	32: 4,	//change perspective
 };
 
 function keyUp(event)
 {
 	const moveIndex = keyMap[event.keyCode];
-	if (moveIndex !== undefined) playerMove[moveIndex] = false;
+	if (moveIndex !== undefined) keyPress[moveIndex] = false;
 }
   
 function keyDown(event)
 {
 	const moveIndex = keyMap[event.keyCode];
-	if (moveIndex !== undefined) playerMove[moveIndex] = true;
+	if (moveIndex !== undefined) keyPress[moveIndex] = true;
 }
 //constants for the fov
 
