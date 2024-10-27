@@ -11,7 +11,7 @@ class Shape3d
 	 * @param {Array} vertice 
 	 * @param {Array} color 
 	 */
-	constructor(gl, programInfo, modelViewMatrix, vertice, indices, texture, colorName)
+	constructor(gl, programInfo, modelMatrix, vertice, indices, texture, colorName)
 	{
 		/** @type {WebGL2RenderingContext} */
 		this.gl = gl;
@@ -20,16 +20,17 @@ class Shape3d
 		this.texture = texture;
 		this.colorName = colorName || "blue";
 		this.buffers = initBuffers3d(gl, vertice, indices);
-		this.modelViewMatrix = modelViewMatrix || mat4.create();
+		this.modelMatrix = modelMatrix || mat4.create();
 		this.normalMatrix = mat4.create();
 		this.mtpMatrix = mat4.create();
 	}
 	/**
 	 * 
-	 * @param {mat4} ProjectionMatrix 
+	 * @param {mat4} ProjectionViewMatrix 
 	 */
-	draw(ProjectionMatrix)
+	draw(ProjectionViewMatrix, viewMatrix)
 	{
+		//set each of the buffers webgl should use to draw the object
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.position);
 		this.gl.vertexAttribPointer(this.programInfo.attribLocation.vertexPosition, 3, this.gl.FLOAT, false, 0, 0);
 		this.gl.enableVertexAttribArray(this.programInfo.attribLocation.vertexPosition);
@@ -44,16 +45,24 @@ class Shape3d
 		this.gl.vertexAttribPointer(this.programInfo.attribLocation.vertexNormal, 3, this.gl.FLOAT, false, 0, 0);
 		this.gl.enableVertexAttribArray(this.programInfo.attribLocation.vertexNormal);
 
+		//which Shaders webgl should use to render this object
 		this.gl.useProgram(this.programInfo.program);
 		
+		//Create the ProjectionViewModelMatrix to actually get a shape in the 3d Space
 		mat4.identity(this.mtpMatrix);
-		mat4.multiply(this.mtpMatrix, ProjectionMatrix, this.modelViewMatrix);
-		mat4.invert(this.normalMatrix, this.modelViewMatrix);
-		mat4.transpose(this.normalMatrix, this.normalMatrix);
+		mat4.multiply(this.mtpMatrix,this.mtpMatrix, ProjectionViewMatrix);
+		mat4.multiply(this.mtpMatrix, this.mtpMatrix, this.modelMatrix);
 
+		//Create the normals from the model and view Matrix (lighting)
+		mat4.multiply(this.normalMatrix, viewMatrix, this.modelMatrix);
+		mat4.invert(this.normalMatrix, this.normalMatrix);
+		mat4.transpose(this.normalMatrix, this.normalMatrix);		
+
+		//Pass the matrices to the shaders
 		this.gl.uniformMatrix4fv(this.programInfo.uniformLocation.mtpMatrix, false, this.mtpMatrix);
 		this.gl.uniformMatrix4fv(this.programInfo.uniformLocation.normalMatrix, false, this.normalMatrix);
 
+		//tell webgl which texture to sample from
 		this.gl.activeTexture(this.gl.TEXTURE0);
 		this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
 		this.gl.uniform1i(this.programInfo.uniformLocation.uSampler, 0);
@@ -62,15 +71,15 @@ class Shape3d
 	}
 	rotate(radians, axis)
 	{
-		mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, radians, axis);
+		mat4.rotate(this.modelMatrix, this.modelMatrix, radians, axis);
 	}
 	translate(amount)
 	{
-		mat4.translate(this.modelViewMatrix, this.modelViewMatrix, amount);
+		mat4.translate(this.modelMatrix, this.modelMatrix, amount);
 	}
 	scale(vector)
 	{
-		mat4.scale(this.modelViewMatrix,this.modelViewMatrix, vector);
+		mat4.scale(this.modelMatrix,this.modelMatrix, vector);
 	}
 	updateColor()
 	{

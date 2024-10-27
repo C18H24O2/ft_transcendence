@@ -18,16 +18,16 @@ const vsSource =
 		vTextureCoord = textureCoord;
 
 
-	// Apply lighting effect
+		// Apply lighting effect
 
-	highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
-	highp vec3 directionalLightColor = vec3(1, 1, 1);
-	highp vec3 directionalVector = normalize(vec3(0, 0, 1));
+		highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
+		highp vec3 directionalLightColor = vec3(1, 1, 1);
+		highp vec3 directionalVector = normalize(vec3(0, 0, 1));
 
-	highp vec4 transformedNormal = normalMatrix * vec4(vertNormal, 1.0);
+		highp vec4 transformedNormal = normalMatrix * vec4(vertNormal, 1.0);
 
-	highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-	vLighting = ambientLight + (directionalLightColor * directional);
+		highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
+		vLighting = ambientLight + (directionalLightColor * directional);
 	}
 `;
 

@@ -14,15 +14,19 @@ const gl = canvas.getContext("webgl2", {alpha: true});
 
 let currentTheme = getTheme();
 
+let gameObjects = {};
+
 function setClearColor(colorName, setgl)
 {
 	const bgColor = getCatppuccinWEBGL(colorName);
 	setgl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
 }
 
-let gameObjects = {};
+document.addEventListener('DOMContentLoaded', main);
 
-main();
+
+let height = gl.canvas.height / 2;
+let width = gl.canvas.width / 2;
 
 function main()
 {
@@ -36,15 +40,55 @@ function main()
 
 	setClearColor("crust", gl);
 	const programInfo = initShaders(gl);
-
-	let paddleHeight = 0.20;
-	let paddleWidth = paddleHeight / 8;
-	let paddleDepth = paddleHeight;	
-	let ballSize = 1 / 50;
-	const xTranslate = 1.10;
-	const zTranslate = -3;
+	initShapes(programInfo);
 
 	let projectionMatrix = mat4.create();
+	let viewMatrix = mat4.create();
+
+	const fieldOfView = (90 * Math.PI) / 180;
+	const aspect = width / height;
+	const zNear = 0.1;
+	const zFar = 7000.0;
+
+	const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
+
+	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+	// mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
+	mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
+
+	let then = Date.now();
+	let deltaTime = 0;
+	let distance = 0;
+
+	function render() {
+		let now = Date.now();
+    	deltaTime = now - then;
+		then = now;
+		if (getTheme() != currentTheme)
+		{
+			currentTheme = getTheme();
+			setClearColor("crust", gl);
+			paddle1.updateColor();
+			paddle2.updateColor();
+		}
+		movePlayers(deltaTime);
+		drawScene(projectionMatrix, viewMatrix);
+		distance += deltaTime;
+	}
+	setInterval(render, 1000/60);
+}
+
+//Because I am dumb and do not know how to write code, these dimensions are half of the size of the actual object, 
+const base = height / 5;
+const paddleHeight = base;
+const paddleWidth = paddleHeight / 9;
+const paddleDepth = paddleHeight;	
+const ballSize = paddleHeight / 10;
+console.log(paddleHeight);
+
+function initShapes(programInfo)
+{
+	const xTranslate = width - paddleWidth;
 
 	let paddle1 = new gameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire"));
 	let paddle2 = new gameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire"));
@@ -54,44 +98,51 @@ function main()
 	gameObjects.paddle2 = paddle2;
 	gameObjects.ball = ball;
 
-	gameObjects.paddle1.setPos([-xTranslate, 0, zTranslate]);
-	gameObjects.paddle2.setPos([xTranslate, 0, zTranslate]);
-	gameObjects.ball.setPos([0, 0, zTranslate]);
-
-	let then = Date.now();
-	let deltaTime = 0;
-
-	function render() {
-		let now = Date.now();
-    	deltaTime = now - then;
-		then = now;
-		movePlayer(deltaTime);
-		if (getTheme() != currentTheme)
-		{
-			currentTheme = getTheme();
-			setClearColor("crust", gl);
-			paddle1.updateColor();
-			paddle2.updateColor();
-		}
-		drawScene(projectionMatrix);
-	}
-	setInterval(render, 1000/60);
+	gameObjects.paddle1.setPos([-xTranslate, 0, 0]);
+	gameObjects.paddle2.setPos([xTranslate, 0, 0]);
+	gameObjects.ball.setPos([0, 0, 0]);
 }
 
-function movePlayer(deltaTime)
-{
-	const step = 22;
-	const speed = (step * (deltaTime / 10)) / gl.canvas.height;
+//example of a scene draw
+let projectionViewMatrix = mat4.create();
 
-	console.log(speed);
-	if (playerMove[0])
-		gameObjects.paddle1.move([0, -speed, 0]);
-	if (playerMove[1])
-		gameObjects.paddle1.move([0, speed, 0]);
-	if (playerMove[2])
-		gameObjects.paddle2.move([0, -speed, 0]);
-	if (playerMove[3])
-		gameObjects.paddle2.move([0, speed, 0]);
+function drawScene(projectionMatrix, viewMatrix)
+{	
+	clearScene(gl);
+
+	mat4.identity(projectionViewMatrix);
+	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
+
+	gameObjects.paddle1.draw(projectionViewMatrix, viewMatrix);
+	gameObjects.paddle2.draw(projectionViewMatrix, viewMatrix);
+	gameObjects.ball.draw(projectionViewMatrix, viewMatrix);
+}
+
+function movePaddle(paddle, speed, limit)
+{
+	paddle.move([0, speed, 0]);
+	if (Math.abs(paddle.y) >= Math.abs(limit))
+		paddle.setPos([paddle.x, limit, paddle.z]);
+	console.log(paddle.y + " " + limit);
+}
+
+function movePlayers(deltaTime)
+{
+	const step = paddleHeight / 16;
+	const speed = (step * (deltaTime / 10));
+	const limit = height - paddleHeight;
+
+	if (playerMove[0] && gameObjects.paddle1.y >= -limit)
+		movePaddle(gameObjects.paddle1, -speed, -limit);
+	if (playerMove[1] && gameObjects.paddle1.y <= limit)
+		movePaddle(gameObjects.paddle1, speed, limit);
+	if (playerMove[2] && gameObjects.paddle2.y >= -limit)
+		movePaddle(gameObjects.paddle2, -speed, -limit);
+	if (playerMove[3] && gameObjects.paddle2.y <= limit)
+		movePaddle(gameObjects.paddle2, speed, limit);
+
+	// console.log("paddle 1 position: " + gameObjects.paddle1.y);
+	// console.log("paddle 2 position: " + gameObjects.paddle2.y);
 }
 
 let playerMove = [
@@ -128,22 +179,4 @@ function clearScene(gl_to_clear)
 	gl_to_clear.enable(gl_to_clear.DEPTH_TEST);
 	gl_to_clear.depthFunc(gl_to_clear.LEQUAL);
 	gl_to_clear.clear(gl_to_clear.COLOR_BUFFER_BIT | gl_to_clear.DEPTH_BUFFER_BIT);
-}
-
-const fieldOfView = (45 * Math.PI) / 180;
-const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-const zNear = 0.1;
-const zFar = 100.0;
-
-//example of a scene draw
-function drawScene(projectionMatrix)
-{	
-	clearScene(gl);
-
-	mat4.identity(projectionMatrix);
-	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-
-	gameObjects.paddle1.draw(projectionMatrix);
-	gameObjects.paddle2.draw(projectionMatrix);
-	gameObjects.ball.draw(projectionMatrix);
 }

@@ -5,8 +5,8 @@ import { mat4 } from "gl-matrix";
 
 class ShapeMaker
 {
-	static makeShape(gl, programInfo, modelViewMatrix, paddleHeight, paddleWidth, paddleDepth, colorName) {
-	
+	static makeShape(gl, programInfo, modelMatrix, paddleHeight, paddleWidth, paddleDepth, colorName) {
+		
 		const paddleVertices = [
 			// Front face
 			-paddleWidth, -paddleHeight, paddleDepth,
@@ -61,7 +61,7 @@ class ShapeMaker
 			20, 21, 22, 20, 22, 23, // left
 		];
 	
-		return new Shape3d(gl, programInfo, modelViewMatrix, paddleVertices, paddleIndices, texture, colorName);
+		return new Shape3d(gl, programInfo, modelMatrix, paddleVertices, paddleIndices, texture, colorName);
 	}
 }
 
@@ -87,11 +87,11 @@ class gameObject
 		this.y += vector[1];
 		this.z += vector[2];
 	}
-	draw(ProjectionMatrix)
+	draw(ProjectionMatrix, viewMatrix)
 	{
-		mat4.identity(this.shape.modelViewMatrix);
+		mat4.identity(this.shape.modelMatrix);
 		this.shape.translate([this.x, this.y, this.z]);
-		this.shape.draw(ProjectionMatrix);
+		this.shape.draw(ProjectionMatrix, viewMatrix);
 	}
 }
 

@@ -29,7 +29,6 @@ function createNewNormalBuffer(gl, normals)
 	return normalBuffer;
 }
 
-
 function calculateVertexNormals(vertices, indices) {
     const vertexNormals = new Array(vertices.length).fill(0);
     
