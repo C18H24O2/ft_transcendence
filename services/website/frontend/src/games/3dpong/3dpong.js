@@ -47,6 +47,8 @@ function main()
 	let then = Date.now();
 	let deltaTime = 0;
 	let distance = 0;
+	mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
+	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
 	function render() {
 		let now = Date.now();
@@ -99,31 +101,27 @@ const aspect = width / height;
 const zNear = 0.1;
 const zFar = 7000.0;
 const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
+let orthoMode = false;
 
 function drawScene(projectionMatrix, viewMatrix)
 {	
 	clearScene(gl);
 
 	mat4.identity(projectionViewMatrix);
-	mat4.identity(projectionMatrix);
-	mat4.identity(viewMatrix);
-	mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
-	if (keyPress[4])
-		mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-	else
-		mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
+	if (orthoMode != keyPress[4])
+	{
+		orthoMode = keyPress[4];
+		mat4.identity(projectionMatrix);
+		if (!keyPress[4])
+			mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+		else
+			mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
+	}
 	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 
 	gameObjects.paddle1.draw(projectionViewMatrix, viewMatrix);
 	gameObjects.paddle2.draw(projectionViewMatrix, viewMatrix);
 	gameObjects.ball.draw(projectionViewMatrix, viewMatrix);
-}
-
-function movePaddle(paddle, speed, limit)
-{
-	paddle.move([0, speed, 0]);
-	if (Math.abs(paddle.y) >= Math.abs(limit))
-		paddle.setPos([paddle.x, limit, paddle.z]);
 }
 
 function movePlayers(deltaTime)
@@ -133,13 +131,33 @@ function movePlayers(deltaTime)
 	const limit = height - paddleHeight;
 
 	if (keyPress[0] && gameObjects.paddle1.y >= -limit)
-		movePaddle(gameObjects.paddle1, -speed, -limit);
+	{
+		let paddle = gameObjects.paddle1;
+		paddle.move([0, -speed, 0]);
+		if (paddle.y < -limit)
+			paddle.setPos([paddle.x, -limit, paddle.z]);
+	}
 	if (keyPress[1] && gameObjects.paddle1.y <= limit)
-		movePaddle(gameObjects.paddle1, speed, limit);
+	{
+		let paddle = gameObjects.paddle1;
+		paddle.move([0, speed, 0]);
+		if (paddle.y > limit)
+			paddle.setPos([paddle.x, limit, paddle.z]);
+	}
 	if (keyPress[2] && gameObjects.paddle2.y >= -limit)
-		movePaddle(gameObjects.paddle2, -speed, -limit);
+	{
+		let paddle = gameObjects.paddle2;
+		paddle.move([0, -speed, 0]);
+		if (paddle.y < -limit)
+			paddle.setPos([paddle.x, -limit, paddle.z]);
+	}
 	if (keyPress[3] && gameObjects.paddle2.y <= limit)
-		movePaddle(gameObjects.paddle2, speed, limit);
+	{
+		let paddle = gameObjects.paddle2;
+		paddle.move([0, speed, 0]);
+		if (paddle.y > limit)
+			paddle.setPos([paddle.x, limit, paddle.z]);
+	}
 }
 
 let keyPress = [
@@ -147,7 +165,7 @@ let keyPress = [
 	false,	//player 1 up
 	false,	//player 2 down
 	false,	//player 2 up
-	false,	//change perspective
+	false,	//temp view Switch
 ];
 
 const keyMap = {
@@ -155,7 +173,6 @@ const keyMap = {
 	87: 1,	//player 1 up
 	40: 2,	//player 2 down
 	38: 3,	//player 2 up
-	32: 4,	//change perspective
 };
 
 function keyUp(event)
@@ -168,6 +185,13 @@ function keyDown(event)
 {
 	const moveIndex = keyMap[event.keyCode];
 	if (moveIndex !== undefined) keyPress[moveIndex] = true;
+
+
+	if (event.keyCode == 32)
+	{
+		console.log("View switch!");
+		keyPress[4] = !(keyPress[4]);
+	}
 }
 //constants for the fov
 
