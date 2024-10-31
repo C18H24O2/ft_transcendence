@@ -42,13 +42,12 @@ function main()
 	const programInfo = initShaders(gl);
 	initShapes(programInfo);
 
-	const projectionMatrix = mat4.create();
-	const viewMatrix = mat4.create();
 	let then = Date.now();
 	let deltaTime = 0;
 	let distance = 0;
 	mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
 	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 
 	function render() {
 		let now = Date.now();
@@ -63,10 +62,11 @@ function main()
 			gameObjects.paddle2.shape.updateColor();
 		}
 		movePlayers(deltaTime);
-		drawScene(projectionMatrix, viewMatrix);
+		drawScene();
 		distance += deltaTime;
+		requestAnimationFrame(render);
 	}
-	setInterval(render, 1000/60);
+	requestAnimationFrame(render);
 }
 
 //Because I am dumb and do not know how to write code, these dimensions are half of the size of the actual object, 
@@ -93,30 +93,36 @@ function initShapes(programInfo)
 	gameObjects.ball.setPos([0, 0, 0]);
 }
 
-let projectionViewMatrix = mat4.create();
+let view = false;
+
+function viewSwitch()
+{
+	view = !view;
+
+	mat4.identity(projectionMatrix);
+	if (!view)
+		mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+	else
+		mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
+	mat4.identity(projectionViewMatrix);
+	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
+}
+
+window.viewSwitch = viewSwitch;
+
+const projectionViewMatrix = mat4.create();
+const projectionMatrix = mat4.create();
+const viewMatrix = mat4.create();
 
 const fieldOfView = (45 * Math.PI) / 180;
 const aspect = width / height;
 const zNear = 0.1;
 const zFar = 7000.0;
 const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
-let orthoMode = false;
 
-function drawScene(projectionMatrix, viewMatrix)
+function drawScene()
 {	
 	clearScene(gl);
-
-	mat4.identity(projectionViewMatrix);
-	if (orthoMode != keyPress[4])
-	{
-		orthoMode = keyPress[4];
-		mat4.identity(projectionMatrix);
-		if (!keyPress[4])
-			mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-		else
-			mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
-	}
-	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 
 	gameObjects.paddle1.draw(projectionViewMatrix, viewMatrix);
 	gameObjects.paddle2.draw(projectionViewMatrix, viewMatrix);
