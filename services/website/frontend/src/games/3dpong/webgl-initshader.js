@@ -3,7 +3,7 @@ import { fsSource } from "./webgl-shaders";
 
 /**
  * 
- * @param {WebGL2RenderingContext} gl 
+ * @param {WebGLRenderingContext} gl 
  * @returns {ProgramInfo}
  */
 
@@ -50,7 +50,7 @@ function getWebGLConstantName(gl, value) {
 
 /**
  * 
- * @param {WebGL2RenderingContext} gl 
+ * @param {WebGLRenderingContext} gl 
  * @param {GLenum} type 
  * @param {String} source 
  * @returns {WebGLShader}

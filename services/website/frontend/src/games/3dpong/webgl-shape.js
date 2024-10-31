@@ -6,14 +6,14 @@ class Shape3d
 {
 	/**
 	 * 
-	 * @param {WebGL2RenderingContext} gl 
+	 * @param {WebGLRenderingContext} gl 
 	 * @param {ProgramInfo} programInfo 
 	 * @param {Array} vertice 
 	 * @param {Array} color 
 	 */
 	constructor(gl, programInfo, modelMatrix, vertice, indices, texture, colorName)
 	{
-		/** @type {WebGL2RenderingContext} */
+		/** @type {WebGLRenderingContext} */
 		this.gl = gl;
 		this.programInfo = programInfo;
 		this.vertexCount = indices.length;

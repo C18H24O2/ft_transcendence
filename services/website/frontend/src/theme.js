@@ -36,7 +36,7 @@ export function updateTheme() {
 }
 
 export function toggleTheme() {
-    const theme = getTheme(); 
+    let theme = getTheme(); 
     const index = themes.indexOf(theme);
     if (index === -1) {
 		theme = defaultTheme;

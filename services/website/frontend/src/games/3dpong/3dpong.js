@@ -9,8 +9,8 @@ import { getCatppuccinWEBGL } from './colorUtils.js';
 /**@type {HTMLCanvasElement} */
 const canvas = document.getElementById("gameField");
 
-/**@type {WebGL2RenderingContext} */
-const gl = canvas.getContext("webgl2", {alpha: true});
+/**@type {WebGLRenderingContext} */
+const gl = canvas.getContext("webgl", {alpha: true});
 
 let currentTheme = getTheme();
 
@@ -93,7 +93,6 @@ function initShapes(programInfo)
 	gameObjects.ball.setPos([0, 0, 0]);
 }
 
-//example of a scene draw
 let projectionViewMatrix = mat4.create();
 
 const fieldOfView = (45 * Math.PI) / 180;
@@ -130,33 +129,39 @@ function movePlayers(deltaTime)
 	const speed = (step * (deltaTime / 10));
 	const limit = height - paddleHeight;
 
-	if (keyPress[0] && gameObjects.paddle1.y >= -limit)
+	if (keyPress[0] ^ keyPress[1])
 	{
-		let paddle = gameObjects.paddle1;
-		paddle.move([0, -speed, 0]);
-		if (paddle.y < -limit)
-			paddle.setPos([paddle.x, -limit, paddle.z]);
+		if (keyPress[0] && gameObjects.paddle1.y > -limit)
+		{
+			let paddle = gameObjects.paddle1;
+			paddle.move([0, -speed, 0]);
+			if (paddle.y < -limit)
+				paddle.setPos([paddle.x, -limit, paddle.z]);
+		}
+		if (keyPress[1] && gameObjects.paddle1.y < limit)
+		{
+			let paddle = gameObjects.paddle1;
+			paddle.move([0, speed, 0]);
+			if (paddle.y > limit)
+				paddle.setPos([paddle.x, limit, paddle.z]);
+		}
 	}
-	if (keyPress[1] && gameObjects.paddle1.y <= limit)
+	if (keyPress[2] ^ keyPress[3])
 	{
-		let paddle = gameObjects.paddle1;
-		paddle.move([0, speed, 0]);
-		if (paddle.y > limit)
-			paddle.setPos([paddle.x, limit, paddle.z]);
-	}
-	if (keyPress[2] && gameObjects.paddle2.y >= -limit)
-	{
-		let paddle = gameObjects.paddle2;
-		paddle.move([0, -speed, 0]);
-		if (paddle.y < -limit)
-			paddle.setPos([paddle.x, -limit, paddle.z]);
-	}
-	if (keyPress[3] && gameObjects.paddle2.y <= limit)
-	{
-		let paddle = gameObjects.paddle2;
-		paddle.move([0, speed, 0]);
-		if (paddle.y > limit)
-			paddle.setPos([paddle.x, limit, paddle.z]);
+		if (keyPress[2] && gameObjects.paddle2.y >= -limit)
+		{
+			let paddle = gameObjects.paddle2;
+			paddle.move([0, -speed, 0]);
+			if (paddle.y < -limit)
+				paddle.setPos([paddle.x, -limit, paddle.z]);
+		}
+		if (keyPress[3] && gameObjects.paddle2.y < limit)
+		{
+			let paddle = gameObjects.paddle2;
+			paddle.move([0, speed, 0]);
+			if (paddle.y > limit)
+				paddle.setPos([paddle.x, limit, paddle.z]);
+		}
 	}
 }
 
@@ -193,8 +198,6 @@ function keyDown(event)
 		keyPress[4] = !(keyPress[4]);
 	}
 }
-//constants for the fov
-
 
 function clearScene(gl_to_clear)
 {

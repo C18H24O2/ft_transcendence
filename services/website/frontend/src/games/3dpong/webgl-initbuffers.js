@@ -16,7 +16,7 @@ function initBuffers3d(gl, vertices, indices)
 
 /**
  * 
- * @param {WebGL2RenderingContext} gl 
+ * @param {WebGLRenderingContext} gl 
  * @param {Float64Array | Float32Array } normals 
  */
 function createNewNormalBuffer(gl, normals)
@@ -83,7 +83,7 @@ function calculateVertexNormals(vertices, indices) {
 
 /**
  * 
- * @param {WebGL2RenderingContext} gl
+ * @param {WebGLRenderingContext} gl
  * @param {Float64Array | Float32Array} positions
  * @returns {WebGLBuffer}
  */
@@ -100,7 +100,7 @@ function createNewIndexBuffer(gl, indices)
 
 /**
  * 
- * @param {WebGL2RenderingContext} gl
+ * @param {WebGLRenderingContext} gl
  * @param {Float64Array | Float32Array} positions
  * @returns {WebGLBuffer}
  */
@@ -117,7 +117,7 @@ function createNewPositionBuffer(gl, positions)
 
 /**
  * 
- * @param {WebGL2RenderingContext} gl
+ * @param {WebGLRenderingContext} gl
  * @param {Float64Array | Float32Array} colors
  * @returns {WebGLBuffer}
  */
