@@ -98,7 +98,7 @@ function initShapes(programInfo)
 	gameObjects.paddle2.setPos([xTranslate, 0, 0]);
 	gameObjects.ball.setPos([0, 0, 0]);
 
-	gameObjects.ball.speedX = -4;
+	gameObjects.ball.speedX = 8;
 	gameObjects.ball.speedY = 0;
 }
 
@@ -146,8 +146,6 @@ function drawScene()
 
 //code for player and ball movement under here
 
-let speedMult = 1;
-
 function reset()
 {
 	const xTranslate = width - paddleWidth;
@@ -156,8 +154,9 @@ function reset()
 	gameObjects.paddle2.setPos([xTranslate, 0, 0]);
 	gameObjects.ball.setPos([0, 0, 0]);
 
-	gameObjects.ball.speedX = 1;
+	gameObjects.ball.speedX = 4;
 	gameObjects.ball.speedY = 0;
+	speedMult = 1;
 }
 
 function BoundingBox(x, y, width, height)
@@ -177,64 +176,14 @@ function boundingBoxCollide(bBoxA, bBoxB)
 	return !(A_Left_B || A_Right_B || A_Above_B || A_Below_B);
 }
 
-// function moveBall(deltaTime)
-// {
-// 	let ball = gameObjects.ball;
-// 	ball.move([speedMult * ball.speedX * (deltaTime / 10), speedMult * ball.speedY * (deltaTime / 10), 0]);
-// 	console.log(ball.x);
-// 	ballCollide(ball);
-// }
-
-// function ballCollide(ball)
-// {
-// 	let paddle;
-
-// 	if (ball.speedX < 0)
-// 		paddle = gameObjects.paddle1;
-// 	else
-// 		paddle = gameObjects.paddle2;
-
-// 	let limit = width - (2 * paddleWidth);
-// 	let ballSide = Math.abs(ball.x) + ballSize;
-
-// 	if (ballSide < limit)
-// 		return;
-
-// 	let ballBoundingBox = BoundingBox(ball.x, ball.y, ballSize, ballSize);
-// 	let paddleBoundingBox = BoundingBox(paddle.x, paddle.y, paddleWidth, paddleHeight);
-
-// 	if (boundingBoxCollide(ballBoundingBox, paddleBoundingBox))
-// 	{
-// 		ball.setPos([(limit - ballSize) * Math.sign(ball.x), ball.y, ball.z]);
-
-// 		let relBallY = ball.y - (paddle.y - paddleHeight);
-// 		let nrmlrelBallY = relBallY / paddleHeight * 2;
-
-// 		let maxAngle = Math.PI / 1.5;
-// 		let angle = nrmlrelBallY * maxAngle - (maxAngle / 2);
-// 		let speed = Math.sqrt(ball.speedX ** 2 + ball.speedY ** 2);
-
-// 		//console.log(Math.sin(angle));
-		
-// 		// ball.speedX = speed * Math.cos(angle) * Math.sign(ball.speedX);
-
-// 		// ball.speedY = speed * Math.sin(angle);
-		
-// 		if (speedMult < 5)
-// 			speedMult += 0.1;
-// 	}
-
-// 	if (ball.y - ballSize <= -height || ball.y + ballSize >= height)
-// 		ball.speedY = -ball.speedY;
-// }
-
+let speedMult = 1;
 function moveBall(deltaTime) {
 	let ball = gameObjects.ball;
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 
 	// Determine the number of steps needed for smooth collision detection
-	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / (ballSize / 2));
+	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
 	const stepY = movementY / steps;
 
@@ -257,41 +206,40 @@ function ballCollide(ball) {
 		paddle = gameObjects.paddle2;
 	}
 
-	let limit = width - (2 * paddleWidth);
-	let ballSide = Math.abs(ball.x) + ballSize;
+	const limit = width - (2 * paddleWidth);
+	const ballXSide = Math.abs(ball.x) + ballSize;
+	const ballYSide = Math.abs(ball.y) + ballSize;
 
-	if (ballSide >= limit)
+	if (ballXSide >= limit)
 	{
-		let ballBoundingBox = BoundingBox(ball.x, ball.y, ballSize, ballSize);
-		let paddleBoundingBox = BoundingBox(paddle.x, paddle.y, paddleWidth, paddleHeight);
+		const ballBoundingBox = BoundingBox(ball.x, ball.y, ballSize, ballSize);
+		const paddleBoundingBox = BoundingBox(paddle.x, paddle.y, paddleWidth, paddleHeight);
 
 		if (boundingBoxCollide(ballBoundingBox, paddleBoundingBox)) {
 			ball.setPos([(limit - ballSize) * Math.sign(ball.x), ball.y, ball.z]);
 			ball.speedX = -ball.speedX;
 
-			// Calculate collision response
 			let relBallY = ball.y - paddle.y;
 			let nrmlrelBallY = relBallY / (paddleHeight + ballSize);
 
-			let maxAngle = Math.PI / 1.5;
-			let angle = nrmlrelBallY * maxAngle;
-			let speed = Math.sqrt(ball.speedX ** 2 + ball.speedY ** 2);
+			console.log(nrmlrelBallY);
 
-			// Update ball speed based on the calculated angle
+			const maxAngle = Math.PI*5 / 12;
+			const angle = nrmlrelBallY * maxAngle;
+			const speed = Math.sqrt(ball.speedX ** 2 + ball.speedY ** 2);
+
 			ball.speedX = speed * Math.cos(angle) * Math.sign(ball.speedX);
 			ball.speedY = speed * Math.sin(angle);
 
-			console.log(ball.speedX);
-			console.log(ball.speedY);
-			// Increase speed multiplier gradually
-			if (speedMult < 10) speedMult += 0.5;
+			if (speedMult < 10) speedMult += 0.1;
 			
 			return true; // Collision occurred
 		}
 	}
-	// Bounce off the top and bottom walls
-	if (ball.y - ballSize <= -height || ball.y + ballSize >= height) {
+	if (ballYSide >= height) {
+		ball.setPos([ball.x, (height - ballSize) * Math.sign(ball.y), ball.z]);
 		ball.speedY = -ball.speedY;
+		return (true)
 	}
 
 	return false; // No collision with paddles
@@ -299,7 +247,7 @@ function ballCollide(ball) {
 
 function movePlayers(deltaTime)
 {
-	const step = paddleHeight / 16;
+	const step = paddleHeight / 12;
 	const speed = (step * (deltaTime / 10));
 	const limit = height - paddleHeight;
 
