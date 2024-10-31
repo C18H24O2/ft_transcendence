@@ -22,12 +22,13 @@ function setClearColor(colorName, setgl)
 	setgl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
 }
 
-document.addEventListener('DOMContentLoaded', main);
-
-
 let height = gl.canvas.height / 2;
 let width = gl.canvas.width / 2;
+const viewMatrix = mat4.create();
+const projectionMatrix = mat4.create();
+const projectionViewMatrix = mat4.create();
 
+document.addEventListener('DOMContentLoaded', main);
 function main()
 {
 	document.addEventListener('keydown', keyDown);
@@ -46,12 +47,15 @@ function main()
 	let deltaTime = 0;
 	let distance = 0;
 	mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
-	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+	if (!view)
+		mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+	else
+		mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
 	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 
 	function render() {
 		let now = Date.now();
-    	deltaTime = now - then;
+		deltaTime = now - then;
 		then = now;
 		if (getTheme() != currentTheme)
 		{
@@ -60,8 +64,10 @@ function main()
 			setClearColor("crust", gl);
 			gameObjects.paddle1.shape.updateColor();
 			gameObjects.paddle2.shape.updateColor();
+			gameObjects.ball.shape.updateColor();
 		}
 		movePlayers(deltaTime);
+		moveBall(deltaTime);
 		drawScene();
 		distance += deltaTime;
 		requestAnimationFrame(render);
@@ -91,10 +97,20 @@ function initShapes(programInfo)
 	gameObjects.paddle1.setPos([-xTranslate, 0, 0]);
 	gameObjects.paddle2.setPos([xTranslate, 0, 0]);
 	gameObjects.ball.setPos([0, 0, 0]);
+
+	gameObjects.ball.speedX = -4;
+	gameObjects.ball.speedY = 0;
 }
 
-let view = false;
+//camera fov + distance to get similar results between orthographic camera and perspective camera
+const fieldOfView = (70 * Math.PI) / 180;
+const aspect = width / height;
+const zNear = 0.1;
+const zFar = 7000.0;
+const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
 
+//switch between 3d and 2d view :)
+let view = true;
 function viewSwitch()
 {
 	view = !view;
@@ -107,18 +123,17 @@ function viewSwitch()
 	mat4.identity(projectionViewMatrix);
 	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 }
-
 window.viewSwitch = viewSwitch;
 
-const projectionViewMatrix = mat4.create();
-const projectionMatrix = mat4.create();
-const viewMatrix = mat4.create();
 
-const fieldOfView = (45 * Math.PI) / 180;
-const aspect = width / height;
-const zNear = 0.1;
-const zFar = 7000.0;
-const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
+//code for frame rendering
+function clearScene(gl_to_clear)
+{
+	gl_to_clear.clearDepth(1.0);
+	gl_to_clear.enable(gl_to_clear.DEPTH_TEST);
+	gl_to_clear.depthFunc(gl_to_clear.LEQUAL);
+	gl_to_clear.clear(gl_to_clear.COLOR_BUFFER_BIT | gl_to_clear.DEPTH_BUFFER_BIT);
+}
 
 function drawScene()
 {	
@@ -127,6 +142,159 @@ function drawScene()
 	gameObjects.paddle1.draw(projectionViewMatrix, viewMatrix);
 	gameObjects.paddle2.draw(projectionViewMatrix, viewMatrix);
 	gameObjects.ball.draw(projectionViewMatrix, viewMatrix);
+}
+
+//code for player and ball movement under here
+
+let speedMult = 1;
+
+function reset()
+{
+	const xTranslate = width - paddleWidth;
+
+	gameObjects.paddle1.setPos([-xTranslate, 0, 0]);
+	gameObjects.paddle2.setPos([xTranslate, 0, 0]);
+	gameObjects.ball.setPos([0, 0, 0]);
+
+	gameObjects.ball.speedX = 1;
+	gameObjects.ball.speedY = 0;
+}
+
+function BoundingBox(x, y, width, height)
+{
+	let minX = x - width, maxX = x + width;
+	let minY = y - height, maxY = y + height;
+
+	return {minX, minY, maxX, maxY};
+}
+
+function boundingBoxCollide(bBoxA, bBoxB)
+{
+	let A_Left_B = bBoxA.maxX < bBoxB.minX;
+	let A_Right_B = bBoxA.minX > bBoxB.maxX;
+	let A_Above_B = bBoxA.maxY < bBoxB.minY;
+	let A_Below_B = bBoxA.minY > bBoxB.maxY;
+	return !(A_Left_B || A_Right_B || A_Above_B || A_Below_B);
+}
+
+// function moveBall(deltaTime)
+// {
+// 	let ball = gameObjects.ball;
+// 	ball.move([speedMult * ball.speedX * (deltaTime / 10), speedMult * ball.speedY * (deltaTime / 10), 0]);
+// 	console.log(ball.x);
+// 	ballCollide(ball);
+// }
+
+// function ballCollide(ball)
+// {
+// 	let paddle;
+
+// 	if (ball.speedX < 0)
+// 		paddle = gameObjects.paddle1;
+// 	else
+// 		paddle = gameObjects.paddle2;
+
+// 	let limit = width - (2 * paddleWidth);
+// 	let ballSide = Math.abs(ball.x) + ballSize;
+
+// 	if (ballSide < limit)
+// 		return;
+
+// 	let ballBoundingBox = BoundingBox(ball.x, ball.y, ballSize, ballSize);
+// 	let paddleBoundingBox = BoundingBox(paddle.x, paddle.y, paddleWidth, paddleHeight);
+
+// 	if (boundingBoxCollide(ballBoundingBox, paddleBoundingBox))
+// 	{
+// 		ball.setPos([(limit - ballSize) * Math.sign(ball.x), ball.y, ball.z]);
+
+// 		let relBallY = ball.y - (paddle.y - paddleHeight);
+// 		let nrmlrelBallY = relBallY / paddleHeight * 2;
+
+// 		let maxAngle = Math.PI / 1.5;
+// 		let angle = nrmlrelBallY * maxAngle - (maxAngle / 2);
+// 		let speed = Math.sqrt(ball.speedX ** 2 + ball.speedY ** 2);
+
+// 		//console.log(Math.sin(angle));
+		
+// 		// ball.speedX = speed * Math.cos(angle) * Math.sign(ball.speedX);
+
+// 		// ball.speedY = speed * Math.sin(angle);
+		
+// 		if (speedMult < 5)
+// 			speedMult += 0.1;
+// 	}
+
+// 	if (ball.y - ballSize <= -height || ball.y + ballSize >= height)
+// 		ball.speedY = -ball.speedY;
+// }
+
+function moveBall(deltaTime) {
+	let ball = gameObjects.ball;
+	let movementX = speedMult * ball.speedX * (deltaTime / 10);
+	let movementY = speedMult * ball.speedY * (deltaTime / 10);
+
+	// Determine the number of steps needed for smooth collision detection
+	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / (ballSize / 2));
+	const stepX = movementX / steps;
+	const stepY = movementY / steps;
+
+	// Iterate over the calculated steps
+	for (let i = 0; i < steps; i++) {
+		ball.move([stepX, stepY, 0]);
+		if (ballCollide(ball)) {
+			// Exit early if a collision is detected
+			break;
+		}
+	}
+}
+
+function ballCollide(ball) {
+	let paddle;
+
+	if (ball.speedX < 0) {
+		paddle = gameObjects.paddle1;
+	} else {
+		paddle = gameObjects.paddle2;
+	}
+
+	let limit = width - (2 * paddleWidth);
+	let ballSide = Math.abs(ball.x) + ballSize;
+
+	if (ballSide >= limit)
+	{
+		let ballBoundingBox = BoundingBox(ball.x, ball.y, ballSize, ballSize);
+		let paddleBoundingBox = BoundingBox(paddle.x, paddle.y, paddleWidth, paddleHeight);
+
+		if (boundingBoxCollide(ballBoundingBox, paddleBoundingBox)) {
+			ball.setPos([(limit - ballSize) * Math.sign(ball.x), ball.y, ball.z]);
+			ball.speedX = -ball.speedX;
+
+			// Calculate collision response
+			let relBallY = ball.y - paddle.y;
+			let nrmlrelBallY = relBallY / (paddleHeight + ballSize);
+
+			let maxAngle = Math.PI / 1.5;
+			let angle = nrmlrelBallY * maxAngle;
+			let speed = Math.sqrt(ball.speedX ** 2 + ball.speedY ** 2);
+
+			// Update ball speed based on the calculated angle
+			ball.speedX = speed * Math.cos(angle) * Math.sign(ball.speedX);
+			ball.speedY = speed * Math.sin(angle);
+
+			console.log(ball.speedX);
+			console.log(ball.speedY);
+			// Increase speed multiplier gradually
+			if (speedMult < 10) speedMult += 0.5;
+			
+			return true; // Collision occurred
+		}
+	}
+	// Bounce off the top and bottom walls
+	if (ball.y - ballSize <= -height || ball.y + ballSize >= height) {
+		ball.speedY = -ball.speedY;
+	}
+
+	return false; // No collision with paddles
 }
 
 function movePlayers(deltaTime)
@@ -176,7 +344,6 @@ let keyPress = [
 	false,	//player 1 up
 	false,	//player 2 down
 	false,	//player 2 up
-	false,	//temp view Switch
 ];
 
 const keyMap = {
@@ -196,19 +363,4 @@ function keyDown(event)
 {
 	const moveIndex = keyMap[event.keyCode];
 	if (moveIndex !== undefined) keyPress[moveIndex] = true;
-
-
-	if (event.keyCode == 32)
-	{
-		console.log("View switch!");
-		keyPress[4] = !(keyPress[4]);
-	}
-}
-
-function clearScene(gl_to_clear)
-{
-	gl_to_clear.clearDepth(1.0);
-	gl_to_clear.enable(gl_to_clear.DEPTH_TEST);
-	gl_to_clear.depthFunc(gl_to_clear.LEQUAL);
-	gl_to_clear.clear(gl_to_clear.COLOR_BUFFER_BIT | gl_to_clear.DEPTH_BUFFER_BIT);
 }
