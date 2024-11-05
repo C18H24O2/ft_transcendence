@@ -166,7 +166,7 @@ function clearScene(gl_to_clear)
 	gl_to_clear.clear(gl_to_clear.COLOR_BUFFER_BIT | gl_to_clear.DEPTH_BUFFER_BIT);
 }
 
-	//just calls draw on every object
+	//clears the scene a calls a draw function on every
 function drawScene()
 {	
 	clearScene(gl);
