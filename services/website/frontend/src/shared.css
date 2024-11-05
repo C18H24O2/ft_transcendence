@@ -48,7 +48,7 @@
         animation: button-pop .25s ease-out;
     }
 
-    .success {
+    /* .success {
         @apply bg-green;
     }
 
@@ -62,5 +62,5 @@
 
     a {
         @apply text-blue no-underline;
-    }
+    } */
 }

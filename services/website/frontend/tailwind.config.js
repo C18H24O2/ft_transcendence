@@ -23,14 +23,16 @@ module.exports = {
     require('tailwindcss-opentype'),
     createThemes({
       ...buildCatppuccinThemes('catppuccin-'),
-    }, {
+	}
+	,{
       produceThemeClass: (themeName) => `theme-${themeName}`,
       strict: true,
       defaultTheme: {
         light: 'catppuccin-latte',
         dark: 'catppuccin-mocha',
       }
-    }),
+    }
+	),
   ],
 };
 // vim: set ts=2 sw=2 et:
