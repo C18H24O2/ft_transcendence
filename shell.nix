@@ -5,7 +5,7 @@
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
     pnpm
-    nodejs_20
+    nodejs_22
     poetry
     python312
   ] ++ (with pkgs.python312Packages; [
