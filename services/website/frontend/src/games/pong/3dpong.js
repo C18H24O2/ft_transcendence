@@ -64,7 +64,7 @@ let view = true;
 let speedMult = 1; //Multiplier for speed, increases
 const BASE_BALL_SPEED = 8;
 const MAX_BALL_SPEED_MULTIPLIER = 20; //how fast the ball can go
-const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 100; //how fast it ramps up
+const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps up
 const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
 
 document.addEventListener('DOMContentLoaded', main);
