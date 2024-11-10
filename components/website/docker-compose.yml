@@ -1,0 +1,22 @@
+name: ft_trans-backend-website
+
+networks:
+  services:
+  nginx:
+
+volumes:
+  frontend-store:
+
+services:
+  website-service:
+    build: .
+    env_file: ../../.env
+    networks:
+      - services
+      - nginx
+    volumes:
+      - frontend-store:/app/dist
+  website-frontend:
+    build: ./frontend
+    volumes:
+      - frontend-store:/app/dist

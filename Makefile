@@ -2,7 +2,7 @@ NAME := ft_trans
 COMPOSE := docker compose
 
 up:
-	$(COMPOSE) up --build
+	$(COMPOSE) up --build -d
 
 down:
 	$(COMPOSE) down

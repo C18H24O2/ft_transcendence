@@ -1,0 +1,12 @@
+Dockerfile
+.dockerignore
+
+node_modules/
+dist/
+
+.gitignore
+README.md
+
+flake.*
+.envrc
+

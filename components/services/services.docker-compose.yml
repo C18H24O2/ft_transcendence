@@ -1,0 +1,19 @@
+name: ft_trans-backend-services
+
+networks:
+  services:
+
+services:
+  # Authentication service
+  auth-service:
+    build:
+      context: ./
+      dockerfile: ./auth-service/Dockerfile
+    env_file: ../../.env
+    networks:
+      - services
+    restart: unless-stopped
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    stop_signal: SIGINT

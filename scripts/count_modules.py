@@ -46,5 +46,5 @@ if __name__ == "__main__":
     print("> Effective Total:", e_total, f"({total_major + total_minor / 2.})")
     print("\nTotal project grade:")
     points = 30 + total_minor * 5 + total_major * 10
-    print("> Points:", points)
+    print(f"> Points: {points}/125")
 

@@ -1,0 +1,17 @@
+name: ft_trans-nginx
+
+networks:
+  nginx:
+
+services:
+  # Use nginx as our HTTP server and reverse-proxy
+  nginx:
+    build: .
+    networks:
+      - nginx
+    ports:
+      - "8069:80"
+      - "8043:443"
+    restart: unless-stopped
+    volumes:
+      - "./config/nginx.conf:/etc/nginx/nginx.conf"
