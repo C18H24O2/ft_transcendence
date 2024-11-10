@@ -9,14 +9,18 @@ import threading
 class LoggingStream(io.TextIOWrapper):
     """A custom stream that redirects to a custom logger
     """
-    def __init__(self, stream: object):
+    __stream: io.TextIOWrapper
+    __buffer: str
+
+    def __init__(self, stream: io.TextIOWrapper):
         self.__stream = stream
         self.__buffer = ""
 
-    def write(self, message: str):
+    def write(self, message: str) -> int:
         self.__buffer += message
         if "\n" in self.__buffer:
             self.flush()
+        return len(message)
 
     def flush(self):
         if self.__buffer:
@@ -32,12 +36,13 @@ class LoggingStream(io.TextIOWrapper):
         # get calling function/file/line
         frame = inspect.currentframe()
         try:
-            caller = inspect.getouterframes(frame, 3)[3]
+            caller = inspect.getouterframes(frame, 4)[3]
             file = caller.filename
             file = file.split("/")[-1]
             line = caller.lineno
             function = caller.function
-        except IndexError:
+        except IndexError as e:
+            print(f"Error getting caller: {e}")
             file = "?"
             line = 0
             function = "?"
@@ -46,6 +51,7 @@ class LoggingStream(io.TextIOWrapper):
         thread_name = threading.current_thread().name
         thread = thread_name.replace("Thread-", "")
         return f"[{time}] [{thread}/{file}:{function}:{line}] {message}"
+
 
 def hijack_stdout():
     """Redirects stdout and stderr to custom loggers

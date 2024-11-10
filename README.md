@@ -4,18 +4,14 @@
 
 ## Project structure
 
-- `bin/` *external programs*
-  - `cli/`
-    - a CLI to interact with the REST API and play games
 - `scripts/` *somewhat useful random stuff :+1:*
-- `services/` *what makes this shit run*
-  - `backend/`
-    - The django backend, organized in a micro-services architecture 
-  - `frontend/`
+- `components/` *what makes this shit run*
+  - `services/`
+    - The backend services, organized in a micro-services architecture 
+  - `website/`
     - HTML/JavaScript front-end, to be served by the API
   - `nginx/`
     - HTTP Server configuration and setup files
-  - `docker-compose.yml`
 
 ## Chosen modules
 
@@ -36,9 +32,9 @@ The transcendance project is split into multiple Minor and Major modules. Here a
 - **Gameplay and User Experience**
   - [x] (Major) Remote players `lvincent`
   - [ ] (Major) Multiplayer (> 2 players)
-  - [x] (Major) Add another Game (w/ User History & Matchmaking) `lvincent`
+  - [\_] (Major) Add another Game (w/ User History & Matchmaking) `lvincent`
   - [ ] (Minor) Game customization options 
-  - [ ] (Major) Live chat
+  - [x] (Major) Live chat `gpouzet`
 
 - **AI / Algorithm**
   - [ ] (Major) Introduce an AI opponent
@@ -50,22 +46,22 @@ The transcendance project is split into multiple Minor and Major modules. Here a
   - [x] (Major) Implement Two-Factor Authentication (2FA) and JWT
 
 - **Devops**
-  - [ ] (Major) Infrastructure setup for log management
+  - [\_] (Major) Infrastructure setup for log management
   - [x] (Minor) Monitoring system `kiroussa`
-  - [x] (Major) Designing the Backend as Microservices `kiroussa` 
+  - [x] (Major) ✅ Designing the Backend as Microservices `kiroussa` 
 
 - **Graphics**
   - [x] (Major) Use of advanced 3D techniques. `lvincent`
 
 - **Accessibility**
-  - [x] (Minor) Support on all devices
-  - [x] (Minor) Expanding Browser compatibility
+  - [\_] (Minor) Support on all devices
+  - [x] (Minor) ✅ Expanding Browser compatibility
   - [x] (Minor) Multiple language support
-  - [x] (Minor) Add accessibility for visually impaired users
-  - [x] (Minor) Server-Side Rendering (SSR) integration
+  - [\_] (Minor) Add accessibility for visually impaired users
+  - [x] (Minor) ✅ Server-Side Rendering (SSR) integration
 
 - **Server-Side Pong**
-  - [ ] (Major) Replace basic pong with server-side pong and implementing an API
+  - [x] (Major) Replace basic pong with server-side pong and implementing an API
   - [ ] (Major) Enabling pong gameplay via CLI against web users with API integration
 
 <!-- MODULES_END -->

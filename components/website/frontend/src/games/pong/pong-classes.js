@@ -2,11 +2,10 @@ import { Shape3d } from "./webgl-shape";
 import { getCatppuccinRGB } from "./colorUtils";
 import { mat4 } from "gl-matrix";
 
-
-class ShapeMaker
+export class ShapeMaker
 {
-	static makeShape(gl, programInfo, modelMatrix, paddleHeight, paddleWidth, paddleDepth, colorName) {
-		
+	static makeShape(gl, programInfo, modelMatrix, paddleHeight, paddleWidth, paddleDepth, colorName)
+	{	
 		const paddleVertices = [
 			// Front face
 			-paddleWidth, -paddleHeight, paddleDepth,
@@ -65,7 +64,7 @@ class ShapeMaker
 	}
 }
 
-class gameObject
+export class GameObject
 {
 	constructor(shape, x, y, z)
 	{
@@ -75,18 +74,21 @@ class gameObject
 		this.y = y || 0;
 		this.z = z || 0;
 	}
+	
 	setPos(coordinates)
 	{
 		this.x = coordinates[0];
 		this.y = coordinates[1];
 		this.z = coordinates[2];
 	}
+	
 	move(vector)
 	{
 		this.x += vector[0];
 		this.y += vector[1];
 		this.z += vector[2];
 	}
+
 	draw(ProjectionMatrix, viewMatrix)
 	{
 		mat4.identity(this.shape.modelMatrix);
@@ -94,6 +96,3 @@ class gameObject
 		this.shape.draw(ProjectionMatrix, viewMatrix);
 	}
 }
-
-export { gameObject };
-export { ShapeMaker };

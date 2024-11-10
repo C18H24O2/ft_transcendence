@@ -1,16 +1,20 @@
 name: ft_trans-backend
 
+include:
+  - ./services.docker-compose.yml
+
 networks:
-  backend:
+  services:
   nginx:
+  prometheus:
 
 volumes:
   db:
 
 services:
   # The global database, used for storing users, scores, game data, etc.
+  # We're using PostgreSQL as per the subject's requirements
   postgres:
-    # We're using PostgreSQL as per the subject's requirements
     env_file: ../../.env
     healthcheck:
       test: "pg_isready -U $POSTGRES_USER"
@@ -19,27 +23,30 @@ services:
       retries: 5
     image: "postgres:14.12-alpine3.19"
     networks:
-      - backend 
+      - services 
     # ports:
     #   - "5432:5432"
     restart: unless-stopped
     volumes:
       - db:/var/lib/postgresql/data
 
-  # A Redis instance that will act as a fast cache layer
-  redis:
-    # We're using valkey, a redis fork by the Linux Foundation, since redis switched
-    # to using a non-free license a while ago, which is, dare I say it, *cringe*.
-    image: "valkey/valkey:7.2.5-alpine"
-    networks:
-      - backend
-    restart: unless-stopped
-
   # RabbitMQ is a fast message queue, used for quick inter-service communication
   rabbitmq:
     image: "rabbitmq:3.13.4"
+    env_file: ../../.env
+    environment:
+      RABBITMQ_ENABLED_PLUGINS_FILE: /rabbitmq_plugins.er
     networks:
-      - backend
+      - services
+      - nginx
+      - prometheus
+    volumes:
+      - ./rabbitmq/enabled-plugins.er:/rabbitmq_plugins.er
     # ports:
       # - "5672:5672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 5s
+      timeout: 30s
+      retries: 10
     restart: unless-stopped

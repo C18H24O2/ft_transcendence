@@ -11,7 +11,6 @@ if __name__ == "__main__":
         print("Usage: python3 launcher.py <path/to/your-service.py>")
         sys.exit(1)
 
-    print(sys.argv)
     target_file = sys.argv[1]
     if not os.path.exists(target_file):
         print(f"File {target_file} does not exist")
@@ -25,6 +24,10 @@ if __name__ == "__main__":
     loader = SourceFileLoader("service", target_file)
 
     # Instantiate the service class, and run it
+    print(f"Loading service {target_file}")
+    current_time = time.time()
     service = loader.load_module("service")
-
-    print(f"Running service {service}")
+    time_diff = time.time() - current_time
+    time_str_in_ms = f"{time_diff * 1000:.2f}"
+    print(f"Loaded service {target_file} in {time_str_in_ms}ms")
+    service.launch()

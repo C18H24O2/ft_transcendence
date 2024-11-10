@@ -20,3 +20,21 @@ from django.urls import path
 
 urlpatterns = [
 ]
+
+
+
+
+
+# api/auth/login
+def login(request):
+    return HttpResponse("auth")
+
+
+
+
+
+
+
+
+
+
