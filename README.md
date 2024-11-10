@@ -2,6 +2,8 @@
 
 > Ping? Pong! Now with a side of `Uncaught TypeError: this.document is undefined`
 
+This monorepo contains the code for `ft_transcendence`, the last project at 42 school. 
+
 ## Project structure
 
 - `scripts/` *somewhat useful random stuff :+1:*
