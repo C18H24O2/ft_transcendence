@@ -2,7 +2,7 @@
 name: ft_trans
 
 include:
-  - ./services/backend/docker-compose.yml
-  - ./services/nginx/docker-compose.yml
-  - ./services/website/docker-compose.yml
-  # - ./services/vault/docker-compose.yml
+  - ./components/services/docker-compose.yml
+  - ./components/nginx/docker-compose.yml
+  - ./components/website/docker-compose.yml
+  # - ./components/vault/docker-compose.yml
