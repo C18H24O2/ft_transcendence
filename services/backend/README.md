@@ -18,8 +18,11 @@
 - `chat-websocket/`
   - The websocket the chat uses
 
+- `matchmaking-service/`
+  - Gestion de création de lobby
+
 - `game-service/`
   - Game manager, handles game state management, match finding, and tournaments.
 
 - `user-service/`
-  - Manages users, no clue what to say about it lol
+  - Manages user creation, profile management, and user-related data
