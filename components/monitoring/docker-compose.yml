@@ -37,14 +37,13 @@ services:
       - nginx
     restart: unless-stopped
 
-  # grafana:
-  #   image: grafana/grafana:11.3.0-ubuntu
-  #   volumes:
-  #     - grafana_data:/var/lib/grafana
-  #     - ./grafana/config.ini:/etc/grafana/grafana.ini
-  #   ports:
-  #     - 3000:3000
-  #   networks:
-  #     - prometheus
-  #     - nginx
-  #   restart: unless-stopped
+  grafana:
+    image: grafana/grafana:11.3.0-ubuntu
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      # - ./grafana/sources:/etc/grafana/provisioning/datasources
+    networks:
+      - prometheus
+      - nginx
+    restart: unless-stopped
