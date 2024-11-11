@@ -19,9 +19,9 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
-      - '--web.external-url=/prometheus/'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
+      # - '--web.external-url=/prometheus/'
+      # - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      # - '--web.console.templates=/usr/share/prometheus/consoles'
       - '--web.enable-lifecycle'
     networks:
       - prometheus
@@ -42,7 +42,7 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      # - ./grafana/sources:/etc/grafana/provisioning/datasources
+      - ./grafana/sources:/etc/grafana/provisioning/datasources
     networks:
       - prometheus
       - nginx
