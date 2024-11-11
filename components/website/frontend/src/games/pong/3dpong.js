@@ -3,7 +3,7 @@ import { getTheme } from '../../theme.js';
 import { initShaders } from './webgl-initshader.js';
 import { Shape3d } from './webgl-shape.js';
 import { mat4 } from 'gl-matrix';
-import { ShapeMaker, gameObject } from './pong-classes.js';
+import { ShapeMaker, GameObject } from './pong-classes.js';
 import { getCatppuccinWEBGL } from './colorUtils.js';
 
 function setClearColor(colorName, setgl)
@@ -122,9 +122,9 @@ function initShapes(programInfo)
 {
 	const xTranslate = width - paddleWidth;
 
-	let paddle1 = new gameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire"));
-	let paddle2 = new gameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire"));
-	let ball = new gameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), ballSize, ballSize, ballSize, "sapphire"));
+	let paddle1 = new GameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire"));
+	let paddle2 = new GameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "sapphire"));
+	let ball = new GameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), ballSize, ballSize, ballSize, "sapphire"));
 
 	gameObjects.paddle1 = paddle1;
 	gameObjects.paddle2 = paddle2;
