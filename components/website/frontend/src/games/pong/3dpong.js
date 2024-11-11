@@ -29,12 +29,22 @@ let gameObjects = {};
 
 
 	//Basic info about the gamefield
+
+function resizeCanvas(size)
+{
+	gl.canvas.width = size;
+	gl.canvas.height = size;
+	gl.viewport(0,0,gl.canvas.width, gl.canvas.height);
+}
+
+if (gl.canvas.height < 720 || gl.canvas.width < 720 || gl.canvas.height != gl.canvas.width)
+	resizeCanvas(720);
+
 const height = gl.canvas.height / 2;
 const width = gl.canvas.width / 2;
 const viewMatrix = mat4.create();
 const projectionMatrix = mat4.create();
 const projectionViewMatrix = mat4.create();
-
 
 	//Score containers
 const scoreP1 = document.getElementById("score-player");
@@ -59,17 +69,17 @@ const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
 	//for the view switch between 3d and 2d
 let view = true;
 
-
 	//Values for the game difficulty ramp up and reset
 let speedMult = 1; //Multiplier for speed, increases
-const BASE_BALL_SPEED = 8;
+const BASE_BALL_SPEED = height / 160;
 const MAX_BALL_SPEED_MULTIPLIER = 20; //how fast the ball can go
 const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps up
 const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
+const BASE_PADDLE_SPEED = paddleHeight / 12;
 
 document.addEventListener('DOMContentLoaded', main);
 
-	//FUnction Setter, value initialisation and shader compilation
+	//Function Setter, value initialisation and shader compilation
 function main()
 {
 	document.addEventListener('keydown', keyDown);
@@ -100,7 +110,6 @@ function main()
 		then = now;
 		if (getTheme() != currentTheme)
 		{
-			console.log("changeTheme()");
 			currentTheme = getTheme();
 			setClearColor("crust", gl);
 			gameObjects.paddle1.shape.updateColor();
@@ -200,7 +209,6 @@ function checkGoal()
 		{
 			gameObjects.paddle2.score += 1;
 			scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
-			console.log("caca");
 			reset(-1);
 		}
 		if (ball.x > width)
@@ -234,7 +242,6 @@ function moveBall(deltaTime) {
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 
-	console.log(speedMult);
 	// Determine the number of steps needed for smooth collision detection
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
@@ -299,8 +306,7 @@ function ballCollide(ball) {
 
 function movePlayers(deltaTime)
 {
-	const step = paddleHeight / 12;
-	const speed = (step * (1 + ((speedMult / MAX_BALL_SPEED_MULTIPLIER) * MAX_PADDLE_SPEED_MULTIPLIER)) * (deltaTime / 10));
+	const speed = (BASE_PADDLE_SPEED * (1 + ((speedMult / MAX_BALL_SPEED_MULTIPLIER) * MAX_PADDLE_SPEED_MULTIPLIER)) * (deltaTime / 10));
 	const limit = height - paddleHeight;
 
 	if (keyPress[0] ^ keyPress[1])
