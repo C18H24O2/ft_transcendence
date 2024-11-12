@@ -2,6 +2,7 @@ name: ft_trans-nginx
 
 networks:
   nginx:
+  nginx_exporter:
 
 services:
   # Use nginx as our HTTP server and reverse-proxy
@@ -9,6 +10,7 @@ services:
     build: .
     networks:
       - nginx
+      - nginx_exporter
     ports:
       - "8069:80"
       - "8043:443"
@@ -16,5 +18,11 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "wget -O /dev/null http://localhost:14321/health || exit 1"]
       timeout: 10s
+      retries: 5
+      interval: 10s
     volumes:
       - "./config/nginx.conf:/etc/nginx/nginx.conf"
+    depends_on:
+      - grafana
+      - rabbitmq
+      - website-service

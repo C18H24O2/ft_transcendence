@@ -1,0 +1,49 @@
+networks:
+  prometheus:
+  nginx_exporter:
+
+services:
+  # Exports nginx metrics (simple) to prometheus
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.3.0
+    environment:
+      - SCRAPE_URI=http://nginx:14321/nginx_status-internal
+    networks:
+      - prometheus
+      # A linked network with nginx just to access the status endpoint
+      - nginx_exporter
+    restart: unless-stopped
+    depends_on:
+      nginx:
+        condition: service_healthy
+
+  # Exports system metrics for prometheus
+  # Note that this only supports Linux hosts, not windows.
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - prometheus
+    restart: unless-stopped
+
+  # Analyzes resource usage and performance characteristics of running containers.
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.51.0
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /dev/kmsg:/dev/kmsg
+    networks:
+      - prometheus
+    restart: unless-stopped
