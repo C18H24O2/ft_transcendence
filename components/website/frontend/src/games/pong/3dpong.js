@@ -37,8 +37,8 @@ function resizeCanvas(size)
 	gl.viewport(0,0,gl.canvas.width, gl.canvas.height);
 }
 
-if (gl.canvas.height < 720 || gl.canvas.width < 720 || gl.canvas.height != gl.canvas.width)
-	resizeCanvas(720);
+if (gl.canvas.height < 1920 || gl.canvas.width < 1920 || gl.canvas.height != gl.canvas.width)
+	resizeCanvas(1920);
 
 const height = gl.canvas.height / 2;
 const width = gl.canvas.width / 2;

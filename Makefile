@@ -7,4 +7,9 @@ up:
 down:
 	$(COMPOSE) down -v
 
-.PHONY: up down
+re: down up
+
+dev:
+	pnpm run --prefix components/website/frontend dev
+
+.PHONY: up down re dev
