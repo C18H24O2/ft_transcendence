@@ -2,9 +2,9 @@ NAME := ft_trans
 COMPOSE := docker compose
 
 up:
-	$(COMPOSE) up --build -d
+	$(COMPOSE) up --build || true
 
 down:
-	$(COMPOSE) down
+	$(COMPOSE) down -v
 
 .PHONY: up down

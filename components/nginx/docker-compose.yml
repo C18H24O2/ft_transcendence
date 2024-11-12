@@ -13,5 +13,8 @@ services:
       - "8069:80"
       - "8043:443"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:14321/health || exit 1"]
+      timeout: 10s
     volumes:
       - "./config/nginx.conf:/etc/nginx/nginx.conf"
