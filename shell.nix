@@ -8,6 +8,9 @@ pkgs.mkShell {
     nodejs_22
     poetry
     python312
+    minikube
+    kubectl
+    kubernetes
   ] ++ (with pkgs.python312Packages; [
     pika
     django

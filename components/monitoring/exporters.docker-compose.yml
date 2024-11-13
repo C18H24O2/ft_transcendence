@@ -1,17 +1,30 @@
 networks:
   prometheus:
-  nginx_exporter:
+  # A linked network with nginx to access internal (metrics) endpoints
+  nginx_internal:
+
+volumes:
+  nginx_logs:
+    driver: local
 
 services:
-  # Exports nginx metrics (simple) to prometheus
-  nginx-exporter:
-    image: nginx/nginx-prometheus-exporter:1.3.0
-    environment:
-      - SCRAPE_URI=http://nginx:14321/nginx_status-internal
+  # Exports nginx metrics via looking at both the internal endpoint,
+  # and scraping nginx's access logs for finer grained metrics.
+  # (only because the free version of nginx doesn't have proper metrics, sigh.)
+  prometheus-nginx-exporter:
+    build: ./prometheus-nginx-exporter
+    command:
+      - '--target.host=nginx'
+      - '--target.port=14321'
+      - '--target.path=/nginx_status-internal'
+      - '--target.log=/nginx-logs/access.log'
     networks:
       - prometheus
-      # A linked network with nginx just to access the status endpoint
-      - nginx_exporter
+      - nginx_internal
+    volumes:
+      - nginx_logs:/nginx-logs
+    ports:
+      - 9150:9150
     restart: unless-stopped
     depends_on:
       nginx:
@@ -47,3 +60,6 @@ services:
     networks:
       - prometheus
     restart: unless-stopped
+
+# Note: There are other containers in the project that provide prometheus metrics endpoints:
+# - RabbitMQ

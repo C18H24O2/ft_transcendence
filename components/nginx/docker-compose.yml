@@ -2,7 +2,11 @@ name: ft_trans-nginx
 
 networks:
   nginx:
-  nginx_exporter:
+  nginx_internal:
+
+volumes:
+  nginx_logs:
+    driver: local
 
 services:
   # Use nginx as our HTTP server and reverse-proxy
@@ -10,7 +14,7 @@ services:
     build: .
     networks:
       - nginx
-      - nginx_exporter
+      - nginx_internal
     ports:
       - "8069:80"
       - "8043:443"
@@ -22,6 +26,7 @@ services:
       interval: 10s
     volumes:
       - "./config/nginx.conf:/etc/nginx/nginx.conf"
+      - nginx_logs:/nginx-logs
     depends_on:
       - grafana
       - rabbitmq
