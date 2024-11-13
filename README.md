@@ -36,7 +36,7 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
 - **Gameplay and User Experience**
   - [x] (Major) Remote players `lvincent`
   - [ ] (Major) Multiplayer (> 2 players)
-  - [\_] (Major) Add another Game (w/ User History & Matchmaking) `lvincent`
+  - [ ] (Major) Add another Game (w/ User History & Matchmaking) `lvincent`
   - [ ] (Minor) Game customization options 
   - [x] (Major) Live chat `gpouzet`
 
@@ -50,7 +50,7 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [x] (Major) Implement Two-Factor Authentication (2FA) and JWT
 
 - **Devops**
-  - [\_] (Major) Infrastructure setup for log management
+  - [ ] (Major) Infrastructure setup for log management
   - [x] (Minor) ✅ Monitoring system `kiroussa`
   - [x] (Major) ✅ Designing the Backend as Microservices `kiroussa` 
 
@@ -58,10 +58,10 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [x] (Major) ✅ Use of advanced 3D techniques. `lvincent`
 
 - **Accessibility**
-  - [\_] (Minor) Support on all devices
+  - [ ] (Minor) Support on all devices
   - [x] (Minor) ✅ Expanding Browser compatibility
   - [x] (Minor) Multiple language support
-  - [\_] (Minor) Add accessibility for visually impaired users
+  - [ ] (Minor) Add accessibility for visually impaired users
   - [x] (Minor) ✅ Server-Side Rendering (SSR) integration
 
 - **Server-Side Pong**
