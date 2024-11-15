@@ -96,7 +96,6 @@ function main()
 
 	let then = Date.now();
 	let deltaTime = 0;
-	let distance = 0;
 	mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
 	if (!view)
 		mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
@@ -120,7 +119,6 @@ function main()
 		moveBall(deltaTime);
 		checkGoal();
 		drawScene();
-		distance += deltaTime;
 		requestAnimationFrame(render);
 	}
 	requestAnimationFrame(render);
