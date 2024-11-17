@@ -128,9 +128,12 @@ def ballCollide(game_state):
 
 			if (speedMult < MAX_BALL_SPEED_MULTIPLIER):
 				speedMult = min(speedMult + BALL_SPEED_INCREASE, MAX_BALL_SPEED_MULTIPLIER);
+			return True
 	if (ballYSide >= FIELD_DIMS):
 		ball.setPos(ball.x, (FIELD_DIMS - BALL_SIZE) * math.copysign(1, ball.y))
 		ball.speed_y = -ball.speed_y
+		return True
+	return False
 
 def moveBall(game_state, delta_time):
 	ball = game_state['ball']
@@ -143,7 +146,8 @@ def moveBall(game_state, delta_time):
 
 	for i in range(steps):
 		ball.move([step_x, step_y])
-		ballCollide(game_state)
+		if ballCollide(game_state):
+			break ;
 
 def checkGoal(game_state):
 	ball = game_state['ball']	
