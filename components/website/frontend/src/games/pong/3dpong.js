@@ -240,15 +240,15 @@ function moveBall(deltaTime) {
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 
-	// Determine the number of steps needed for smooth collision detection
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
 	const stepY = movementY / steps;
 
-	// Iterate over the calculated steps
 	for (let i = 0; i < steps; i++) {
 		ball.move([stepX, stepY, 0]);
-		ballCollide(ball);
+		if (ballCollide(ball)) {
+			break;
+		}
 	}
 }
 
@@ -286,12 +286,17 @@ function ballCollide(ball) {
 
 			if (speedMult < MAX_BALL_SPEED_MULTIPLIER) 
 				speedMult = Math.min(speedMult + BALL_SPEED_INCREASE, MAX_BALL_SPEED_MULTIPLIER);
+			
+			return true; // Collision occurred
 		}
 	}
 	if (ballYSide >= height) {
 		ball.setPos([ball.x, (height - ballSize) * Math.sign(ball.y), ball.z]);
 		ball.speedY = -ball.speedY;
+		return (true)
 	}
+
+	return false; // No collision with paddles
 }
 
 function movePlayers(deltaTime)
