@@ -248,10 +248,7 @@ function moveBall(deltaTime) {
 	// Iterate over the calculated steps
 	for (let i = 0; i < steps; i++) {
 		ball.move([stepX, stepY, 0]);
-		if (ballCollide(ball)) {
-			// Exit early if a collision is detected
-			break;
-		}
+		ballCollide(ball);
 	}
 }
 
@@ -289,17 +286,12 @@ function ballCollide(ball) {
 
 			if (speedMult < MAX_BALL_SPEED_MULTIPLIER) 
 				speedMult = Math.min(speedMult + BALL_SPEED_INCREASE, MAX_BALL_SPEED_MULTIPLIER);
-			
-			return true; // Collision occurred
 		}
 	}
 	if (ballYSide >= height) {
 		ball.setPos([ball.x, (height - ballSize) * Math.sign(ball.y), ball.z]);
 		ball.speedY = -ball.speedY;
-		return (true)
 	}
-
-	return false; // No collision with paddles
 }
 
 function movePlayers(deltaTime)
