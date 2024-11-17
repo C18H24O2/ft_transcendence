@@ -65,7 +65,15 @@
     }
 	
 	.card {
-		@apply w-96 aspect-[11/16] bg-mantle rounded-md shadow-xl !transition-all duration-500 ease-in-out hover:scale-110 hover:z-10 overflow-x-hidden overflow-y-scroll text-pretty;
+		@apply w-96 aspect-[11/16] opacity-90 bg-mantle rounded-md shadow-lg !transition-all duration-500 ease-in-out hover:shadow-2xl hover:-translate-y-[10%] hover:scale-[115%] hover:z-10 overflow-x-hidden overflow-y-scroll text-pretty;
+	}
+	  
+	.card-container:has(.card:hover) .card {
+		filter: brightness(95%)
+	}
+
+	.card-container:has(.card:hover) .card:hover {
+		filter: brightness(105%)
 	}
 
 	.card-text {
