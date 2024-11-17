@@ -7,15 +7,40 @@
 		<link rel="icon" href="/assets/logo.webp" type="image/icon type"/> 
 	</head>
 	<body class="p-0 m-0 font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300 bg-placeholder-pattern bg-auto bg-center min-h-svh flex flex-col justify-center items-center">
-		<header class="px-4 py-8 flex items-center justify-start bg-surface0/65 hover:bg-surface0/90 rounded-xl p-4 fixed top-5 left-5 flex-col space-y-4 [&_*]:transition-colors [&_*]:duration-300">
+		<header class="z-10 px-4 py-8 flex items-center justify-start bg-surface0/65 hover:bg-surface0/90 rounded-xl p-4 fixed top-5 left-5 flex-col space-y-4 [&_*]:transition-colors [&_*]:duration-300">
 			<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg"><i class="inline" data-feather="edit-3"></i> Change Theme</button>
 			<a class="text-blue btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4" href="/"> 
 				<button><i class="inline" data-feather="home"></i> Home</button>
 			</a>
 		</header>
-		<div class="bg-mantle/90 hover:bg-mantle/95 [&_*]:transition-colors [&_*]:duration-300 backdrop-blur-md w-[70vw] h-[90vh] rounded-xl relative">
-			<div class="bg-lavender/80 hover:bg-lavender [&_*]:transition-colors [&_*]:duration-300 w-[15%] aspect-square rounded-full absolute top-5 left-5 overflow-hidden">
-				<img src="/account/assets/profile.png" onerror="this.src='/assets/placeholder.png'">
+		<div class="bg-mantle/85 hover:bg-mantle/90 [&_*]:transition-colors [&_*]:duration-300 backdrop-blur-md w-[70vw] h-[90vh] rounded-xl p-5">
+			<div class="w-10 aspect-square rounded-full bg-green absolute top-8 right-8"></div>
+			<div class="flex flex-col">
+				<div class="bg-overlay2/80 hover:bg-overlay2 w-64 aspect-square rounded-full overflow-hidden">
+					<img src="/account/assets/profile.png" onerror="this.src='/assets/placeholder.png'">
+				</div>
+				<div id="public-info" class="flex flex-col justify-evenly my-5">
+					<div class="text-3xl">
+						<span id="display-name">
+							No Data
+						</span>
+					</div>					  
+					<div class="text-lg">
+						<span id="display-name">
+							No Data
+						</span>
+					</div>	
+				</div>
+				<div id="private-info" class="flex flex-col justify-evenly my-16">
+					<div class="text-lg">
+						<span id="e-mail">
+							No Data
+						</span>
+					</div>					  
+				</div>
+			</div>
+			<div id="match-history">
+
 			</div>
 		</div>
 		<script type="module" src="home.js"></script>
