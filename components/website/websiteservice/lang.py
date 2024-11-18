@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.http import HttpRequest
-from .decorators import memoized
 import json
 import os
 
@@ -19,9 +18,7 @@ def get_user_lang(request: HttpRequest) -> str:
     return request.COOKIES.get('ft-lang', 'en')
 
 
-@memoized
-def get_translate_function(request: HttpRequest) -> callable:
-    lang: str = get_user_lang(request)
+def get_translate_function(lang: str) -> callable:
     filename = os.path.join(LANGS_DIR, f'{lang}.json')
 
     if not os.path.exists(filename):
@@ -33,6 +30,7 @@ def get_translate_function(request: HttpRequest) -> callable:
             data = json.load(f)
 
             def translate(text: str) -> str:
+                print("Translating", text)
                 keys = text.split('.')
                 try:
                     if len(keys) == 1:
@@ -40,8 +38,10 @@ def get_translate_function(request: HttpRequest) -> callable:
                     else:
                         current = data
                         for key in keys:
+                            print("getting", key, "from", current)
                             current = current.get(key, {})
-                        return current.get(keys[-1], text)
+                        print("got", current)
+                        return str(current)
                 except Exception as e:
                     print("Error translating", text, e)
                     return text

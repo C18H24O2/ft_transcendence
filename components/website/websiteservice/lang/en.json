@@ -13,4 +13,7 @@
 		"login": "Connexion",
 		"view": "Change de vue",
 	},
+	"test": {
+		"salut": "ptdr hello"
+	}
 }

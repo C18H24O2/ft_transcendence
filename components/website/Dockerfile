@@ -23,8 +23,8 @@ WORKDIR /app
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
-COPY website-service ./website-service
+COPY websiteservice ./websiteservice
 
 EXPOSE 42069
 
-ENTRYPOINT ["django-admin", "runserver", "--pythonpath=.", "--settings=website-service.main", "0.0.0.0:42069"]
+ENTRYPOINT ["django-admin", "runserver", "--pythonpath=.", "--settings=websiteservice.main", "0.0.0.0:42069"]

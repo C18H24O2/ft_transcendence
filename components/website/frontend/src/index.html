@@ -1,3 +1,4 @@
+{% load ft_trans_tags %}
 <!DOCTYPE html>
 <html lang="{{ lang }}" class="scroll-smooth">
 <head>
@@ -28,8 +29,8 @@
 	<noscript>
 		<div class="flex justify-center items-center w-full h-svh">
 			<div class="w-full max-w-md">
-				<h1 class="text-2xl font-bold">{{ translate('javascript_required.title') }}</h1>
-				<p class="text-lg">{{ translate('javascript_required.desc') }}</p>
+				<h1 class="text-2xl font-bold">{% translate 'javascript_required.title' %}</h1>
+				<p class="text-lg">{% translate 'javascript_required.desc' %}</p>
 			</div>
 		</div>
 	</noscript>
@@ -39,20 +40,7 @@
 			<!-- <a href="/">
 				<img src="/static/assets/logo.webp" alt="ft_trans logo">
 			</a>
-			<div class="flex flex-row gap-16">```py
-def template(template_name):
-    def decorator(func):
-        def wrapper(request, *args, **kwargs):
-            context = func(request, *args, **kwargs)
-            return render(request, template_name, context)
-        return wrapper
-    return decorator
-
-
-@template('index.html')
-def home(request):
-  
-```
+			<div class="flex flex-row gap-16">
 				<button class="btn" href="/">Home</button>
 				<button class="btn" href="/login">Login</button>
 				<button class="btn" href="/register">Register</button>
@@ -71,7 +59,7 @@ def home(request):
 			<div class="backdrop-blur-xl rounded-xl p-24 px-32 bg-base/70 hover:bg-base/80 border-overlay2/15 border-2 flex flex-col gap-12 font-title">
 				<div class="flex flex-col">
 					<h1 class="text-6xl"><span class="font-semibold">Welcome</span> to <span class="font-extrabold">ft_trans.</span></h1>  
-					<p class="text-xl italic drop-shadow-xl font-light">a free and open source gaming platform with</p>
+					<p class="text-xl italic drop-shadow-xl font-light">{% translate 'test.salut' %}</p>
 					<p class="text-xl italic drop-shadow-xl self-end font-light">popular games and a vast community of players!</p>
 				</div>
 				<div class="flex flex-row justify-center">

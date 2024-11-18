@@ -15,6 +15,7 @@ ROOT_URLCONF = __name__
 
 INSTALLED_APPS = [
     "django.contrib.staticfiles",
+    "websiteservice",
 ]
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -45,6 +46,7 @@ def _find_template(
             # if it's a directory, add /index.html
             if os.path.isdir(abs):
                 abs = os.path.join(abs, 'index.html')
+            print(abs)
             return render(request, abs, context)
     return None
 
@@ -79,8 +81,7 @@ def main(_request):
         'website_title': 'ft_trans',
         'title': title,
         'languages': LANGUAGES,
-        'current_lang': get_user_lang(_request),
-        'translate': get_translate_function(_request),
+        'lang': get_user_lang(_request),
     }
 
     return find_template(_request, context)

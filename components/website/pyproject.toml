@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "website-service"
+name = "websiteservice"
 version = "0.1.0"
 description = ""
 authors = []
