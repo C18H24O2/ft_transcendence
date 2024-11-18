@@ -1,2 +1,16 @@
 {
+	"javascript_required": {
+		"title": "Le JavaScript est desactivé",
+		"desc": "ft_trans requiert l'activation du JavaScript sur votre navigateur",
+	},
+	"title": {
+		"main": "Welcome to the website",
+		"login": "Log in",
+		"pong": "Ping? Pong!"
+	},
+	"button": {
+		"theme": "Change Theme",
+		"login": "Login",
+		"view": "Change view",
+	},
 }

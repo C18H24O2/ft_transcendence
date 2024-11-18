@@ -58,9 +58,9 @@ def home(request):
 				<button class="btn" href="/register">Register</button>
 			</div> -->
 			<div class="flex flex-row gap-8">
-				<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i> Change Theme</button>
+				<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i>{{translate('theme.btn')}} </button>
 					<a class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4" href="/login/"> 
-						<button><i class="inline" data-feather="log-in"></i> Login</button>
+						<button><i class="inline" data-feather="log-in"></i>{{translate('login.btn')}} </button>
 					</a>
 			</div>
 		</nav>

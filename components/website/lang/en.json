@@ -3,7 +3,14 @@
 		"title": "JavaScript is disabled",
 		"desc": "ft_trans requires JavaScript to be enabled in your browser.",
 	},
-	"main": {
-		"title": "Welcome to the website",
+	"title": {
+		"main": "Welcome to the website",
+		"login": "Log in",
+		"pong": "Ping? Pong!"
+	},
+	"button": {
+		"theme": "Changer de Theme",
+		"login": "Connexion",
+		"view": "Change de vue",
 	},
 }
