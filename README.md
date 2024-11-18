@@ -38,7 +38,7 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [ ] (Major) Multiplayer (> 2 players)
   - [ ] (Major) Add another Game (w/ User History & Matchmaking) `lvincent`
   - [ ] (Minor) Game customization options 
-  - [x] (Major) Live chat `gpouzet`
+  - [ ] (Major) Live chat `gpouzet`
 
 - **AI / Algorithm**
   - [ ] (Major) Introduce an AI opponent
