@@ -55,7 +55,7 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [x] (Major) ✅ Designing the Backend as Microservices `kiroussa` 
 
 - **Graphics**
-  - [x] (Major) ✅ Use of advanced 3D techniques. `lvincent`
+  - [x] (Major) ✅ Use of ~~advanced~~ 3D techniques. `lvincent`
 
 - **Accessibility**
   - [ ] (Minor) Support on all devices
