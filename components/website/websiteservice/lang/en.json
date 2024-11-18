@@ -1,17 +1,48 @@
 {
-	"javascript_required": {
+	"error": {
+		"javascript_required": {
 		"title": "JavaScript is disabled",
 		"desc": "ft_trans requires JavaScript to be enabled in your browser.",
+		},
+		"html5_required": "Your Browser doesn't support some HTML5 flags, please consider using a HTML5 compliant browser to continue playing",
+		"missing_text": "No Data",
 	},
 	"title": {
 		"main": "Welcome to the website",
 		"login": "Log in",
-		"pong": "Ping? Pong!"
+		"pong": "Ping? Pong!",
+		"chat": "Livechat",
+		"account": "Accounts",
 	},
 	"button": {
-		"theme": "Changer de Theme",
-		"login": "Connexion",
-		"view": "Change de vue",
+		"theme": "Change Theme",
+		"login": "Login",
+		"view": "Change view",
+		"home": "Home",
+	},
+	"welcome_page": {
+			"title": "Welcome to",
+			"desc_1": "a free and open source gaming platform with",
+			"desc_2": "popular games and a vast community of players!",
+			"gamemodes": "See our Gamemodes",
+	},
+	"gamemode_cards": {
+		"pong_offline": {
+			"title": "Offline Pong",
+			"desc": "The classic pong experience, now on your Browser!",
+		},
+		"pong_online": {
+			"title": "Online Pong",
+			"desc": "Play against other players in an epic real-time battle!",
+		},
+		"pong_tournament": {
+			"title": "Pong Tournament",
+			"desc": "Battle against your friends and become the champion!",
+		},
+	},
+	"dictionnary": {
+		"username": "Username",
+		"password": "Password",
 	},
 	"test": {
 		"salut": "ptdr hello"

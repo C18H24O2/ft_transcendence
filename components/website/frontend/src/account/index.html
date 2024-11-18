@@ -3,14 +3,14 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; user-scalable=0;">
-		<title>My Account</title>
+		<title>{% translate 'title.account' %}</title>
 		<link rel="icon" href="/assets/logo.webp" type="image/icon type"/> 
 	</head>
 	<body class="p-0 m-0 font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300 bg-placeholder-pattern bg-auto bg-center min-h-svh flex flex-col justify-center items-center">
 		<header class="z-10 px-4 py-8 flex items-center justify-start bg-surface0/65 hover:bg-surface0/90 rounded-xl p-4 fixed top-5 left-5 flex-col space-y-4 [&_*]:transition-colors [&_*]:duration-300">
-			<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg"><i class="inline" data-feather="edit-3"></i> Change Theme</button>
+			<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %}</button>
 			<a class="text-blue btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4" href="/"> 
-				<button><i class="inline" data-feather="home"></i> Home</button>
+				<button><i class="inline" data-feather="home"></i> {% translate 'button.home' %}</button>
 			</a>
 		</header>
 		<div class="bg-mantle/85 hover:bg-mantle/90 [&_*]:transition-colors [&_*]:duration-300 backdrop-blur-md w-[70vw] h-[90vh] rounded-xl p-5">
@@ -22,19 +22,19 @@
 				<div id="public-info" class="flex flex-col justify-evenly my-5">
 					<div class="text-3xl">
 						<span id="display-name">
-							No Data
+							{% translate 'error.missing_text' %}
 						</span>
 					</div>					  
 					<div class="text-lg">
 						<span id="display-name">
-							No Data
+							{% translate 'error.missing_text' %}
 						</span>
 					</div>	
 				</div>
 				<div id="private-info" class="flex flex-col justify-evenly my-16">
 					<div class="text-lg">
 						<span id="e-mail">
-							No Data
+							{% translate 'error.missing_text' %}
 						</span>
 					</div>					  
 				</div>

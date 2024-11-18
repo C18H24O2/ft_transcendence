@@ -1,5 +1,50 @@
 {
+	"error": {
+		"javascript_required": {
+		"title": "le JavaScript est desactivé",
+		"desc": "ft_trans necessite que JavaScript soit activé dans votre navigateur.",
+		},
+		"html5_required": "Votre navigateur ne supporte pas certaines balises HTML5, pensez a utiliser un navigateur compatible HTML5 pour continuer a jouer",
+		"missing_text": "pas de données",
+	},
+	"title": {
+		"main": "Bienvenue sur le site",
+		"login": "Connexion",
+		"pong": "Ping? Pong!",
+		"chat": "discussion",
+		"account": "Comptes",
+	},
+	"button": {
+		"theme": "Changer de Theme",
+		"login": "Connexion",
+		"view": "Changer de vue",
+		"home": "Accueil",
+	},
+	"welcome_page": {
+			"title": "Bienvenue sur",
+			"desc_1": "une plateforme de jeu gratuite et ouverte avec",
+			"desc_2": "des jeux populaires et une vaste communauté de joueurs!",
+			"gamemodes": "Voir nos modes de jeu",
+	},
+	"gamemode_cards": {
+		"pong_offline": {
+			"title": "Pong local",
+			"desc": "L'experience originale du pong, sur votre navigateur!",
+		},
+		"pong_online": {
+			"title": "Pong en Ligne",
+			"desc": "Jouez contre d'autres joueurs dans une bataille epique en temps réel!",
+		},
+		"pong_tournament": {
+			"title": "Tournoi Pong",
+			"desc": "Jouez contre vos amis et devenez le champion!",
+		},
+	},
+	"dictionnary": {
+		"username": "Identifiant",
+		"password": "Mot de passe",
+	},
 	"test": {
-		"salut": "ptdr hi"
+		"salut": "ptdr hello"
 	}
 }
