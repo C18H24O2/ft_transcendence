@@ -3,9 +3,9 @@
 
 from django.core.management.utils import get_random_secret_key
 from django.http import HttpResponse, HttpRequest
-# from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import re_path
+from .lang import LANGUAGES, get_user_lang, get_translate_function
 import os
 
 
@@ -32,6 +32,7 @@ STATIC_URL = 'static/'
 
 def _find_template(
     request: HttpRequest,
+    context: dict = {},
     path: str | None = None
 ) -> HttpResponse | None:
     path = request.path if path is None else path
@@ -44,31 +45,51 @@ def _find_template(
             # if it's a directory, add /index.html
             if os.path.isdir(abs):
                 abs = os.path.join(abs, 'index.html')
-            return render(request, abs)
+            return render(request, abs, context)
     return None
 
 
-def find_template(request: HttpRequest) -> HttpResponse:
-    template = _find_template(request)
+def find_template(request: HttpRequest, context: dict) -> HttpResponse:
+    template = _find_template(request, context=context)
     if template is None:
-        template = _find_template(request, path='404.html')
+        template = _find_template(request, context=context, path='404.html')
         if template is None:
+            import json
             return HttpResponse(
-                "Not found.",
-                status=200,
-                content_type='text/plain'
+                json.dumps({'error': 'Not found', 'status': 404}),
+                status=404,
+                content_type='text/json'
             )
     return template
 
 
-def home(request):
-    if request.path.endswith('/'):
-        request.path += 'index.html'
-    return find_template(request)
+def main(_request):
+    title = _request.path
+    if title.startswith('/'):
+        title = title[1:]
+    if title.endswith('/'):
+        title = title[:-1]
+    if title == '':
+        title = 'Welcome'
+
+    if _request.path.endswith('/'):
+        _request.path += 'index.html'
+
+    context = {
+        'website_title': 'ft_trans',
+        'title': title,
+        'languages': LANGUAGES,
+        'current_lang': get_user_lang(_request),
+        'translate': get_translate_function(_request),
+    }
+
+    return find_template(_request, context)
 
 
 urlpatterns = [
-    # path('.*', home, name='home'),
     # Regex to anything that doesnt start with /static/
-    re_path(r'^(?!static/).*', home),
+    re_path(r'^(?!static/).*', main),
 ]
+
+# Anything else should be served from the static directory
+# (see `django.contrib.staticfiles`)

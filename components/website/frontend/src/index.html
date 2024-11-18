@@ -28,8 +28,8 @@
 	<noscript>
 		<div class="flex justify-center items-center w-full h-svh">
 			<div class="w-full max-w-md">
-				<h1 class="text-2xl font-bold">JavaScript is disabled</h1>
-				<p class="text-lg">ft_trans requires JavaScript to be enabled in your browser.</p>
+				<h1 class="text-2xl font-bold">{{ translate('javascript_required.title') }}</h1>
+				<p class="text-lg">{{ translate('javascript_required.desc') }}</p>
 			</div>
 		</div>
 	</noscript>
@@ -39,7 +39,20 @@
 			<!-- <a href="/">
 				<img src="/static/assets/logo.webp" alt="ft_trans logo">
 			</a>
-			<div class="flex flex-row gap-16">
+			<div class="flex flex-row gap-16">```py
+def template(template_name):
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            context = func(request, *args, **kwargs)
+            return render(request, template_name, context)
+        return wrapper
+    return decorator
+
+
+@template('index.html')
+def home(request):
+  
+```
 				<button class="btn" href="/">Home</button>
 				<button class="btn" href="/login">Login</button>
 				<button class="btn" href="/register">Register</button>
