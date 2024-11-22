@@ -1,113 +1,130 @@
-import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
-import "./Chat.css";
+const socket = io();
 
-const socket = io("http://localhost:8043");
+const toggleChatBtn = document.getElementById('toggle-chat-btn');
+const closeChatBtn = document.getElementById('close-chat-btn');
+const chatContainer = document.getElementById('chat-container');
+const messageInput = document.getElementById('message-input');
+const sendBtn = document.getElementById('send-btn');
+const friendList = document.getElementById('users');
+const messagesElement = document.getElementById('messages');
 
-function Chat() {
-  const [username, setUsername] = useState("");
-  const [friends, setFriends] = useState([]);
-  const [selectedFriend, setSelectedFriend] = useState("");
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+let selectedFriend = null; // Current friend being chatted with
+let unreadMessages = {}; // Track unread messages for each friend
 
-  useEffect(() => {
-    if (username) {
-      // Register the username with the server
-      socket.emit("register", username);
+// Toggle the chat visibility when the main toggle button is clicked
+toggleChatBtn.addEventListener('click', () => {
+    chatContainer.classList.toggle('hidden');
+});
 
-      // Mock: Fetch friend list from the backend
-      const mockFriendList = {
-        user1: ["user2", "user3"],
-        user2: ["user1"],
-        user3: ["user1"],
-      };
-      setFriends(mockFriendList[username] || []);
+// Close the chat when the close button is clicked
+closeChatBtn.addEventListener('click', () => {
+    chatContainer.classList.add('hidden');
+});
+
+function registerUser() {
+    const username = prompt("Enter your username:");
+    if (username && username.trim()) {
+        socket.emit('register', username.trim());
+    } else {
+        alert("Username is required!");
+        registerUser();
     }
-
-    // Listen for private messages from the server
-    socket.on("private message", ({ sender, message }) => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender, text: message, private: true },
-      ]);
-    });
-
-    // Listen for errors
-    socket.on("error", (errorMessage) => {
-      alert(errorMessage);
-    });
-
-    return () => {
-      socket.off("private message");
-      socket.off("error");
-    };
-  }, [username]);
-
-  const sendMessage = (e) => {
-    e.preventDefault();
-    if (message.trim() && selectedFriend) {
-      socket.emit("private message", {
-        sender: username,
-        recipient: selectedFriend,
-        message,
-      });
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: "You", text: message, private: true },
-      ]);
-      setMessage("");
-    }
-  };
-
-  return (
-    <div>
-      <h2>Friends-Only Chat</h2>
-
-      {/* Username Setup */}
-      <input
-        type="text"
-        placeholder="Enter your username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-
-      {/* Friend Selection */}
-      <select
-        value={selectedFriend}
-        onChange={(e) => setSelectedFriend(e.target.value)}
-      >
-        <option value="">Select a friend</option>
-        {friends.map((friend) => (
-          <option key={friend} value={friend}>
-            {friend}
-          </option>
-        ))}
-      </select>
-
-      {/* Chat Box */}
-      <div className="chat-box">
-        {messages.map((msg, index) => (
-          <div key={index} className={msg.private ? "private-message" : ""}>
-            {msg.private
-              ? `(Private) ${msg.sender}: ${msg.text}`
-              : `${msg.sender}: ${msg.text}`}
-          </div>
-        ))}
-      </div>
-
-      {/* Message Input */}
-      <form onSubmit={sendMessage}>
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message here"
-        />
-        <button type="submit">Send</button>
-      </form>
-    </div>
-  );
 }
 
-export default Chat;
+registerUser();
+
+// Update the friend list
+socket.on('user list', (userList) => {
+    const currentUser = socket.id;
+    friendList.innerHTML = ''; // Clear existing friends
+
+    userList.forEach((user) => {
+        if (user.id !== currentUser) {
+            const li = document.createElement('li');
+            li.textContent = user.username;
+            li.dataset.userId = user.id;
+
+            // Create unread message dot
+            const unreadDot = document.createElement('span');
+            unreadDot.classList.add('unread-dot');
+            li.appendChild(unreadDot);
+
+            // Highlight the selected friend
+            li.addEventListener('click', () => {
+                selectedFriend = user.id;
+
+                // Clear unread messages for this friend
+                unreadMessages[selectedFriend] = 0;
+                updateUnreadDots();
+
+                // Clear the chat and fetch message history
+                messagesElement.innerHTML = '';
+                socket.emit('get messages', { recipientId: selectedFriend });
+            });
+
+            friendList.appendChild(li);
+        }
+    });
+
+    updateUnreadDots(); // Update dots after list refresh
+});
+
+// Handle sending private messages
+sendBtn.addEventListener('click', () => {
+    const message = messageInput.value.trim();
+
+    if (!selectedFriend) {
+        alert("Please select a friend to send a message.");
+        return;
+    }
+
+    if (message) {
+        socket.emit('private message', { recipientId: selectedFriend, message });
+
+        // Display sent message
+        const li = document.createElement('li');
+        li.textContent = `You to ${document.querySelector(`li[data-user-id="${selectedFriend}"]`).textContent}: ${message}`;
+        messagesElement.appendChild(li);
+
+        messageInput.value = ''; // Clear input
+    }
+});
+
+// Handle receiving private messages
+socket.on('private message', (data) => {
+    if (data.senderId === selectedFriend || data.recipientId === selectedFriend) {
+        // Append message if this chat is active
+        const li = document.createElement('li');
+        li.textContent = `${data.sender}: ${data.message}`;
+        messagesElement.appendChild(li);
+    } else {
+        // Increment unread messages for the sender
+        unreadMessages[data.senderId] = (unreadMessages[data.senderId] || 0) + 1;
+        updateUnreadDots();
+    }
+});
+
+// Populate chat with the selected friend's messages
+socket.on('chat history', (history) => {
+    history.forEach((message) => {
+        const li = document.createElement('li');
+        li.textContent = `${message.sender}: ${message.text}`;
+        messagesElement.appendChild(li);
+    });
+});
+
+// Update unread dots
+function updateUnreadDots() {
+    const friendItems = friendList.querySelectorAll('li');
+
+    friendItems.forEach((item) => {
+        const userId = item.dataset.userId;
+        const unreadDot = item.querySelector('.unread-dot');
+
+        if (unreadMessages[userId] && unreadMessages[userId] > 0) {
+            unreadDot.style.display = 'inline-block';
+        } else {
+            unreadDot.style.display = 'none';
+        }
+    });
+}

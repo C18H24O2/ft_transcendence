@@ -1,160 +1,137 @@
-/* General styles */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-.App {
-  text-align: center;
+#toggle-chat-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    cursor: pointer;
 }
 
-.register {
-  margin-top: 20px;
+#chat-container {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 400px;
+    height: 100vh;
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    display: flex;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    flex-direction: row;
+    overflow: hidden; /* Prevents overflow */
 }
 
-.chat-toggle-button {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  z-index: 1100;
+/* Initially hide the chat container */
+#chat-container.hidden {
+    display: none;
 }
 
-.chat-toggle-button:hover {
-  background-color: #0056b3;
+/* Friend list styling */
+#friend-list {
+    width: 120px; /* Adjusted width for better proportions */
+    background: #e0e0e0;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
-/* Chat slider styles */
-.chat-slider {
-  position: fixed;
-  top: 0;
-  right: -400px; /* Start offscreen */
-  width: 400px;
-  height: 100%;
-  background-color: #f1f1f1;
-  border-left: 1px solid #ccc;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  transition: right 0.3s ease; /* Smooth slide-in animation */
-  z-index: 1000;
+#friend-list h3 {
+    margin: 0 0 10px 0;
+    text-align: center;
 }
 
-.chat-slider.open {
-  right: 0; /* Slide into view */
+#friend-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
-.chat-container {
-  display: flex;
-  flex: 1;
-  height: 100%;
-  overflow: hidden;
+#friend-list ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space between name and dot */
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+    white-space: normal; /* Allow text wrapping */
+    word-break: break-all; /* Break long words into multiple lines */
+    overflow: hidden; /* Prevent overflow */
+    max-width: 100%; /* Prevent it from stretching */
 }
 
-.friend-list {
-  width: 30%;
-  background-color: #f8f9fa;
-  border-right: 1px solid #ccc;
-  overflow-y: auto;
-  padding: 20px;
+#friend-list ul li:hover {
+    background: #d1d1d1;
 }
 
-.friend-list h2 {
-  margin-top: 0;
+/* Unread message dot */
+#friend-list ul li .unread-dot {
+    width: 8px;
+    height: 8px;
+    background: red;
+    border-radius: 50%;
+    margin-left: 5px;
+    display: none; /* Initially hidden */
 }
 
-.friend-list ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+/* Close button to hide chat */
+#close-chat-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
 }
 
-.friend-list li {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
+#chat-box {
+    flex: 1; /* Makes the chat area take up the remaining space */
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: 100%; /* Ensure chat area takes full available height */
+    overflow-y: auto; /* Prevent overflow of messages */
 }
 
-.friend-list li:hover {
-  background-color: #ddd;
+#chat-box ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+    word-break: break-word; /* Ensure messages break properly */
 }
 
-.friend-list .selected {
-  background-color: #007bff;
-  color: #fff;
+#message-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Keep input and button aligned */
+    padding: 20px;
 }
 
-.chat-box {
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
+#message-box input {
+    padding: 10px;
+    width: 80%;
+    margin-right: 10px;
 }
 
-.messages {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.messages .no-recipient {
-  text-align: center;
-  color: #888;
-}
-
-.message,
-.private-message {
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.message {
-  background-color: #f1f1f1;
-}
-
-.private-message {
-  background-color: #007bff;
-  color: #fff;
-}
-
-/* Adjusted form to fit the "Send" button */
-.message-input-form {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #ccc;
-  background-color: #f8f9fa;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}
-
-.message-input-form input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.message-input-form button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  margin-left: 10px;
-  cursor: pointer;
-  align-self: flex-end; /* Make sure button is aligned to the bottom */
-}
-
-.message-input-form button:hover {
-  background-color: #0056b3;
+#message-box button {
+    padding: 10px;
+    cursor: pointer;
 }
