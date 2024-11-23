@@ -13,6 +13,7 @@ DEBUG = True
 SECRET_KEY = os.environ.get('DJANGO_SECRET', get_random_secret_key())
 ROOT_URLCONF = __name__
 
+ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "websiteservice",
@@ -24,10 +25,15 @@ TEMPLATES = [{
         'frontend/dist/',
     ],
 }]
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 STATICFILES_DIRS = [
     "/app/dist/static/",
     "frontend/dist/static",
 ]
+STATIC_ROOT = '/app/static/'
 STATIC_URL = 'static/'
 
 

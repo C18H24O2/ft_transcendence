@@ -9,7 +9,9 @@ pkgs.mkShell {
     poetry
     python312
   ] ++ (with pkgs.python312Packages; [
+    gunicorn
     pika
+    peewee
     pyright
     django
     black
