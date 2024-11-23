@@ -1,47 +1,47 @@
 {
 	"error": {
 		"javascript_required": {
-		"title": "le JavaScript est desactivé",
-		"desc": "ft_trans necessite que JavaScript soit activé dans votre navigateur.",
+			"title": "JavaScript está desactivado",
+			"desc": "ft_trans requiere que JavaScript esté habilitado en tu navegador."
 		},
-		"html5_required": "Votre navigateur ne supporte pas certaines balises HTML5, pensez a utiliser un navigateur compatible HTML5 pour continuer a jouer",
-		"missing_text": "pas de données",
+		"html5_required": "Tu navegador no soporta algunas funciones de HTML5, por favor considera usar un navegador compatible con HTML5 para continuar jugando",
+		"missing_text": "Sin Datos"
 	},
 	"title": {
-		"main": "Bienvenue sur le site",
-		"login": "Connexion",
-		"pong": "Ping? Pong!",
-		"chat": "discussion",
-		"account": "Comptes",
+		"main": "Bienvenido al sitio web",
+		"login": "Iniciar sesión",
+		"pong": "¿Ping? ¡Pong!",
+		"chat": "Chat en vivo",
+		"account": "Cuentas"
 	},
 	"button": {
-		"theme": "Changer de Theme",
-		"login": "Connexion",
-		"view": "Changer de vue",
-		"home": "Accueil",
+		"theme": "Cambiar tema",
+		"login": "Iniciar sesión",
+		"view": "Cambiar vista",
+		"home": "Inicio"
 	},
 	"welcome_page": {
-			"title": "Bienvenue sur",
-			"desc_1": "une plateforme de jeu gratuite et ouverte avec",
-			"desc_2": "des jeux populaires et une vaste communauté de joueurs!",
-			"gamemodes": "Voir nos modes de jeu",
+		"title": "Bienvenido a",
+		"desc_1": "una plataforma de juegos gratuita y de código abierto con",
+		"desc_2": "juegos populares y una vasta comunidad de jugadores.",
+		"gamemodes": "Ver nuestros modos de juego"
 	},
 	"gamemode_cards": {
 		"pong_offline": {
-			"title": "Pong local",
-			"desc": "L'experience originale du pong, sur votre navigateur!",
+			"title": "Pong Offline",
+			"desc": "¡La experiencia clásica de pong, ahora en tu navegador!"
 		},
 		"pong_online": {
-			"title": "Pong en Ligne",
-			"desc": "Jouez contre d'autres joueurs dans une bataille epique en temps réel!",
+			"title": "Pong Online",
+			"desc": "¡Juega contra otros jugadores en una épica batalla en tiempo real!"
 		},
 		"pong_tournament": {
-			"title": "Tournoi Pong",
-			"desc": "Jouez contre vos amis et devenez le champion!",
-		},
+			"title": "Torneo de Pong",
+			"desc": "¡Lucha contra tus amigos y conviértete en el campeón!"
+		}
 	},
 	"dictionnary": {
-		"username": "Identifiant",
-		"password": "Mot de passe",
-	},
+		"username": "Nombre de usuario",
+		"password": "Contraseña"
+	}
 }

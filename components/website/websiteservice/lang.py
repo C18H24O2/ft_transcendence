@@ -10,7 +10,8 @@ LANGS_DIR = os.path.join(os.path.dirname(__file__), 'lang')
 LANGUAGES = [
     ('en', 'English'),
     ('fr', 'Français'),
-    ('cr', "Cramptés"),
+    ('x-crmt', "Cramptés"),
+    ('x-crmt', "Español"),
 ]
 
 

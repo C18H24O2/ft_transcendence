@@ -18,6 +18,8 @@ BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200
 MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20
 BASE_PADDLE_SPEED = PADDLE_HEIGHT / 12
 
+SCORE_TO_WIN = 5
+
 class GameObject:
 	def __init__(self, x = 0, y = 0):
 		self.x = x
@@ -40,12 +42,15 @@ def initGameState():
 	ball.speed_y = 0
 	player_inputs = [False, False, False, False]
 	speed_multiplier = 1
+	paddle1.score = 0
+	paddle2.score = 0
 	return {
 		'paddle1': paddle1,
 		'paddle2': paddle2,
 		'ball': ball,
 		'player_inputs': player_inputs,
-		'speed_multiplier': speed_multiplier
+		'speed_multiplier': speed_multiplier,
+		'running': True,
 	}
 
 def reset(game_state, side = 1):
@@ -104,30 +109,30 @@ def ballCollide(game_state):
 	else:
 		paddle = game_state['paddle2']
 
-	limit = FIELD_DIMS - (2 * PADDLE_WIDTH);
-	ballXSide = abs(ball.x) + BALL_SIZE;
-	ballYSide = abs(ball.y) + BALL_SIZE;
+	limit = FIELD_DIMS - (2 * PADDLE_WIDTH)
+	ballXSide = abs(ball.x) + BALL_SIZE
+	ballYSide = abs(ball.y) + BALL_SIZE
 
 	if (ballXSide >= limit):
 		ballBoundingBox = bounding_box(ball.x, ball.y, BALL_SIZE, BALL_SIZE)
 		paddleBoundingBox = bounding_box(paddle.x, paddle.y, PADDLE_WIDTH, PADDLE_HEIGHT)
 
 		if (boundingBoxCollide(ballBoundingBox, paddleBoundingBox)):
-			ball.setPos((limit - BALL_SIZE) * math.copysign(1, ball.x), ball.y);
-			ball.speed_x = -ball.speed_x;
+			ball.setPos((limit - BALL_SIZE) * math.copysign(1, ball.x), ball.y)
+			ball.speed_x = -ball.speed_x
 
-			relBallY = ball.y - paddle.y;
-			nrmlrelBallY = relBallY / (PADDLE_HEIGHT + BALL_SIZE);
+			relBallY = ball.y - paddle.y
+			nrmlrelBallY = relBallY / (PADDLE_HEIGHT + BALL_SIZE)
 
-			maxAngle = math.pi * 5 / 12;
-			angle = nrmlrelBallY * maxAngle;
-			speed = math.sqrt(ball.speed_x ** 2 + ball.speed_y ** 2);
+			maxAngle = math.pi * 5 / 12
+			angle = nrmlrelBallY * maxAngle
+			speed = math.sqrt(ball.speed_x ** 2 + ball.speed_y ** 2)
 
-			ball.speed_x = speed * math.cos(angle) * math.copysign(1, ball.speed_x);
-			ball.speed_y = speed * math.sin(angle);
+			ball.speed_x = speed * math.cos(angle) * math.copysign(1, ball.speed_x)
+			ball.speed_y = speed * math.sin(angle)
 
 			if (speedMult < MAX_BALL_SPEED_MULTIPLIER):
-				speedMult = min(speedMult + BALL_SPEED_INCREASE, MAX_BALL_SPEED_MULTIPLIER);
+				speedMult = min(speedMult + BALL_SPEED_INCREASE, MAX_BALL_SPEED_MULTIPLIER)
 			return True
 	if (ballYSide >= FIELD_DIMS):
 		ball.setPos(ball.x, (FIELD_DIMS - BALL_SIZE) * math.copysign(1, ball.y))
@@ -137,17 +142,17 @@ def ballCollide(game_state):
 
 def moveBall(game_state, delta_time):
 	ball = game_state['ball']
-	movement_x = game_state['speed_multiplier'] * ball.speed_x * (delta_time / 10);
-	movement_y = game_state['speed_multiplier'] * ball.speed_y * (delta_time / 10);
+	movement_x = game_state['speed_multiplier'] * ball.speed_x * (delta_time / 10)
+	movement_y = game_state['speed_multiplier'] * ball.speed_y * (delta_time / 10)
 
-	steps = math.ceil(max(abs(movement_x), abs(movement_y)) / BALL_SIZE);
-	step_x = movement_x / steps;
-	step_y = movement_y / steps;
+	steps = math.ceil(max(abs(movement_x), abs(movement_y)) / BALL_SIZE)
+	step_x = movement_x / steps
+	step_y = movement_y / steps
 
 	for i in range(steps):
 		ball.move([step_x, step_y])
 		if ballCollide(game_state):
-			break ;
+			break 
 
 def checkGoal(game_state):
 	ball = game_state['ball']	
@@ -158,6 +163,12 @@ def checkGoal(game_state):
 		if (ball.x > FIELD_DIMS):
 			game_state['paddle1'].score += 1
 			reset(1)
+	if (game_state['paddle1'].score >= SCORE_TO_WIN or game_state['paddle2'].score >= SCORE_TO_WIN):
+		game_state['running'] = False
+		if (game_state['paddle1'].score >= SCORE_TO_WIN):
+			game_state['paddle1'].win = True
+		if (game_state['paddle2'].score >= SCORE_TO_WIN):
+			game_state['paddle2'].win = True
 
 def game_loop():
 	game_state = initGameState()
@@ -165,7 +176,7 @@ def game_loop():
 
 	#probs need to setup client - server connexion
 
-	while True:
+	while game_state['running']:
 		now = time.time()
 		delta_time = now = then
 		then = now
@@ -175,5 +186,6 @@ def game_loop():
 		moveBall(game_state, delta_time)
 		checkGoal(game_state)
 
-		#something to sync clients?
+		#something to sync clients
+
 		
