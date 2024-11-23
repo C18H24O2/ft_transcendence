@@ -1,7 +1,7 @@
 name: ft_trans-backend
 
-include:
-  - ./services.docker-compose.yml
+# include:
+#   - ./services.docker-compose.yml
 
 networks:
   services:
@@ -24,8 +24,8 @@ services:
     image: "postgres:14.12-alpine3.19"
     networks:
       - services 
-    # ports:
-    #   - "5432:5432"
+    ports: #TODO: this is for development only, to remove later
+      - "5432:5432"
     restart: unless-stopped
     volumes:
       - db:/var/lib/postgresql/data
@@ -42,8 +42,8 @@ services:
       - prometheus
     volumes:
       - ./rabbitmq/enabled-plugins.er:/rabbitmq_plugins.er
-    # ports:
-      # - "5672:5672"
+    ports: #TODO: this is for development only, to remove later
+      - "5672:5672"
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
       interval: 5s
