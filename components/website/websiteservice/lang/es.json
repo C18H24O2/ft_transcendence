@@ -18,7 +18,9 @@
 		"theme": "Cambiar tema",
 		"login": "Iniciar sesión",
 		"view": "Cambiar vista",
-		"home": "Inicio"
+		"home": "Inicio",
+		"chat_send": "Enviar",
+		"chat_invite_game": "Invitar",
 	},
 	"welcome_page": {
 		"title": "Bienvenido a",
@@ -40,8 +42,10 @@
 			"desc": "¡Lucha contra tus amigos y conviértete en el campeón!"
 		}
 	},
-	"dictionnary": {
+	"placeholders": {
 		"username": "Nombre de usuario",
-		"password": "Contraseña"
+		"password": "Contraseña",
+		"message_send": "enviar un mensaje",
+		"friends": "Amigos"
 	}
 }

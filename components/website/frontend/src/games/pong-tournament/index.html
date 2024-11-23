@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; user-scalable=0;">
 		<title>{% translate 'title.pong' %}</title>
 		<link rel="icon" href="/assets/logo.webp" type="image/icon type"/>
-		<script type="module" src="./pong-game/3dpong.js"></script>
+		<script type="module" src="./pong-tournament-init.js"></script>
 	</head>
 	<body class="p-0 m-0 font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300 bg-placeholder-pattern bg-auto bg-center min-h-svh md:flex flex-col justify-center items-center">
 		<header class="px-4 py-8 flex items-center justify-start bg-surface0/65 hover:bg-surface0/90 rounded-xl p-4 fixed top-5 left-5 flex-col space-y-4">
@@ -22,6 +22,10 @@
 			<canvas id="gameField" width="1920" height="1920" style="height:70vh; width:70vh; " class="bg-crust text-text rounded-xl p-[1vh]">
 				{% translate 'error.html5_required' %}
 			</canvas>
+			<form class="flex flex-col space-y-4" onsubmit="add_entry(this)">
+				<input class="bg-surface0/55 focus:outline-none focus:ring-2 focus:ring-lavender text-text rounded-md p-5" type="text" name="username" placeholder="{% translate 'dictionnary.username' %}" required>
+				<input class="bg-surface0/55 focus:outline-none active:bg-crust text-text rounded-md p-6 mx-10 btn" type="submit" value="{% translate 'dictionnary.playeradd '%}">
+			</form>
 		</div>		
 	</body>
 </html>

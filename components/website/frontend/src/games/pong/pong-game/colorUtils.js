@@ -1,5 +1,5 @@
 import { flavors } from "@catppuccin/palette";
-import { getTheme } from "../../theme";
+import { getTheme } from "../../../theme.js";
 
 /**
  * 

@@ -19,6 +19,8 @@
 		"login": "Connexion",
 		"view": "Changer de vue",
 		"home": "Accueil",
+		"chat_send": "Envoyer",
+		"chat_invite_game": "Inviter",
 	},
 	"welcome_page": {
 			"title": "Bienvenue sur",
@@ -40,8 +42,10 @@
 			"desc": "Jouez contre vos amis et devenez le champion!",
 		},
 	},
-	"dictionnary": {
+	"placeholders": {
 		"username": "Identifiant",
 		"password": "Mot de passe",
+		"message_send": "Envoyer un message",
+		"friends": "Amis"
 	},
 }

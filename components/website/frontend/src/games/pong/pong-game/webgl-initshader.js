@@ -19,7 +19,7 @@ function initShaders(gl)
 
 	if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
 	{
-		console.error(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`);
+		console.warning(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`);
 		return null;
 	}
 	
@@ -65,7 +65,7 @@ function loadShader(gl, type, source)
 
 	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 	{
-		console.error(`ERROR: could not compile: ${getWebGLConstantName(gl, type)}: ${gl.getShaderInfoLog(shader)}`);
+		console.warning(`ERROR: could not compile: ${getWebGLConstantName(gl, type)}: ${gl.getShaderInfoLog(shader)}`);
 		return null;
 	}
 	return shader;

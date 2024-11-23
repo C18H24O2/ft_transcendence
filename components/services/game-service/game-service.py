@@ -15,5 +15,8 @@ class GameService(Service):
 		self.queue.add_consumer(self.queue_id, self.new_game_lobby)
 	def new_game_lobby(self, lobby_id):
 		print("Game lobby {lobby_id} created")
+		game_thread = threading.Thread(target=pong.game_loop, name="game_{lobby_id}", args={lobby_id})
+
+		game_thread.start()
 	def launch(self):
 		self.queue.consume()

@@ -1,5 +1,5 @@
-import '../../shared.js';
-import { getTheme } from '../../theme.js';
+import '../../../shared.js';
+import { getTheme } from '../../../theme.js'
 import { initShaders } from './webgl-initshader.js';
 import { Shape3d } from './webgl-shape.js';
 import { mat4 } from 'gl-matrix';
@@ -11,7 +11,6 @@ function setClearColor(colorName, setgl)
 	const bgColor = getCatppuccinWEBGL(colorName);
 	setgl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
 }
-
 
 	//Getting the webgl context
 /**@type {HTMLCanvasElement} */
@@ -86,7 +85,7 @@ function main()
 	document.addEventListener('keyup', keyUp);
 	if (!gl)
 	{
-		console.error('Your browser does not support webgl, consider using a different browser to access this functionnality');
+		console.warning('Your browser does not support webgl, consider using a different browser to access this functionnality');
 		return;
 	}
 
