@@ -18,6 +18,7 @@ services:
     ports:
       - "8069:80"
       - "8043:443"
+      - "6943:6943"
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "wget -O /dev/null http://localhost:14321/health || exit 1"]
