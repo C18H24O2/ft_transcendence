@@ -10,6 +10,7 @@ pkgs.mkShell {
     python312
   ] ++ (with pkgs.python312Packages; [
     pika
+    pyright
     django
     black
     mypy

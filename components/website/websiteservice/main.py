@@ -5,7 +5,7 @@ from django.core.management.utils import get_random_secret_key
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.urls import re_path
-from .lang import LANGUAGES, get_user_lang, get_translate_function
+from .lang import LANGUAGES, get_user_lang #, get_translate_function
 import os
 
 

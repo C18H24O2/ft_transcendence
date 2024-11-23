@@ -19,22 +19,10 @@ from django.contrib import admin
 from django.urls import path
 
 urlpatterns = [
+    path('/', include('rest_framework.urls'))
 ]
-
-
-
 
 
 # api/auth/login
 def login(request):
     return HttpResponse("auth")
-
-
-
-
-
-
-
-
-
-

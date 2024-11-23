@@ -1,13 +1,13 @@
 from service_runtime.service import Service, service, message
 from service_runtime.remote_service import remote_service
-# from service_runtime.database import query
+from service_runtime.models import User
 
 AuthService = remote_service("auth-service", ["is_logged"])
 
 
 class UserController:
     def create_user(self, username: str, email: str, password: str) -> str:
-        return "success"
+        return User.create(username=username, email=email, passwordHash=passwordHash, displayName=username, profilePicture="")
 
 
 @service(id="user-service")
@@ -16,7 +16,18 @@ class UserService(Service):
         self.controller = UserController()
 
     @message("create_user")
-    def create_user(self, username: str, email: str, passwordHash: str) -> str:
+    # @require_user_context
+    def create_user(self, username: str, email: str, passwordHash: str) -> User:
+        """
+        {
+            "message": "create_user",
+            "context: { "user_token": "token" }",
+            "data": {
+                "username": "username",
+                "email": "email",
+                "passwordHash": "password"
+            }
+        """
         return self.controller.create_user(username, email, passwordHash)
 
     # @message("get_user")

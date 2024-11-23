@@ -12,6 +12,7 @@ class User(Model):
     displayName = CharField()
     # base64 encoded image
     profilePicture = CharField()
+    friends = CharField()
 
     class Meta:
         database = provide_database()
