@@ -2,46 +2,46 @@
 	"error": {
 		"javascript_required": {
 		"title": "le CramptéScript est desactivé",
-		"desc": "ft_trans necessite que CramptéScript soit activé dans votre Cramptax.",
+		"desc": "ft_trans necessite que CramptéScript soit activé dans votre Cramptax."
 		},
 		"html5_required": "Votre Cramptax ne supporte pas certaines balises HTML5, pensez a utiliser un Cramptax compatible HTML5 pour continuer a jouer",
-		"missing_text": "pas de données",
+		"missing_text": "pas de données"
 	},
 	"title": {
 		"main": "Bienvenue sur le feur",
 		"login": "Eau plate",
 		"pong": "Quoi? Feur!",
 		"chat": "e-dating",
-		"account": "(ceux qui savent)",
+		"account": "(ceux qui savent)"
 	},
 	"button": {
 		"theme": "Changer de Mangue",
 		"login": "Eau plate",
 		"view": "Changer de vue",
-		"home": "Accueil",
+		"home": "Accueil"
 	},
 	"welcome_page": {
 			"title": "Bienvenue sur",
 			"desc_1": "une plateforme pleine de Cramptés populaires",
 			"desc_2": "et une vaste communauté de crampteurs!",
-			"gamemodes": "Voir nos Cramptés",
+			"gamemodes": "Voir nos Cramptés"
 	},
 	"gamemode_cards": {
 		"pong_offline": {
 			"title": "Crampté local",
-			"desc": "L'experience originale du Crampté, sur votre Cramptax!",
+			"desc": "L'experience originale du Crampté, sur votre Cramptax!"
 		},
 		"pong_online": {
 			"title": "Crampté en Ligne",
-			"desc": "Jouez contre d'autres crampteurs et montrez que VOUS êtes le Sigma",
+			"desc": "Jouez contre d'autres crampteurs et montrez que VOUS êtes le Sigma"
 		},
 		"pong_tournament": {
 			"title": "Tournoi Crampté",
-			"desc": "Jouez contre vos quoicoubebous et devenez le looksmaxxer!",
-		},
+			"desc": "Jouez contre vos quoicoubebous et devenez le looksmaxxer!"
+		}
 	},
 	"dictionnary": {
 		"username": "Eau Plate",
-		"password": "Mangue (ceux qui savent)",
-	},
+		"password": "Mangue (ceux qui savent)"
+	}
 }

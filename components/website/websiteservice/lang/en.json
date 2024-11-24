@@ -1,18 +1,18 @@
 {
 	"error": {
 		"javascript_required": {
-		"title": "JavaScript is disabled",
-		"desc": "ft_trans requires JavaScript to be enabled in your browser.",
+			"title": "JavaScript is disabled",
+			"desc": "ft_trans requires JavaScript to be enabled in your browser."
 		},
 		"html5_required": "Your Browser doesn't support some HTML5 flags, please consider using a HTML5 compliant browser to continue playing",
-		"missing_text": "No Data",
+		"missing_text": "No Data"
 	},
 	"title": {
 		"main": "Welcome to the website",
 		"login": "Log in",
 		"pong": "Ping? Pong!",
 		"chat": "Livechat",
-		"account": "Accounts",
+		"account": "Accounts"
 	},
 	"button": {
 		"theme": "Change Theme",
@@ -20,32 +20,32 @@
 		"view": "Change view",
 		"home": "Home",
 		"chat_send": "Send",
-		"chat_invite_game": "Invite",
+		"chat_invite_game": "Invite"
 	},
 	"welcome_page": {
 			"title": "Welcome to",
 			"desc_1": "a free and open source gaming platform with",
 			"desc_2": "popular games and a vast community of players!",
-			"gamemodes": "See our Gamemodes",
+			"gamemodes": "See our Gamemodes"
 	},
 	"gamemode_cards": {
 		"pong_offline": {
 			"title": "Offline Pong",
-			"desc": "The classic pong experience, now on your Browser!",
+			"desc": "The classic pong experience, now on your Browser!"
 		},
 		"pong_online": {
 			"title": "Online Pong",
-			"desc": "Play against other players in an epic real-time battle!",
+			"desc": "Play against other players in an epic real-time battle!"
 		},
 		"pong_tournament": {
 			"title": "Pong Tournament",
-			"desc": "Battle against your friends and become the champion!",
-		},
+			"desc": "Battle against your friends and become the champion!"
+		}
 	},
 	"placeholders": {
 		"username": "Username",
 		"password": "Password",
 		"message_send": "Send a message",
 		"friends": "Friends"
-	},
+	}
 }

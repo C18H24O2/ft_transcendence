@@ -7,15 +7,10 @@ register = template.Library()
 
 @register.simple_tag(name="translate", takes_context=True)
 def translate(context, value):
-    print("Translating:", value)
     try:
-        actual = 
-        for ctx in context:
-            print("\n", ctx, "\n")
-        # lang = ctx.website_title
-        # trans = get_translate_function(lang)
-        # return trans(value)
+        lang = context["lang"]
+        trans = get_translate_function(lang)
+        return trans(value)
     except Exception as e:
-        print("Error:", e)
-        pass
+        print("translate_tag error:", e)
     return value

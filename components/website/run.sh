@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-poetry run django-admin runserver --pythonpath=. --settings=websiteservice.main 0.0.0.0:42069
+pnpm run -C frontend build
+python3 manage.py runserver 0.0.0.0:42069

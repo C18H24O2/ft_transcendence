@@ -28,6 +28,7 @@ def get_translate_function(lang: str) -> callable:
 
     try:
         with open(filename, 'r') as f:
+            print("Loading language file", filename)
             data = json.load(f)
 
             def translate(text: str) -> str:
@@ -48,5 +49,5 @@ def get_translate_function(lang: str) -> callable:
                     return text
             return translate
     except Exception as e:
-        print("Error loading language file", e)
+        print("Error loading language file:", e)
     return lambda text: text
