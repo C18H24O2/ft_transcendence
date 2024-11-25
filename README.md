@@ -8,12 +8,16 @@ This monorepo contains the code for `ft_transcendence`, the last project at 42 s
 
 - `scripts/` *somewhat useful random stuff :+1:*
 - `components/` *what makes this shit run*
-  - `services/`
-    - The backend services, organized in a micro-services architecture 
-  - `website/`
-    - HTML/JavaScript front-end, to be served by the API
+  - `monitoring/`
+    - The monitoring system, using Prometheus and Grafana, as well as custom exporters
   - `nginx/`
     - HTTP Server configuration and setup files
+  - `services/`
+    - The backend services, organized in a micro-services architecture 
+  - `vault/`
+    - HashiCorp Vault configuration and setup files (i hope lol)
+  - `website/`
+    - HTML/JavaScript front-end, to be served by the API
 
 ## Chosen modules
 
@@ -30,15 +34,15 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [ ] (Major) Store the score of a tournament in a Blockchain
 
 - **User Management**
-  - [x] (Major) Standard user management, authentication, users across tournaments
-  - [x] (Major) Implementing remote authentication (OAuth2)
+  - [x] (Major) Standard user management, authentication, users across tournaments `kiroussa` `lvincent`
+  - [x] (Major) Implementing remote authentication (OAuth2) + JWT `kiroussa`
 
 - **Gameplay and User Experience**
-  - [x] (Major) Remote players `lvincent`
+  - [x] (Major) Remote players `lvincent` `gpouzet`
   - [ ] (Major) Multiplayer (> 2 players)
-  - [ ] (Major) Add another Game (w/ User History & Matchmaking) `lvincent`
+  - [ ] (Major) Add another Game (w/ User History & Matchmaking)
   - [ ] (Minor) Game customization options 
-  - [ ] (Major) Live chat `gpouzet`
+  - [x] (Major) Live chat `gpouzet`
 
 - **AI / Algorithm**
   - [ ] (Major) Introduce an AI opponent
@@ -47,7 +51,7 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
 - **Cybersecurity**
   - [x] (Major) Implement WAF/ModSecurity w/ Hardened Configuration and HashiCorp Vault for Secrets Management `kiroussa`
   - [ ] (Minor) GDPR Compliance options with User Anonymization, local data management, and account deletion
-  - [x] (Major) Implement Two-Factor Authentication (2FA) and JWT
+  - [x] (Major) Implement Two-Factor Authentication (2FA)
 
 - **Devops**
   - [ ] (Major) Infrastructure setup for log management
@@ -59,13 +63,13 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
 
 - **Accessibility**
   - [ ] (Minor) Support on all devices
-  - [x] (Minor) ✅ Expanding Browser compatibility
-  - [x] (Minor) Multiple language support
+  - [x] (Minor) ✅ Expanding Browser compatibility `?`
+  - [x] (Minor) ✅ Multiple language support `lvincent`
   - [ ] (Minor) Add accessibility for visually impaired users
-  - [x] (Minor) ✅ Server-Side Rendering (SSR) integration
+  - [x] (Minor) ✅ Server-Side Rendering (SSR) integration `kiroussa`
 
 - **Server-Side Pong**
-  - [x] (Major) Replace basic pong with server-side pong and implementing an API
+  - [x] (Major) Replace basic pong with server-side pong and implementing an API `kiroussa` `lvincent`
   - [ ] (Major) Enabling pong gameplay via CLI against web users with API integration
 
 <!-- MODULES_END -->

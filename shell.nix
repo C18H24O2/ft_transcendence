@@ -9,6 +9,7 @@ pkgs.mkShell {
     poetry
     python312
   ] ++ (with pkgs.python312Packages; [
+    PyJWT
     markupsafe
     gunicorn
     pika
