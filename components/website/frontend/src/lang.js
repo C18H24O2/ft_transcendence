@@ -21,6 +21,7 @@ function setCookie(name,value,days) {
     }
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
+
 function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
@@ -31,3 +32,5 @@ function getCookie(name) {
     }
     return null;
 }
+
+setCookie('SameSite', 'Strict');
