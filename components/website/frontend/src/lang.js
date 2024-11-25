@@ -32,5 +32,3 @@ function getCookie(name) {
     }
     return null;
 }
-
-setCookie('SameSite', 'Strict');
