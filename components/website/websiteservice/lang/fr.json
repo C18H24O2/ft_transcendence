@@ -8,10 +8,10 @@
 		"missing_text": "pas de données"
 	},
 	"title": {
-		"main": "Bienvenue sur le site",
+		"main": "Bienvenue",
 		"login": "Connexion",
 		"pong": "Ping? Pong!",
-		"chat": "discussion",
+		"chat": "Discussion",
 		"account": "Comptes"
 	},
 	"button": {

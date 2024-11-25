@@ -5,7 +5,7 @@ from django.core.management.utils import get_random_secret_key
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.urls import re_path
-from .lang import LANGUAGES, get_user_lang #, get_translate_function
+from .lang import LANGUAGES, get_user_lang, get_translate_function
 import os
 
 
@@ -64,7 +64,7 @@ def find_template(request: HttpRequest, context: dict) -> HttpResponse:
         if template is None:
             import json
             return HttpResponse(
-                json.dumps({'error': 'Not found', 'status': 404}),
+                json.dumps({'error': 'Not found', 'status': 404}), # mypy: ignore
                 status=404,
                 content_type='text/json'
             )
@@ -78,16 +78,20 @@ def main(_request):
     if title.endswith('/'):
         title = title[:-1]
     if title == '':
-        title = 'Welcome'
+        title = 'main'
+    print("Title:", title)
 
     if _request.path.endswith('/'):
         _request.path += 'index.html'
 
+    user_lang = get_user_lang(_request)
+    translate = get_translate_function(user_lang)
+    page_title = translate(f'title.{title}')
     context = {
         'website_title': 'ft_trans',
-        'title': title,
+        'title': page_title,
         'languages': LANGUAGES,
-        'lang': get_user_lang(_request),
+        'lang': user_lang,
     }
 
     return find_template(_request, context)

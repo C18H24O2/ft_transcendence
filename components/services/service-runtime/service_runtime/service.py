@@ -1,6 +1,7 @@
 from .logger import hijack_stdout
 from .queue import ServiceQueue
-from .database import provide_database, all_models
+from .database import provide_database
+from .models import all_models
 import traceback
 
 

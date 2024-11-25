@@ -7,7 +7,6 @@ import pika.exceptions
 import pika.spec
 import os
 from typing import Optional, Callable
-import traceback
 
 env = os.environ.copy()
 rabbitmq_host = env.get("RABBITMQ_HOST", "rabbitmq") # rabbitmq container name on the docker network

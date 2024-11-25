@@ -15,14 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.contrib import admin
 from django.urls import path
+from .flango import FlangoApp
 
-urlpatterns = [
-    path('/', include('rest_framework.urls'))
-]
+flango = FlangoApp()
+flango.discover_handlers("api.endpoints")
 
-
-# api/auth/login
-def login(request):
-    return HttpResponse("auth")
+urlpatterns = [ flango.provide_handler() ]

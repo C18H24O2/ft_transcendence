@@ -3,18 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
+    systems.url = "github:nix-systems/x86_64-linux";
   };
 
   outputs =
-    { self, nixpkgs }:
+    { self, nixpkgs, ... }@inputs:
     let
       inherit (self) outputs;
-      systems = [
-        "aarch64-linux"
-        "x86_64-linux"
-        "aarch64-darwin"
-        "x86_64-darwin"
-      ];
+      systems = (import inputs.systems);
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in
     {
