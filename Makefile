@@ -10,7 +10,10 @@ else
 endif
 
 down:
-	$(COMPOSE) down -v
+	$(COMPOSE) down
+
+clean:
+	$(COMPOSE) down --volumes
 
 re: down up
 
