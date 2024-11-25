@@ -44,7 +44,7 @@
     }
 
     .btn {
-        @apply px-4 py-2 text-sm font-semibold rounded-md shadow-sm;
+        @apply px-4 py-2 text-sm font-semibold rounded-lg shadow-sm;
         animation: button-pop .25s ease-out;
     }
 
@@ -65,11 +65,11 @@
     }
 	
 	.card {
-		@apply w-96 aspect-[11/16] opacity-90 bg-mantle rounded-md shadow-lg !transition-all duration-500 ease-in-out hover:shadow-2xl hover:-translate-y-[10%] hover:scale-[115%] hover:z-10 overflow-x-hidden overflow-y-scroll text-pretty;
+		@apply w-96 aspect-[11/16] opacity-90 bg-mantle rounded-md shadow-lg !transition-all duration-1000 ease-in-out hover:shadow-2xl hover:-translate-y-[5%] hover:scale-[115%] hover:z-10 overflow-x-hidden overflow-y-scroll text-pretty;
 	}
 	  
 	.card-container:has(.card:hover) .card {
-		filter: brightness(95%)
+		filter: brightness(85%)
 	}
 
 	.card-container:has(.card:hover) .card:hover {

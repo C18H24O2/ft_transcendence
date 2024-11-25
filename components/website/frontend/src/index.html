@@ -47,9 +47,18 @@
 			</div> -->
 			<div class="flex flex-row gap-8">
 				<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i>{% translate 'button.theme' %} </button>
-					<a class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4" href="/login/"> 
-						<button><i class="inline" data-feather="log-in"></i>{% translate 'button.login' %}</button>
-					</a>
+				<a class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4" href="/login/"> 
+					<button><i class="inline" data-feather="log-in"></i>{% translate 'button.login' %}</button>
+				</a>
+				<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
+					{% for i in languages %}
+						{% if i.0 == lang %}
+							<option value='{{ i.0 }}' selected=true>{{i.1}}</option>
+						{% else %}
+							<option value='{{ i.0 }}'>{{i.1}}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
 			</div>
 		</nav>
 	</header>
