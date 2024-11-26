@@ -1,5 +1,7 @@
 import './pong-game/3dpong.js'
 
+var playerlist
+
 function add_entry(form)
 {
 	form.preventDefault();
