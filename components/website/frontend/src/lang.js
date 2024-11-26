@@ -1,3 +1,5 @@
+
+//For the translations
 export function change_lang(value)
 {
 	console.log(value);
@@ -5,18 +7,13 @@ export function change_lang(value)
 
 	if (value !== current)
 	{
-		updateCookie('ft-lang', value);
+		setCookie('ft-lang', value);
 		location.reload();
 	}
 }
-
-function initCookie()
-{
-	window.cookieMap = document.cookie.split(';').map('=');
-}	
-
 window.change_lang = change_lang;
 
+//My dumbass thought it reset the cookie, sources seem to say otherwise, put nothing in days to have it as a temporary cookie
 function setCookie(name,value,days) {
 	var expires = "";
 	if (days) {
@@ -27,24 +24,7 @@ function setCookie(name,value,days) {
 	document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
-function updateCookie(name, value, days)
-{
-	var cookieMap = document.cookie.split(';').map(v => v.split("="));
-	var expires = "";
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime() + (days*24*60*60*1000));
-		expires = "; expires=" + date.toUTCString();
-	}
-	var cookieString;
-	cookieMap[name] = (value || "") + expires + "; path=/";
-	window.cookie = "";
-	for (var key in cookieMap)
-	{
-		console.log(key);
-	}
-}
-
+//get a cookie by name
 function getCookie(name) {
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');
