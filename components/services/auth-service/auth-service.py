@@ -20,7 +20,7 @@ def validate_jwt(token: str) -> tuple[bool, User | None]:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         if payload['exp'] < datetime.now(timezone.utc):
             return False, None
-        return True, User(id=payload['uid'])
+        return True, User.get(User.id == payload['uid']) # mypy ferme ta gueule putain
     except jwt.ExpiredSignatureError:
         pass
     except jwt.InvalidTokenError:

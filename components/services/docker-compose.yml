@@ -1,6 +1,7 @@
 name: ft_trans-backend
 
 include:
+  - ./postgres.docker-compose.yml
   - ./services.docker-compose.yml
 
 networks:
@@ -12,23 +13,6 @@ volumes:
   db:
 
 services:
-  # The global database, used for storing users, scores, game data, etc.
-  # We're using PostgreSQL as per the subject's requirements
-  postgres:
-    env_file: ../../.env
-    healthcheck:
-      test: "pg_isready -U $POSTGRES_USER"
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    image: "postgres:14.12-alpine3.19"
-    networks:
-      - services 
-    ports: #TODO: this is for development only, to remove later
-      - "5432:5432"
-    restart: unless-stopped
-    volumes:
-      - db:/var/lib/postgresql/data
 
   # RabbitMQ is a fast message queue, used for quick inter-service communication
   rabbitmq:

@@ -4,7 +4,7 @@ import peewee
 
 
 env = os.environ.copy()
-postgres_host = env.get("POSTGRES_HOST", "postgres")
+postgres_host = env.get("POSTGRES_HOST", "localhost")
 postgres_port = env.get("POSTGRES_PORT", "5432")
 postgres_user = env.get("POSTGRES_USER", "guest")
 postgres_password = env.get("POSTGRES_PASSWORD", "guest")

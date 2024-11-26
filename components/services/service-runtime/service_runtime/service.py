@@ -52,13 +52,18 @@ def service(id: str):
         service_class._IS_AT_SERVICE = True
         orig_init = service_class.__init__
 
+        def await_connections(self):
+            print("Awaiting connections")
+
         def le_init(self, *args, **kwargs):
             self.database = provide_database()
             self.database.create_tables(all_models)
             self.queue = ServiceQueue()
             self.message_handlers = scan_for_handlers(self)
             orig_init(self, *args, **kwargs)
+            self._await_connections()
 
+        service_class._await_connections = await_connections
         service_class._service_launch = internal_service_launch
 
         service_class.__init__ = le_init
