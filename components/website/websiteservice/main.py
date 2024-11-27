@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.urls import re_path
 from .lang import LANGUAGES, get_user_lang, get_translate_function
 import os
+import json
 
 
 DEBUG = True
@@ -15,7 +16,7 @@ ROOT_URLCONF = __name__
 
 ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
-    "django.contrib.staticfiles",
+    # "django.contrib.staticfiles",
     "websiteservice",
 ]
 TEMPLATES = [{
@@ -29,9 +30,17 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
-STATICFILES_DIRS = [
-    "/app/dist/static/",
+STATICFILES_DIRS = [ # Sorry mom and dad.
+    "/app/dist/static",
+    "/app/dist/assets",
+    "/app/dist",
+    "/app/static",
+    "/app",
     "frontend/dist/static",
+    "frontend/dist/assets",
+    "frontend/dist",
+    "frontend/static",
+    "frontend"
 ]
 STATIC_ROOT = '/app/static/'
 STATIC_URL = 'static/'
@@ -96,10 +105,53 @@ def main(_request):
 
     return find_template(_request, context)
 
+def fetch_resource_dumb(request, idk):
+    for search_path in STATICFILES_DIRS:
+        target = search_path + request.path
+        if os.path.exists(target):
+            abs = os.path.abspath(target)
+            extension = abs.split('.')[-1]
+            type = 'application/octet-stream'
+            if extension == 'js':
+                type = 'text/javascript'
+            elif extension == 'css':
+                type = 'text/css'
+            elif extension == 'html':
+                type = 'text/html'
+            elif extension == 'ico':
+                type = 'image/x-icon'
+            elif extension == 'png':
+                type = 'image/png'
+            elif extension == 'jpg':
+                type = 'image/jpeg'
+            elif extension == 'svg':
+                type = 'image/svg+xml'
+            elif extension == 'webp':
+                type = 'image/webp'
+            elif extension == 'woff':
+                type = 'font/woff'
+            elif extension == 'woff2':
+                type = 'font/woff2'
+            elif extension == 'ttf':
+                type = 'font/ttf'
+            elif extension == 'otf':
+                type = 'font/otf'
+            try:
+                with open(abs, 'rb') as f:
+                    return HttpResponse(f.read(), content_type=type)
+            except Exception:
+                pass
+    return HttpResponse(
+        json.dumps({'error': 'Not found', 'status': 404}), # mypy: ignore
+        status=404,
+        content_type='text/json'
+    )
+
 
 urlpatterns = [
     # Regex to anything that doesnt start with /static/
-    re_path(r'^(?!static/).*', main),
+    re_path(r'^(static\/|assets\/|favicon\.ico).*', fetch_resource_dumb),
+    re_path(r'^(?!static\/|assets\/|favicon\.ico).*', main),
 ]
 
 # Anything else should be served from the static directory

@@ -1,4 +1,11 @@
 /**
+ * Copyright (c) 2024  kiroussa <ft@xtrm.me> 
+ *
+ * This file is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
+/**
  * Handler for `hx-spa-pick`, which allows to only select part of the requested content to swap.
  * 
  * @param {Event} event 
@@ -16,11 +23,14 @@ function handleBeforeSwap(event) {
     }
     /** @type {String} */
     let target = undefined;
+	let swapType = undefined;
     for (const attr of requestElement.attributes) {
         if (attr.name === "hx-spa-pick") {
             target = attr.value;
-            break;
         }
+		if (attr.name === "hx-swap") {
+			swapType = attr.value;
+		}
     }
     if (target === undefined) {
         console.error("Found hx-spa-pick attribute with undefined target on:", requestElement)
@@ -33,7 +43,13 @@ function handleBeforeSwap(event) {
         console.error(`hx-spa-pick attribute '${target}' was not found.`);
         return;
     }
-    event.detail.serverResponse = elem.innerHTML;
+	if (swapType === "innerHTML") {
+		event.detail.serverResponse = elem.innerHTML;
+	} else if (swapType === "outerHTML") {
+		event.detail.serverResponse = elem.outerHTML;
+	} else {
+		console.error("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
+	}
 }
 
 function preventDoubleHistorySave(event) {
@@ -52,7 +68,6 @@ function preventDoubleHistorySave(event) {
  * @returns {boolean} Whether this event should fire
  */
 function spaHandleEvent(name, event) {
-    console.log(name, event);
     if (name === "htmx:beforeSwap") {
         handleBeforeSwap(event);
     }
@@ -61,9 +76,6 @@ function spaHandleEvent(name, event) {
     }
     return true;
 }
-
-console.log("htmx-spa-tools loaded");
-console.dir(document.htmx);
 
 htmx.defineExtension('spa-tools', {
     onEvent: spaHandleEvent,

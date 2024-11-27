@@ -37,6 +37,7 @@ export default defineConfig(async ({ _, __ }) => {
     ],
     root: root,
     base: '',
+    publicDir: 'static',
     build: {
       assetsDir: 'static',
       cssMinify: 'lightningcss',

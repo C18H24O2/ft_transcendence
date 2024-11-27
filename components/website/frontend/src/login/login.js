@@ -1,3 +1,5 @@
+console.log("Loaded login script");
+
 import butterup from 'butteruptoasts';
 butterup.options.toastLife = 3000;
 

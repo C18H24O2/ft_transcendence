@@ -13,7 +13,7 @@
 		<meta name="google" content="index, follow">
 
 		<!-- Common stuff -->
-		<link rel="icon" href="/assets/logo.webp" type="image/icon"/>
+		<link rel="icon" href="/assets/img/logo.webp" type="image/icon"/>
 		<link rel="stylesheet" href="/shared.css">
 		<title>{{ title }} &mdash; {{ website_title }}</title>
 		<script defer type="module" src="/shared.js"></script>
@@ -32,6 +32,18 @@
 		<header class="container fixed top-0 left-0 right-0 mx-auto px-8 pt-4 pb-5 rounded-b-xl bg-surface0/75 hover:bg-surface0/90 backdrop-blur-3xl min-h-12 z-10">
 			<nav class="flex flex-row justify-between items-center">
 				<div id="customize" class="flex flex-row gap-8">
+					<button
+						hx-get="/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/"
+						hx-spa-pick="#content"
+						preload="mouseover"
+						preload-images="true"
+						class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"
+					>
+						<i class="inline" data-feather="home"></i> {% translate 'button.home' %}
+					</button>
 					<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %} </button>
 					<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
 						{% for i in languages %}
@@ -50,6 +62,8 @@
 						hx-target="#content"
 						hx-swap="innerHTML"
 						hx-push-url="/register/"
+						preload="mouseover"
+						preload-images="true"
 						hx-spa-pick="#content"
 					>
 						<span>
@@ -63,6 +77,8 @@
 						hx-target="#content"
 						hx-swap="innerHTML"
 						hx-push-url="/login/"
+						preload="mouseover"
+						preload-images="true"
 						hx-spa-pick="#content"
 					>
 						<span>
@@ -89,27 +105,26 @@
 			</section>
 			<section id="games" class="card-container min-h-svh flex flex-row justify-evenly items-center bg-base">
 				<div class="card">
-					<img src="./assets/pong_offline.png" class="w-full">
+					<img src="/assets/img/pong_offline.png" class="w-full">
 					<div class="card-text">
 						<h1 class="py-3 text-4xl">{% translate 'gamemode_cards.pong_offline.title' %}</h1>
 						<p>{% translate 'gamemode_cards.pong_offline.desc' %}</p>
 					</div>
 				</div>
 				<div class="card">
-					<img src="./assets/pong_online.png" class="w-full">
+					<img src="/assets/img/pong_online.png" class="w-full">
 					<div class="card-text">
 						<h1 class="py-3 text-4xl">{% translate 'gamemode_cards.pong_online.title' %}</h1>
 						<p>{% translate 'gamemode_cards.pong_online.desc' %}</p>
 					</div>
 				</div>
 				<div class="card">
-					<img src="./assets/pong_tournament.png" class="w-full">
+					<img src="/assets/img/pong_tournament.png" class="w-full">
 					<div class="card-text">
 						<h1 class="py-3 text-4xl">{% translate 'gamemode_cards.pong_tournament.title' %}</h1>
 						<p class="text-center">{% translate 'gamemode_cards.pong_tournament.desc' %}</p>
 					</div>
 				</div>
-				
 			</section> 
 		</main>
 	</body>

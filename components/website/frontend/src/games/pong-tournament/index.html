@@ -13,7 +13,7 @@
 		<meta name="google" content="index, follow">
 
 		<!-- Common stuff -->
-		<link rel="icon" href="/assets/logo.webp" type="image/icon"/>
+		<link rel="icon" href="/assets/img/logo.webp" type="image/icon"/>
 		<link rel="stylesheet" href="/shared.css">
 		<title>{{ title }} &mdash; {{ website_title }}</title>
 		<script defer type="module" src="/shared.js"></script>
@@ -28,17 +28,25 @@
 				<button><i class="inline" data-feather="home"></i>{% translate 'button.home' %}</button>
 			</a>
 		</header>
-		<main class="flex justify-center items-center flex-col space-y-[5vh]" id="content">
-			<div class="overflow-scroll flex items-center justify-center bg-base w-[60vh] text-[10vh] text-text font-mono h-[20vh] rounded-xl ">
-				<span id="score-player">000</span> - <span id="score-opponent">000</span>
+		<main id="content">
+			<div class="flex justify-center items-center flex-col space-y-[5vh]">
+				<div class="min-h-full flex justify-center flex-col space-y-[5vh]">
+					<div class="overflow-scroll flex items-center justify-center bg-base w-[60vh] text-[10vh] text-text font-mono h-[20vh] rounded-xl ">
+						<span id="score-player">000</span> - <span id="score-opponent">000</span>
+					</div>
+					<canvas id="gameField" width="1920" height="1920" style="height:70vh; width:70vh; " class="bg-crust text-text rounded-xl p-[1vh]">
+						{% translate 'error.html5_required' %}
+					</canvas>
+				</div>
+
+				<div class="min-h-full flex justify-center flex-col space-y-[5vh]">
+					<form>
+						<input type="text" id="player-name-input" name="player-names">
+					</form>
+					<div id=player-list></div>
+				</div>
 			</div>
-			<canvas id="gameField" width="1920" height="1920" style="height:70vh; width:70vh; " class="bg-crust text-text rounded-xl p-[1vh]">
-				{% translate 'error.html5_required' %}
-			</canvas>
-			<form>
-				<input type="text" id="player-name-input" name="player-names">
-			</form>
-			<div id=player-list></div>
-		</main>		
+			<script defer type="module" src="./pong-tournament-init.js"></script>
+		</main>
 	</body>
 </html>

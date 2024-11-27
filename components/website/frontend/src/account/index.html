@@ -13,7 +13,7 @@
 		<meta name="google" content="index, follow">
 
 		<!-- Common stuff -->
-		<link rel="icon" href="/assets/logo.webp" type="image/icon"/>
+		<link rel="icon" href="/assets/img/logo.webp" type="image/icon"/>
 		<link rel="stylesheet" href="/shared.css">
 		<title>{{ title }} &mdash; {{ website_title }}</title>
 		<script defer type="module" src="/shared.js"></script>
@@ -27,36 +27,38 @@
 				<button><i class="inline" data-feather="home"></i> {% translate 'button.home' %}</button>
 			</a>
 		</header>
-		<main class="bg-mantle/85 hover:bg-mantle/90 [&_*]:transition-colors [&_*]:duration-300 backdrop-blur-md w-[70vw] h-[90vh] rounded-xl p-5" id="content">
-			<div class="w-10 aspect-square rounded-full bg-green absolute top-8 right-8"></div>
-			<div class="flex flex-col">
-				<div class="bg-overlay2/80 hover:bg-overlay2 w-64 aspect-square rounded-full overflow-hidden">
-					<img src="/account/assets/profile.png" onerror="this.src='/assets/placeholder.png'">
+		<main id="content">
+			<div class="bg-mantle/85 hover:bg-mantle/90 [&_*]:transition-colors [&_*]:duration-300 backdrop-blur-md w-[70vw] h-[90vh] rounded-xl p-5">
+				<div class="w-10 aspect-square rounded-full bg-green absolute top-8 right-8"></div>
+				<div class="flex flex-col">
+					<div class="bg-overlay2/80 hover:bg-overlay2 w-64 aspect-square rounded-full overflow-hidden">
+						<img src="/account/assets/profile.png" onerror="this.src='/assets/placeholder.png'">
+					</div>
+					<div id="public-info" class="flex flex-col justify-evenly my-5">
+						<div class="text-3xl">
+							<span id="display-name">
+								{% translate 'error.missing_text' %}
+							</span>
+						</div>					  
+						<div class="text-lg">
+							<span id="display-name">
+								{% translate 'error.missing_text' %}
+							</span>
+						</div>	
+					</div>
+					<div id="private-info" class="flex flex-col justify-evenly my-16">
+						<div class="text-lg">
+							<span id="e-mail">
+								{% translate 'error.missing_text' %}
+							</span>
+						</div>					  
+					</div>
 				</div>
-				<div id="public-info" class="flex flex-col justify-evenly my-5">
-					<div class="text-3xl">
-						<span id="display-name">
-							{% translate 'error.missing_text' %}
-						</span>
-					</div>					  
-					<div class="text-lg">
-						<span id="display-name">
-							{% translate 'error.missing_text' %}
-						</span>
-					</div>	
-				</div>
-				<div id="private-info" class="flex flex-col justify-evenly my-16">
-					<div class="text-lg">
-						<span id="e-mail">
-							{% translate 'error.missing_text' %}
-						</span>
-					</div>					  
-				</div>
-			</div>
-			<div id="match-history">
+				<div id="match-history">
 
+				</div>
 			</div>
+			<script type="module" src="home.js"></script>
 		</main>
-		<script type="module" src="home.js"></script>
 	</body>
 </html>
