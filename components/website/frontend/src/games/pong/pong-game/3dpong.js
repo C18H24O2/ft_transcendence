@@ -66,6 +66,8 @@ const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
 
 	//for the view switch between 3d and 2d
 let view = true;
+let initDone = false;
+let matchEnded = false;
 
 	//Values for the game difficulty ramp up and reset
 let speedMult = 1; //Multiplier for speed, increases
@@ -75,32 +77,37 @@ const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps
 const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
 const BASE_PADDLE_SPEED = paddleHeight / 12;
 
-document.addEventListener('DOMContentLoaded', main);
-
 	//Function Setter, value initialisation and shader compilation
-function main()
+export function startMatch(player1 = "player1", player2 = "player2", max_score = 0)
 {
-	document.addEventListener('keydown', keyDown);
-	document.addEventListener('keyup', keyUp);
-	if (!gl)
+	if (initDone === false)
 	{
-		console.warning('Your browser does not support webgl, consider using a different browser to access this functionnality');
-		return;
-	}
+		document.addEventListener('keydown', keyDown);
+		document.addEventListener('keyup', keyUp);
+		if (!gl)
+		{
+			console.warning('Your browser does not support webgl, consider using a different browser to access this functionnality');
+			return;
+		}
 
-	setClearColor("crust", gl);
-	const programInfo = initShaders(gl);
-	initShapes(programInfo);
+		setClearColor("crust", gl);
+		const programInfo = initShaders(gl);
+		initShapes(programInfo);
+
+		mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
+		if (!view)
+			mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+		else
+			mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
+		mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
+		initDone = true;
+	}
+	else
+		resetMatch(1, player1, player2);
 
 	let then = Date.now();
 	let deltaTime = 0;
-	mat4.lookAt(viewMatrix, [0, 0, cameraDistance], [0, 0, 0], [0, 1, 0]);
-	if (!view)
-		mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-	else
-		mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
-	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
-
+	requestAnimationFrame(render);
 	function render() {
 		let now = Date.now();
 		deltaTime = now - then;
@@ -115,11 +122,15 @@ function main()
 		}
 		movePlayers(deltaTime);
 		moveBall(deltaTime);
-		checkGoal();
+		checkGoal(max_score);
 		drawScene();
-		requestAnimationFrame(render);
+		if (!matchEnded)
+			requestAnimationFrame(render);
 	}
-	requestAnimationFrame(render);
+	if (gameObjects.paddle1.score >= max_score)
+		return (1);
+	else 
+		return (2);
 }
 
 	//set the paddles and the balls on the field
@@ -196,7 +207,17 @@ function reset(side = 0)
 	speedMult = 1;
 }
 
-function checkGoal()
+function resetMatch(side = 0)
+{
+	gameObjects.paddle1.score = 0;
+	gameObjects.paddle2.score = 0;
+
+	scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
+	scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
+	reset(side);
+}
+
+function checkGoal(max_score)
 {
 	let ball = gameObjects.ball;	
 	if (ball.x < -width || ball.x > width)
@@ -205,12 +226,16 @@ function checkGoal()
 		{
 			gameObjects.paddle2.score += 1;
 			scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
+			if (max_score != 0 && gameObjects.paddle2.score >= max_score)
+				matchEnded = true;
 			reset(-1);
 		}
 		if (ball.x > width)
 		{
 			gameObjects.paddle1.score += 1;
 			scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
+			if (max_score != 0 && gameObjects.paddle2.score >= max_score)
+				matchEnded = true;
 			reset(1);
 		}
 	}

@@ -35,11 +35,7 @@
 			<canvas id="gameField" width="1920" height="1920" style="height:70vh; width:70vh; " class="bg-crust text-text rounded-xl p-[1vh]">
 				{% translate 'error.html5_required' %}
 			</canvas>
-			<form class="flex flex-col space-y-4" onsubmit="add_entry(this)">
-				<input class="bg-surface0/55 focus:outline-none focus:ring-2 focus:ring-lavender text-text rounded-md p-5" type="text" name="username" placeholder="{% translate 'placeholders.username' %}" required>
-				<input class="bg-surface0/55 focus:outline-none active:bg-crust text-text rounded-md p-6 mx-10 btn" type="submit" value="{% translate 'placeholders.playeradd '%}">
-			</form>
-			<script defer type="module" src="./pong-tournament-init.js"></script>
-		</main>
+			<input type="text" id="player-names" name="player-names" placeholder=""> </input>
+		</div>		
 	</body>
 </html>
