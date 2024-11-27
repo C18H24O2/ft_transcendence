@@ -21,11 +21,12 @@
 	<meta property="og:url" content="https://fttrans.org">
 	<meta property="og:image" content="https://fttrans.org/assets/logo.png">
 	<link rel="icon" href="/assets/logo.webp" type="image/icon type"/>
+	<link rel="stylesheet" href="/shared.css">
 	<title>{{ title }} &mdash; {{ website_title }}</title>
 	<script defer type="module" src="/shared.js"></script>
 </head>
 
-<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300">
+<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300" hx-ext="spa-tools, preload">
 	<noscript>
 		<div class="flex justify-center items-center w-full h-svh">
 			<div class="w-full max-w-md">

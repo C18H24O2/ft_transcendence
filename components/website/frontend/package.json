@@ -17,18 +17,20 @@
     "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
     "globby": "^14.0.2",
-    "lightningcss": "^1.28.1",
-    "tailwindcss": "^3.4.14",
+    "lightningcss": "^1.28.2",
+    "tailwindcss": "^3.4.15",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-opentype": "^1.1.0",
     "tw-colors": "^3.3.2",
-    "vite": "^5.4.10",
+    "vite": "^5.4.11",
     "vite-plugin-minify": "^1.5.2"
   },
   "dependencies": {
     "@fontsource-variable/urbanist": "^5.1.0",
     "feather-icons": "^4.29.2",
     "gl-matrix": "^3.4.3",
-    "htmx.org": "2.0.0"
+    "htmx-ext-preload": "^2.0.1",
+    "htmx.org": "2.0.0",
+    "socket.io-client": "^4.8.1"
   }
 }
