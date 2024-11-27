@@ -10,6 +10,7 @@
 	"title": {
 		"main": "Welcome to the website",
 		"login": "Log in",
+		"register": "Register",
 		"pong": "Ping? Pong!",
 		"chat": "Livechat",
 		"account": "Accounts"
@@ -17,6 +18,7 @@
 	"button": {
 		"theme": "Change Theme",
 		"login": "Login",
+		"register": "Register",
 		"view": "Change view",
 		"home": "Home",
 		"chat_send": "Send",

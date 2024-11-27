@@ -9,16 +9,20 @@
 	},
 	"title": {
 		"main": "Bienvenue sur le feur",
-		"login": "Eau plate",
+		"login": "Apagnan",
+		"register": "Quoicoubeh",
 		"pong": "Quoi? Feur!",
 		"chat": "e-dating",
 		"account": "(ceux qui savent)"
 	},
 	"button": {
 		"theme": "Changer de Mangue",
-		"login": "Eau plate",
-		"view": "Changer de vue",
-		"home": "Accueil"
+		"login": "Apagnan",
+		"register": "Quoicoubeh",
+		"view": "Changer de Cramptex",
+		"home": "Eau plate",
+		"chat_send": "Crampté",
+		"chat_invite_game": "Cramptinviter"
 	},
 	"welcome_page": {
 			"title": "Bienvenue sur",
@@ -42,6 +46,8 @@
 	},
 	"placeholders": {
 		"username": "Eau Plate",
-		"password": "Mangue (ceux qui savent)"
+		"password": "Mangue (ceux qui savent)",
+		"message_send": "Envoyer un Crampté",
+		"friends": "Sigmas"
 	}
 }

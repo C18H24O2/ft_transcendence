@@ -10,6 +10,7 @@
 	"title": {
 		"main": "Bienvenue",
 		"login": "Connexion",
+		"register": "Inscription",
 		"pong": "Ping? Pong!",
 		"chat": "Discussion",
 		"account": "Comptes"
@@ -17,6 +18,7 @@
 	"button": {
 		"theme": "Changer de Theme",
 		"login": "Connexion",
+		"register": "S'inscrire",
 		"view": "Changer de vue",
 		"home": "Accueil",
 		"chat_send": "Envoyer",

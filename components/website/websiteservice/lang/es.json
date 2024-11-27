@@ -10,6 +10,7 @@
 	"title": {
 		"main": "Bienvenido al sitio web",
 		"login": "Iniciar sesión",
+		"register": "Registrar",
 		"pong": "¿Ping? ¡Pong!",
 		"chat": "Chat en vivo",
 		"account": "Cuentas"
@@ -17,6 +18,7 @@
 	"button": {
 		"theme": "Cambiar tema",
 		"login": "Iniciar sesión",
+		"register": "Registrar",
 		"view": "Cambiar vista",
 		"home": "Inicio",
 		"chat_send": "Enviar",
