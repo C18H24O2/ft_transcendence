@@ -35,7 +35,10 @@
 			<canvas id="gameField" width="1920" height="1920" style="height:70vh; width:70vh; " class="bg-crust text-text rounded-xl p-[1vh]">
 				{% translate 'error.html5_required' %}
 			</canvas>
-			<input type="text" id="player-names" name="player-names" placeholder=""> </input>
-		</div>		
+			<form>
+				<input type="text" id="player-name-input" name="player-names">
+			</form>
+			<div id=player-list></div>
+		</main>		
 	</body>
 </html>

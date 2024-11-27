@@ -127,10 +127,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		if (!matchEnded)
 			requestAnimationFrame(render);
 	}
-	if (gameObjects.paddle1.score >= max_score)
-		return (1);
-	else 
-		return (2);
+	return (gameObjects);
 }
 
 	//set the paddles and the balls on the field
@@ -234,7 +231,7 @@ function checkGoal(max_score)
 		{
 			gameObjects.paddle1.score += 1;
 			scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
-			if (max_score != 0 && gameObjects.paddle2.score >= max_score)
+			if (max_score != 0 && gameObjects.paddle1.score >= max_score)
 				matchEnded = true;
 			reset(1);
 		}
