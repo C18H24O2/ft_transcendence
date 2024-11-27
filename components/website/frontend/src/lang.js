@@ -2,7 +2,6 @@
 //For the translations
 export function change_lang(value)
 {
-	console.log(value);
 	var current = getCookie('ft-lang');
 
 	if (value !== current)
