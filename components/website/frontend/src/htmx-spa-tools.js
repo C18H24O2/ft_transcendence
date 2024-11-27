@@ -62,6 +62,9 @@ function spaHandleEvent(name, event) {
     return true;
 }
 
+console.log("htmx-spa-tools loaded");
+console.dir(document.htmx);
+
 htmx.defineExtension('spa-tools', {
     onEvent: spaHandleEvent,
 });

@@ -1,20 +1,33 @@
-{% load ft_trans_tags %}
 <!DOCTYPE html>
-<html>
+<html lang="{{ lang }}" class="scroll-smooth">
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width; initial-scale=1.0; user-scalable=0;">
-		<title>{% translate 'title.register' %}</title>
-		<script type="module" src="register.js"></script>
+		<!-- User scalability is set to none so that it feels more like a native app on mobile -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+		<!-- SEO stuff -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="author" content="ft_trans">
+		<meta name="robots" content="index, follow">
+		<meta name="googlebot" content="index, follow">
+		<meta name="google" content="index, follow">
+
+		<!-- Common stuff -->
+		<link rel="icon" href="/assets/logo.webp" type="image/icon"/>
+		<link rel="stylesheet" href="/shared.css">
+		<title>{{ title }} &mdash; {{ website_title }}</title>
+		<script defer type="module" src="/shared.js"></script>
 	</head>
+
 	<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300">
+		{% load ft_trans_tags %}
 		<header class="px-4 py-8 flex items-center justify-start bg-surface0/65 hover:bg-surface0/90 rounded-xl p-4 fixed top-5 left-5 flex-col space-y-4">
 			<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %}</button>
 			<a class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4" href="/"> 
 				<button><i class="inline" data-feather="home"></i> {% translate 'button.home' %}</button>
 			</a>
 		</header>
-		<main class="bg-placeholder-pattern bg-auto bg-center min-h-svh md:flex flex-col justify-center items-center">
+		<main class="bg-placeholder-pattern bg-auto bg-center min-h-svh md:flex flex-col justify-center items-center" id="content">
 			<div class="bg-mantle/75 hover:bg-mantle/90 transition-colors duration-500 backdrop-blur-md md:flex flex-col items-center px-20 py-10 rounded-xl">
 				<img class="object-scale-down h-60 w-60 opacity-50" src="/assets/logo.webp" alt="No logo for you :(">
 				<h1 class="text-xl font-black"> {% translate 'title.register' %} </h1>

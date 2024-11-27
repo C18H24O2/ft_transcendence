@@ -1,4 +1,3 @@
-import '../../../shared.js';
 import { getTheme } from '../../../theme.js'
 import { initShaders } from './webgl-initshader.js';
 import { Shape3d } from './webgl-shape.js';

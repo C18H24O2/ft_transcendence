@@ -4,6 +4,8 @@ import { globby } from 'globby'
 
 import { ViteMinifyPlugin } from 'vite-plugin-minify'
 
+import inject from '@rollup/plugin-inject';
+
 /**
  * Resolve all entry '.html' files recursively in the project
  *
@@ -28,6 +30,9 @@ export default defineConfig(async ({ _, __ }) => {
   return {
     appType: 'mpa', // tkt
     plugins: [
+      inject({
+        htmx: "htmx.org",
+      }),
       ViteMinifyPlugin({}),
     ],
     root: root,

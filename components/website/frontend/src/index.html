@@ -1,117 +1,116 @@
-{% load ft_trans_tags %}
 <!DOCTYPE html>
 <html lang="{{ lang }}" class="scroll-smooth">
-<head>
-	<meta charset="utf-8">
-	<!-- User scalability is set to none so that it feels more like a native app -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<head>
+		<meta charset="utf-8">
+		<!-- User scalability is set to none so that it feels more like a native app on mobile -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-	<!-- SEO stuff -->
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="description"
-		content="ft_trans is a free and open source gaming platform with popular games and a vast community of players.">
-	<meta name="keywords"
-		content="pong, free, open source, gaming, community, free to play, free to stream, free to download, multiplayer, games, game, play, stream, download, community, player, players, platform, ft_trans, fttrans, fttranslations, translations, translate, translator, translators, translation, translation platform, open source, open source platform, opensource, opensource platform, gaming platform, gaming community, gaming community platform, multiplayer gaming, multiplayer gaming platform, multiplayer games, multiplayer game, multiplayer platform, multiplayer community, multiplayer community platform">
-	<meta name="author" content="ft_trans">
-	<meta name="robots" content="index, follow">
-	<meta name="googlebot" content="index, follow">
-	<meta name="google" content="index, follow">
-	<meta property="og:title" content="ft_trans">
-	<meta property="og:type" content="website">
-	<meta property="og:url" content="https://fttrans.org">
-	<meta property="og:image" content="https://fttrans.org/assets/logo.png">
-	<link rel="icon" href="/assets/logo.webp" type="image/icon type"/>
-	<link rel="stylesheet" href="/shared.css">
-	<title>{{ title }} &mdash; {{ website_title }}</title>
-	<script defer type="module" src="/shared.js"></script>
-</head>
+		<!-- SEO stuff -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="author" content="ft_trans">
+		<meta name="robots" content="index, follow">
+		<meta name="googlebot" content="index, follow">
+		<meta name="google" content="index, follow">
 
-<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300" hx-ext="spa-tools, preload">
-	<noscript>
-		<div class="flex justify-center items-center w-full h-svh">
-			<div class="w-full max-w-md">
-				<h1 class="text-2xl font-bold">{% translate 'error.javascript_required.title' %}</h1>
-				<p class="text-lg">{% translate 'error.javascript_required.desc' %}</p>
-			</div>
-		</div>
-	</noscript>
-	<header
-		class="container fixed top-0 left-0 right-0 mx-auto px-8 pt-4 pb-5 rounded-b-xl bg-surface0/75 hover:bg-surface0/90 backdrop-blur-3xl min-h-12 z-10">
-		<nav class="flex flex-row justify-between items-center">
-			<!-- <a href="/">
-				<img src="/static/assets/logo.webp" alt="ft_trans logo">
-			</a>
-			<div class="flex flex-row gap-16">
-				<button class="btn" href="/">Home</button>
-				<button class="btn" href="/login">Login</button>
-				<button class="btn" href="/register">Register</button>
-			</div> -->
-			<div id="customize" class="flex flex-row gap-8">
-				<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %} </button>
-				<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
-					{% for i in languages %}
-						{% if i.0 == lang %}
-							<option value='{{ i.0 }}' selected=true>{{i.1}}</option>
-						{% else %}
-							<option value='{{ i.0 }}'>{{i.1}}</option>
-						{% endif %}
-					{% endfor %}
-				</select>
-			</div>
-			<div id="account" class="flex flex-row gap-8">
-				<a class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto" href="/register/"> 
-					<button><i class="inline" data-feather="user-plus"></i> {% translate 'button.register' %}</button>
-				</a>
-				<a class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto" href="/login/"> 
-					<button><i class="inline" data-feather="log-in"></i> {% translate 'button.login' %}</button>
-				</a>
-			</div>
-		</nav>
-	</header>
-	<main>
-		<section id="hero"
-			class="bg-auto bg-center min-h-svh bg-placeholder-pattern flex flex-col justify-center items-center">
-			<div class="backdrop-blur-xl rounded-xl p-24 px-32 bg-base/70 hover:bg-base/80 border-overlay2/15 border-2 flex flex-col gap-12 font-title">
-				<div class="flex flex-col">
-					<h1 class="text-6xl"><span class="font-semibold"> {% translate 'welcome_page.title' %} </span> <span class="font-extrabold">{{ website_title }}.</span></h1>  
-					<p class="text-xl italic drop-shadow-xl font-light">{% translate 'welcome_page.desc_1' %}</p>
-					<p class="text-xl italic drop-shadow-xl self-end font-light">{% translate 'welcome_page.desc_2' %}</p>
-				</div>
-				<div class="flex flex-row justify-center">
-					<a href="#games" class="self-center no-underline p-4 rounded-lg bg-crust/50 hover:bg-crust/80 transition-colors duration-200 text-text">{% translate 'welcome_page.gamemodes' %}</a>
-				</div>
-			</div>
-		</section>
-		<section id="games" class="card-container min-h-svh flex flex-row justify-evenly items-center bg-base">
-			<div class="card">
-				<img src="./assets/pong_offline.png" class="w-full">
-				<div class="card-text">
-					<h1 class="py-3 text-4xl">{% translate 'gamemode_cards.pong_offline.title' %}</h1>
-					<p>{% translate 'gamemode_cards.pong_offline.desc' %}</p>
-				</div>
-			</div>
-			<div class="card">
-				<img src="./assets/pong_online.png" class="w-full">
-				<div class="card-text">
-					<h1 class="py-3 text-4xl">{% translate 'gamemode_cards.pong_online.title' %}</h1>
-					<p>{% translate 'gamemode_cards.pong_online.desc' %}</p>
-				</div>
-			</div>
-			<div class="card">
-				<img src="./assets/pong_tournament.png" class="w-full">
-				<div class="card-text">
-					<h1 class="py-3 text-4xl">{% translate 'gamemode_cards.pong_tournament.title' %}</h1>
-					<p class="text-center">{% translate 'gamemode_cards.pong_tournament.desc' %}</p>
-				</div>
-			</div>
-			
-		</section> 
-		<!-- <section id="content" class="container mx-auto px-8 py-16 max-w-xl text-black min-h-svh">
-			<h1 class="text-4xl font-bold">Welcome to ft_trans!</h1>
-			<p class="text-lg">ft_trans is a free and open source gaming platform with popular games and a vast
-				community of players.</p>
-		</section> -->
-	</main>
-</body>
+		<!-- Common stuff -->
+		<link rel="icon" href="/assets/logo.webp" type="image/icon"/>
+		<link rel="stylesheet" href="/shared.css">
+		<title>{{ title }} &mdash; {{ website_title }}</title>
+		<script defer type="module" src="/shared.js"></script>
+	</head>
 
+	<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300" hx-ext="spa-tools, preload">
+		{% load ft_trans_tags %}
+		<noscript>
+			<div class="flex justify-center items-center w-full h-svh">
+				<div class="w-full max-w-md">
+					<h1 class="text-2xl font-bold">{% translate 'error.javascript_required.title' %}</h1>
+					<p class="text-lg">{% translate 'error.javascript_required.desc' %}</p>
+				</div>
+			</div>
+		</noscript>
+		<header class="container fixed top-0 left-0 right-0 mx-auto px-8 pt-4 pb-5 rounded-b-xl bg-surface0/75 hover:bg-surface0/90 backdrop-blur-3xl min-h-12 z-10">
+			<nav class="flex flex-row justify-between items-center">
+				<div id="customize" class="flex flex-row gap-8">
+					<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %} </button>
+					<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
+						{% for i in languages %}
+							{% if i.0 == lang %}
+								<option value='{{ i.0 }}' selected=true>{{i.1}}</option>
+							{% else %}
+								<option value='{{ i.0 }}'>{{i.1}}</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+				<div id="account" class="flex flex-row gap-8">
+					<button
+						class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
+						hx-get="/register/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/register/"
+						hx-spa-pick="#content"
+					>
+						<span>
+							<i class="inline" data-feather="user-plus"></i>
+							{% translate 'button.register' %}
+						</span>
+					</button>
+					<button
+						class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
+						hx-get="/login/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/login/"
+						hx-spa-pick="#content"
+					>
+						<span>
+							<i class="inline" data-feather="log-in"></i>
+							{% translate 'button.login' %}
+						</span>
+					</button>
+				</div>
+			</nav>
+		</header>
+		<main id="content">
+			<section id="hero"
+				class="bg-auto bg-center min-h-svh bg-placeholder-pattern flex flex-col justify-center items-center">
+				<div class="backdrop-blur-xl rounded-xl p-24 px-32 bg-base/70 hover:bg-base/80 border-overlay2/15 border-2 flex flex-col gap-12 font-title">
+					<div class="flex flex-col">
+						<h1 class="text-6xl"><span class="font-semibold"> {% translate 'welcome_page.title' %} </span> <span class="font-extrabold">{{ website_title }}.</span></h1>  
+						<p class="text-xl italic drop-shadow-xl font-light">{% translate 'welcome_page.desc_1' %}</p>
+						<p class="text-xl italic drop-shadow-xl self-end font-light">{% translate 'welcome_page.desc_2' %}</p>
+					</div>
+					<div class="flex flex-row justify-center">
+						<a href="#games" class="self-center no-underline p-4 rounded-lg bg-crust/50 hover:bg-crust/80 transition-colors duration-200 text-text">{% translate 'welcome_page.gamemodes' %}</a>
+					</div>
+				</div>
+			</section>
+			<section id="games" class="card-container min-h-svh flex flex-row justify-evenly items-center bg-base">
+				<div class="card">
+					<img src="./assets/pong_offline.png" class="w-full">
+					<div class="card-text">
+						<h1 class="py-3 text-4xl">{% translate 'gamemode_cards.pong_offline.title' %}</h1>
+						<p>{% translate 'gamemode_cards.pong_offline.desc' %}</p>
+					</div>
+				</div>
+				<div class="card">
+					<img src="./assets/pong_online.png" class="w-full">
+					<div class="card-text">
+						<h1 class="py-3 text-4xl">{% translate 'gamemode_cards.pong_online.title' %}</h1>
+						<p>{% translate 'gamemode_cards.pong_online.desc' %}</p>
+					</div>
+				</div>
+				<div class="card">
+					<img src="./assets/pong_tournament.png" class="w-full">
+					<div class="card-text">
+						<h1 class="py-3 text-4xl">{% translate 'gamemode_cards.pong_tournament.title' %}</h1>
+						<p class="text-center">{% translate 'gamemode_cards.pong_tournament.desc' %}</p>
+					</div>
+				</div>
+				
+			</section> 
+		</main>
+	</body>
 </html>

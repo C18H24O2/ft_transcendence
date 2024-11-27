@@ -1,8 +1,8 @@
 import './theme.js';
 import './lang.js';
 
-import * as htmx from 'htmx.org';
-window.htmx = htmx;
+import './shared.css';
+import './assets/butterup.css';
 
 import './htmx-spa-tools.js';
 

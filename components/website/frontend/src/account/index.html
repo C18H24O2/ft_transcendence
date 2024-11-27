@@ -1,20 +1,33 @@
-{% load ft_trans_tags %}
 <!DOCTYPE html>
-<html>
+<html lang="{{ lang }}" class="scroll-smooth">
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width; initial-scale=1.0; user-scalable=0;">
-		<title>{% translate 'title.account' %}</title>
-		<link rel="icon" href="/assets/logo.webp" type="image/icon type"/> 
+		<!-- User scalability is set to none so that it feels more like a native app on mobile -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+		<!-- SEO stuff -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="author" content="ft_trans">
+		<meta name="robots" content="index, follow">
+		<meta name="googlebot" content="index, follow">
+		<meta name="google" content="index, follow">
+
+		<!-- Common stuff -->
+		<link rel="icon" href="/assets/logo.webp" type="image/icon"/>
+		<link rel="stylesheet" href="/shared.css">
+		<title>{{ title }} &mdash; {{ website_title }}</title>
+		<script defer type="module" src="/shared.js"></script>
 	</head>
+
 	<body class="p-0 m-0 font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300 bg-placeholder-pattern bg-auto bg-center min-h-svh flex flex-col justify-center items-center">
+		{% load ft_trans_tags %}
 		<header class="z-10 px-4 py-8 flex items-center justify-start bg-surface0/65 hover:bg-surface0/90 rounded-xl p-4 fixed top-5 left-5 flex-col space-y-4 [&_*]:transition-colors [&_*]:duration-300">
 			<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %}</button>
 			<a class="text-blue btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4" href="/"> 
 				<button><i class="inline" data-feather="home"></i> {% translate 'button.home' %}</button>
 			</a>
 		</header>
-		<div class="bg-mantle/85 hover:bg-mantle/90 [&_*]:transition-colors [&_*]:duration-300 backdrop-blur-md w-[70vw] h-[90vh] rounded-xl p-5">
+		<main class="bg-mantle/85 hover:bg-mantle/90 [&_*]:transition-colors [&_*]:duration-300 backdrop-blur-md w-[70vw] h-[90vh] rounded-xl p-5" id="content">
 			<div class="w-10 aspect-square rounded-full bg-green absolute top-8 right-8"></div>
 			<div class="flex flex-col">
 				<div class="bg-overlay2/80 hover:bg-overlay2 w-64 aspect-square rounded-full overflow-hidden">
@@ -43,7 +56,7 @@
 			<div id="match-history">
 
 			</div>
-		</div>
+		</main>
 		<script type="module" src="home.js"></script>
 	</body>
 </html>
