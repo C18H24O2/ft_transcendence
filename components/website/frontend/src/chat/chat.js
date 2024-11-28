@@ -130,3 +130,36 @@ function updateUnreadDots() {
         }
     });
 }
+
+function blockUser(userId) {
+    socket.emit("block_user", { userId });
+}
+
+function unblockUser(userId) {
+    socket.emit("unblock_user", { userId });
+}
+
+socket.on("success", (data) => {
+    alert(data.message);
+});
+
+socket.on("error", (data) => {
+    alert(data.message);
+});
+
+function renderFriendList() {
+    friendList.innerHTML = '';
+    friends.forEach((friend) => {
+        const li = document.createElement('li');
+        li.textContent = friend.username;
+        li.dataset.userId = friend.id;
+
+        // Add a block button
+        const blockBtn = document.createElement('button');
+        blockBtn.textContent = 'Block';
+        blockBtn.addEventListener('click', () => blockUser(friend.id));
+
+        li.appendChild(blockBtn);
+        friendList.appendChild(li);
+    });
+}
