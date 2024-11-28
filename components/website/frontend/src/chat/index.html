@@ -4,20 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Chat</title>
+    <title>{{ title }} &mdash; {{ website_title }}</title>
     <link rel="stylesheet" href="./chat.css">
 	<script defer type="module" src="./chat.js"></script>
 </head>
 <body>
     <!-- Button to toggle chat visibility -->
-    <button id="toggle-chat-btn">Toggle Chat</button>
+    <button id="toggle-chat-btn">{% translate 'buttons.chat.' %}</button>
 
     <!-- Chat container -->
     <div id="chat-container" class="hidden">
         <!-- Button to close chat -->
         <button id="close-chat-btn" class="close-btn">X</button>
         <div id="friend-list">
-            <h3>Friends</h3>
+            <h3>{% translate 'placeholders.friends' %}</h3>
             <ul id="users">
                 <!-- Friend list populated dynamically -->
             </ul>
@@ -25,8 +25,8 @@
         <div id="chat-box">
             <ul id="messages"></ul>
             <div id="message-box">
-                <input type="text" id="message-input" placeholder="Type a message..." />
-                <button id="send-btn">Send</button>
+                <input type="text" id="message-input" placeholder="{% placeholders.message_send %}" />
+                <button id="send-btn">{% translate 'button.chat_send' %}</button>
             </div>
         </div>
     </div>
