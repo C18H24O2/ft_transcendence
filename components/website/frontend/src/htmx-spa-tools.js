@@ -38,15 +38,29 @@ function handleBeforeSwap(event) {
     }
     const parser = new DOMParser();
     const htmlResponse = parser.parseFromString(serverResponse, 'text/html');
+	const scriptTags = htmlResponse.querySelectorAll("script");
+	const injectedScripts = [];
+	for (const scriptTag of scriptTags) {
+		if (scriptTag.src) {
+			if (scriptTag.attributes["hx-spa-please-for-the-love-of-god-use-me"]) {
+				injectedScripts.push(scriptTag);
+			}
+		}
+	}
     const elem = htmlResponse.querySelector(target);
     if (!elem) {
         console.error(`hx-spa-pick attribute '${target}' was not found.`);
         return;
     }
+	const scriptHtml = "";
+	for (const script of injectedScripts) {
+		console.log("Injecting script tag: ", script.src);
+		scriptHtml += script.outerHTML;
+	}
 	if (swapType === "innerHTML") {
-		event.detail.serverResponse = elem.innerHTML;
+		event.detail.serverResponse = elem.innerHTML + scriptHtml;
 	} else if (swapType === "outerHTML") {
-		event.detail.serverResponse = elem.outerHTML;
+		event.detail.serverResponse = elem.outerHTML + scriptHtml;
 	} else {
 		console.error("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
 	}

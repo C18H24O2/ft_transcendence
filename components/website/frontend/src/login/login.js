@@ -1,28 +1,34 @@
-console.log("Loaded login script");
-
 import butterup from 'butteruptoasts';
 butterup.options.toastLife = 3000;
 
 function loginWarn(message) {
-	butterup.toast({
-		title: 'Hey!',
-		message: message,
-		location: 'bottom-right',
-		icon: true,
-		dismissable: true,
-		type: 'warning',
-	});
+	try {
+		butterup.toast({
+			title: 'Hey!',
+			message: message,
+			location: 'bottom-right',
+			icon: true,
+			dismissable: true,
+			type: 'warning',
+		});
+	} catch (e) {
+		// Fuck you and your error logging. why? because i said so.
+		//                                     - Xavier Niel, probablement.
+	}
 }
 
 function loginFailed(message) {
-	butterup.toast({
-		title: 'Error',
-		message: message,
-		location: 'bottom-right',
-		icon: true,
-		dismissable: true,
-		type: 'error',
-	});
+	try {
+		butterup.toast({
+			title: 'Error',
+			message: message,
+			location: 'bottom-right',
+			icon: true,
+			dismissable: true,
+			type: 'error',
+		});
+	} catch (e) {
+	}
 }
 
 function tryLogin(event) {
@@ -57,8 +63,13 @@ function tryLogin(event) {
 	});
 }
 
-try {
-	let elem = document.getElementById("login-form");
-	elem.onsubmit = tryLogin;
-} catch (e) {
+function handleLoad() {
+	try {
+		const form = document.getElementById("login-form");
+		form.onsubmit = tryLogin;
+	} catch (e) {
+	}
 }
+
+handleLoad();
+htmx.onLoad(handleLoad);

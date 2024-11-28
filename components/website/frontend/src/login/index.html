@@ -16,7 +16,7 @@
 		<link rel="icon" href="/assets/img/logo.webp" type="image/icon"/>
 		<link rel="stylesheet" href="/shared.css">
 		<title>{{ title }} &mdash; {{ website_title }}</title>
-		<script defer type="module" src="/shared.js"></script>
+		<script type="module" src="/shared.js"></script>
 	</head>
 
 	<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300">
@@ -40,17 +40,14 @@
 				<div class="bg-mantle/75 hover:bg-mantle/90 transition-colors duration-500 backdrop-blur-md md:flex flex-col items-center px-20 py-10 rounded-xl">
 					<img class="object-scale-down h-60 w-60 opacity-50" src="/assets/img/logo.webp" alt="No logo for you :(">
 					<h1 class="text-xl font-black">{% translate 'title.login' %}</h1>
-					<form class="flex flex-col space-y-4" id="login-form" action="/api/v1/auth/login?redirect=/" method="post">
+					<form class="flex flex-col space-y-4" id="login-form" action="javascript:void(0);">
 						<input class="bg-surface0/55 focus:outline-none focus:ring-2 focus:ring-lavender text-text rounded-md p-5" type="text" name="username" placeholder="{% translate 'placeholders.username' %}">
 						<input class="bg-surface0/55 focus:outline-none focus:ring-2 focus:ring-lavender text-text rounded-md p-5" type="password" name="password" placeholder="{% translate 'placeholders.password' %}">
 						<input class="bg-surface0/55 focus:outline-none active:bg-crust text-text rounded-md p-6 mx-10 btn" type="submit" value="{% translate 'button.login' %}">
 					</form>
 				</div>
 			</div>
-			<script>
-				console.log("Loaded login inline script");
-			</script>
-			<script src="./login.js"></script>
+			<script type="module" src="./login.js" hx-please-please-for-the-love-of-god-use-me></script>
 		</main>
 	</body>
 </html>
