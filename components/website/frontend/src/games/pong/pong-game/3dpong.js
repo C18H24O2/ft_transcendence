@@ -103,7 +103,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		}
 		if (!gl)
 		{
-			console.warning('Your browser does not support webgl, consider using a different browser to access this functionnality');
+			console.warn('Your browser does not support webgl, consider using a different browser to access this functionnality');
 			return;
 		}
 		if (gl.canvas.height < 1920 || gl.canvas.width < 1920 || gl.canvas.height != gl.canvas.width)
@@ -128,8 +128,6 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 	function render() {
 		let now = Date.now();
 		deltaTime = now - then;
-		if (deltaTime > 20)
-			console.log(deltaTime);
 		then = now;
 		if (newTheme != currentTheme)
 		{
