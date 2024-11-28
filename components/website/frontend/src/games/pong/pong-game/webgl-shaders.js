@@ -22,12 +22,14 @@ const vsSource =
 
 		highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
 		highp vec3 directionalLightColor = vec3(1, 1, 1);
-		highp vec3 directionalVector = normalize(vec3(0, 0, 1));
+		highp vec3 directionalVectorFront = normalize(vec3(0.1, 0.5, 1));
+		highp vec3 directionalVectorBack = normalize(vec3(-0.1, -0.3, -1));
 
 		highp vec4 transformedNormal = normalMatrix * vec4(vertNormal, 1.0);
 
-		highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-		vLighting = ambientLight + (directionalLightColor * directional);
+		highp float directionalFront = max(dot(transformedNormal.xyz, directionalVectorFront), 0.0);
+		highp float directionalBack = max(dot(transformedNormal.xyz, directionalVectorBack), 0.0);
+		vLighting = ambientLight + (directionalLightColor * directionalFront) + (directionalLightColor * directionalBack);
 	}
 `;
 
