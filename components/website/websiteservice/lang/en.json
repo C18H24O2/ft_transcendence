@@ -22,7 +22,9 @@
 		"view": "Change view",
 		"home": "Home",
 		"chat_send": "Send",
-		"chat_invite_game": "Invite"
+		"chat_invite_game": "Invite",
+		"add_player": "Add Player",
+		"start_tournament": "Start the tournament"
 	},
 	"welcome_page": {
 			"title": "Welcome to",
@@ -48,6 +50,7 @@
 		"username": "Username",
 		"password": "Password",
 		"message_send": "Send a message",
-		"friends": "Friends"
+		"friends": "Friends",
+		"add_player": "Add a Player"
 	}
 }

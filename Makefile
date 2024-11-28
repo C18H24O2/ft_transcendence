@@ -20,4 +20,7 @@ re: down up
 dev:
 	pnpm run --prefix components/website/frontend dev
 
+ensure-frontend-not-fucked:
+	pnpm run --prefix components/website/frontend build
+
 .PHONY: up down re dev

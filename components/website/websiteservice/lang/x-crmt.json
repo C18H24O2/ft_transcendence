@@ -22,7 +22,9 @@
 		"view": "Changer de Cramptex",
 		"home": "Eau plate",
 		"chat_send": "Crampté",
-		"chat_invite_game": "Cramptinviter"
+		"chat_invite_game": "Cramptinviter",
+		"add_player": "Ajouter un crampteur",
+		"start_tournament": "Crampter le Crampté"
 	},
 	"welcome_page": {
 			"title": "Bienvenue sur",
@@ -48,6 +50,7 @@
 		"username": "Eau Plate",
 		"password": "Mangue (ceux qui savent)",
 		"message_send": "Envoyer un Crampté",
-		"friends": "Sigmas"
+		"friends": "Sigmas",
+		"add_player":"Ajouter un crampteur"
 	}
 }

@@ -13,10 +13,18 @@ function setClearColor(colorName, setgl)
 
 	//Getting the webgl context
 /**@type {HTMLCanvasElement} */
-const canvas = document.getElementById("gameField");
+let canvas = document.getElementById("gameField");
 
 /**@type {WebGLRenderingContext} */
-const gl = canvas.getContext("webgl", {alpha: true});
+let gl = canvas.getContext("webgl", {alpha: true});
+
+htmx.onLoad(e => {
+	initDone = false;
+	matchEnded = false;
+	canvas = document.getElementById("gameField");
+	gl = canvas.getContext("webgl", {alpha: true});
+	resetMatch();
+});
 
 
 	//used to be able to keep track of theme changes
@@ -25,6 +33,7 @@ let currentTheme = getTheme();
 	//global gameobjects container for ease of use
 let gameObjects = {};
 
+export { gameObjects };
 
 	//Basic info about the gamefield
 
@@ -102,13 +111,13 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 		initDone = true;
 	}
-	else
-		resetMatch(1, player1, player2);
+	resetMatch(1, player1, player2);
 
 	let then = Date.now();
 	let deltaTime = 0;
 	requestAnimationFrame(render);
 	function render() {
+		// console.log("3d ponge");
 		let now = Date.now();
 		deltaTime = now - then;
 		then = now;
@@ -127,7 +136,6 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		if (!matchEnded)
 			requestAnimationFrame(render);
 	}
-	return (gameObjects);
 }
 
 	//set the paddles and the balls on the field
@@ -155,7 +163,7 @@ function initShapes(programInfo)
 }
 
 	//swap Between 2d and 3d
-function viewSwitch()
+export function viewSwitch()
 {
 	view = !view;
 
@@ -212,6 +220,7 @@ function resetMatch(side = 0)
 	scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
 	scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
 	reset(side);
+	matchEnded = false;
 }
 
 function checkGoal(max_score)
@@ -377,11 +386,17 @@ const keyMap = {
 function keyUp(event)
 {
 	const moveIndex = keyMap[event.keyCode];
-	if (moveIndex !== undefined) keyPress[moveIndex] = false;
+	if (moveIndex !== undefined) {
+		keyPress[moveIndex] = false;
+	}
 }
-  
+
 function keyDown(event)
 {
 	const moveIndex = keyMap[event.keyCode];
-	if (moveIndex !== undefined) keyPress[moveIndex] = true;
+	if (moveIndex !== undefined) {
+		keyPress[moveIndex] = true;
+		if (moveIndex > 1)
+			event.preventDefault();
+	}
 }

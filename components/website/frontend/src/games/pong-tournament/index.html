@@ -19,34 +19,97 @@
 		<script defer type="module" src="/shared.js"></script>
 	</head>
 
-	<body class="p-0 m-0 font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300 bg-placeholder-pattern bg-auto bg-center min-h-svh md:flex flex-col justify-center items-center">
+	<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300" hx-ext="spa-tools, preload">
 		{% load ft_trans_tags %}
-		<header class="px-4 py-8 flex items-center justify-start bg-surface0/65 hover:bg-surface0/90 rounded-xl p-4 fixed top-5 left-5 flex-col space-y-4">
-			<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text"><i class="inline" data-feather="edit-3"></i>{% translate 'button.theme' %}</button>
-			<button onclick="viewSwitch()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text"><i class="inline" data-feather="box"></i>{% translate 'button.view' %}</button>
-			<a class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4" href="/">
-				<button><i class="inline" data-feather="home"></i>{% translate 'button.home' %}</button>
-			</a>
+		<noscript>
+			<div class="flex justify-center items-center w-full h-svh">
+				<div class="w-full max-w-md">
+					<h1 class="text-2xl font-bold">{% translate 'error.javascript_required.title' %}</h1>
+					<p class="text-lg">{% translate 'error.javascript_required.desc' %}</p>
+				</div>
+			</div>
+		</noscript>
+		<header class="container fixed top-0 left-0 right-0 mx-auto px-8 pt-4 pb-5 rounded-b-xl bg-surface0/75 hover:bg-surface0/90 backdrop-blur-3xl min-h-12 z-10">
+			<nav class="flex flex-row justify-between items-center">
+				<div id="customize" class="flex flex-row gap-8">
+					<button
+						hx-get="/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/"
+						hx-spa-pick="#content"
+						preload="mouseover"
+						preload-images="true"
+						class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"
+					>
+						<i class="inline" data-feather="home"></i> {% translate 'button.home' %}
+					</button>
+					<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %} </button>
+					<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
+						{% for i in languages %}
+							{% if i.0 == lang %}
+								<option value='{{ i.0 }}' selected=true>{{i.1}}</option>
+							{% else %}
+								<option value='{{ i.0 }}'>{{i.1}}</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+				<div id="account" class="flex flex-row gap-8">
+					<button
+						class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
+						hx-get="/register/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/register/"
+						preload="mouseover"
+						preload-images="true"
+						hx-spa-pick="#content"
+					>
+						<span>
+							<i class="inline" data-feather="user-plus"></i>
+							{% translate 'button.register' %}
+						</span>
+					</button>
+					<button
+						class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
+						hx-get="/login/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/login/"
+						preload="mouseover"
+						preload-images="true"
+						hx-spa-pick="#content"
+					>
+						<span>
+							<i class="inline" data-feather="log-in"></i>
+							{% translate 'button.login' %}
+						</span>
+					</button>
+				</div>
+			</nav>
 		</header>
 		<main id="content">
-			<div class="flex justify-center items-center flex-col space-y-[5vh]">
-				<div class="min-h-full flex justify-center flex-col space-y-[5vh]">
+			<div class="flex justify-center items-center flex-col space-y-[5vh] bg-placeholder-pattern bg-auto bg-fixed min-h-svh">
+				<section id="player-list-section" class="pt-14 min-h-svh flex justify-start m-10 flex-col space-y-[5vh] min-w-40">
+					<form id="add-player-form">
+						<input type="text" id="player-name-input" name="player-name" placeholder="{% translate 'placeholders.add_player' %}" class="btn bg-base">
+						<button type="submit" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg">{% translate 'button.add_player' %}</button>
+						<button type="button" onclick="startTournament()" class="btn bg-surface2">{% translate 'button.start_tournament' %}</button>
+					</form>
+					<div class="bg-base min-w-40" id=player-list></div>
+				</section>
+				
+				<section id="game" class="min-h-full flex justify-center flex-col space-y-[5vh]">
 					<div class="overflow-scroll flex items-center justify-center bg-base w-[60vh] text-[10vh] text-text font-mono h-[20vh] rounded-xl ">
 						<span id="score-player">000</span> - <span id="score-opponent">000</span>
 					</div>
 					<canvas id="gameField" width="1920" height="1920" style="height:70vh; width:70vh; " class="bg-crust text-text rounded-xl p-[1vh]">
 						{% translate 'error.html5_required' %}
 					</canvas>
-				</div>
-
-				<div class="min-h-full flex justify-center flex-col space-y-[5vh]">
-					<form>
-						<input type="text" id="player-name-input" name="player-names">
-					</form>
-					<div id=player-list></div>
-				</div>
+				</section>
 			</div>
-			<script defer type="module" src="./pong-tournament-init.js"></script>
+			<script type="module" src="./pong-tournament-init.js" hx-spa-please-for-the-love-of-god-use-me=""></script>
 		</main>
 	</body>
 </html>

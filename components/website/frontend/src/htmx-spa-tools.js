@@ -11,48 +11,40 @@
  * @param {Event} event 
  */
 function handleBeforeSwap(event) {
-    /** @type {Element} */
-    const requestElement = event?.detail?.requestConfig?.elt;
-    if (!requestElement) {
-        return;
-    }
-    /** @type {String} */
-    const serverResponse = event?.detail?.serverResponse;
-    if (!serverResponse) {
-        return ;
-    }
-    /** @type {String} */
-    let target = undefined;
+	/** @type {Element} */
+	const requestElement = event?.detail?.requestConfig?.elt;
+	if (!requestElement) {
+		return;
+	}
+	/** @type {String} */
+	const serverResponse = event?.detail?.serverResponse;
+	if (!serverResponse) {
+		return ;
+	}
+	/** @type {String} */
+	let target = undefined;
 	let swapType = undefined;
-    for (const attr of requestElement.attributes) {
-        if (attr.name === "hx-spa-pick") {
-            target = attr.value;
-        }
+	for (const attr of requestElement.attributes) {
+		if (attr.name === "hx-spa-pick") {
+			target = attr.value;
+		}
 		if (attr.name === "hx-swap") {
 			swapType = attr.value;
 		}
-    }
-    if (target === undefined) {
-        console.error("Found hx-spa-pick attribute with undefined target on:", requestElement)
-        return;
-    }
-    const parser = new DOMParser();
-    const htmlResponse = parser.parseFromString(serverResponse, 'text/html');
-	const scriptTags = htmlResponse.querySelectorAll("script");
-	const injectedScripts = [];
-	for (const scriptTag of scriptTags) {
-		if (scriptTag.src) {
-			if (scriptTag.attributes["hx-spa-please-for-the-love-of-god-use-me"]) {
-				injectedScripts.push(scriptTag);
-			}
-		}
 	}
-    const elem = htmlResponse.querySelector(target);
-    if (!elem) {
-        console.error(`hx-spa-pick attribute '${target}' was not found.`);
-        return;
-    }
-	const scriptHtml = "";
+	if (target === undefined) {
+		console.error("Found hx-spa-pick attribute with undefined target on:", requestElement)
+		return;
+	}
+	const parser = new DOMParser();
+	const htmlResponse = parser.parseFromString(serverResponse, 'text/html');
+	const injectedScripts = htmlResponse.querySelectorAll("script");
+	const elem = htmlResponse.querySelector(target);
+	if (!elem) {
+		console.error(`hx-spa-pick attribute '${target}' was not found.`);
+		return;
+	}
+	let scriptHtml = "";
 	for (const script of injectedScripts) {
 		console.log("Injecting script tag: ", script.src);
 		scriptHtml += script.outerHTML;
@@ -67,10 +59,10 @@ function handleBeforeSwap(event) {
 }
 
 function preventDoubleHistorySave(event) {
-    const path = event?.detail?.path;
-    const currentPath = window.location.pathname;
-    // console.log(`wanting to change from '${currentPath}' to '${path}'`);
-    return (path !== currentPath);
+	const path = event?.detail?.path;
+	const currentPath = window.location.pathname;
+	// console.log(`wanting to change from '${currentPath}' to '${path}'`);
+	return (path !== currentPath);
 }
 
 /**
@@ -82,15 +74,15 @@ function preventDoubleHistorySave(event) {
  * @returns {boolean} Whether this event should fire
  */
 function spaHandleEvent(name, event) {
-    if (name === "htmx:beforeSwap") {
-        handleBeforeSwap(event);
-    }
-    if (name === "htmx:beforeHistorySave") {
-        return preventDoubleHistorySave(event);
-    }
-    return true;
+	if (name === "htmx:beforeSwap") {
+		handleBeforeSwap(event);
+	}
+	if (name === "htmx:beforeHistorySave") {
+		return preventDoubleHistorySave(event);
+	}
+	return true;
 }
 
 htmx.defineExtension('spa-tools', {
-    onEvent: spaHandleEvent,
+	onEvent: spaHandleEvent,
 });

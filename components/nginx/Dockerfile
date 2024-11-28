@@ -95,6 +95,7 @@ RUN mkdir -p /etc/nginx/modules
 RUN cp objs/ngx_http_modsecurity_module.so /etc/nginx/modules
 RUN cp objs/ngx_http_brotli_filter_module.so /etc/nginx/modules
 RUN cp objs/ngx_http_brotli_static_module.so /etc/nginx/modules
+RUN rm -rf /tmp/nginx-${NGINX_IMG_VERSION}
 
 #######################################################
 ### Setup the OWASP ModSecurity Core Rule Set (CRS) ###
@@ -111,11 +112,14 @@ RUN mv /usr/local/coreruleset-${OWASP_CRS_VERSION} /usr/local/modsecurity-crs
 RUN mv /usr/local/modsecurity-crs/crs-setup.conf.example /usr/local/modsecurity-crs/crs-setup.conf
 RUN mv /usr/local/modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example \
 	/usr/local/modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
+RUN rm -rf /tmp/modsec-connector
 
 ##> Setup ModSecurity in nginx <##
 
 RUN mkdir -p /etc/nginx/modsec
 RUN cp /tmp/modsec/modsecurity-v${MODSEC_VERSION}/unicode.mapping /etc/nginx/modsec
+RUN rm -rf /tmp/modsec
+RUN rm -rf /tmp/ngx_brotli
 COPY ./config/modsec.conf /etc/nginx/modsec/modsecurity.conf
 COPY ./config/modsec-main.conf /etc/nginx/modsec/main.conf
 
