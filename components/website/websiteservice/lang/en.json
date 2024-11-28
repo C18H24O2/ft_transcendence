@@ -11,7 +11,8 @@
 		"main": "Welcome to the website",
 		"login": "Log in",
 		"register": "Register",
-		"pong": "Ping? Pong!",
+		"games/pong": "Ping? Pong!",
+		"games/pong-tournament": "Ping? Pong!",
 		"chat": "Livechat",
 		"account": "Accounts"
 	},

@@ -11,7 +11,8 @@
 		"main": "Bienvenue",
 		"login": "Connexion",
 		"register": "Inscription",
-		"pong": "Ping? Pong!",
+		"games/pong": "Ping? Pong!",
+		"games/pong-tournament": "Ping? Pong!",
 		"chat": "Discussion",
 		"account": "Comptes"
 	},
