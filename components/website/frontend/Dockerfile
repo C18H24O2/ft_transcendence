@@ -9,4 +9,9 @@ RUN corepack use pnpm@latest
 
 RUN pnpm install
 
+COPY builder.sh .
+RUN chmod +x builder.sh
+
+ENTRYPOINT ["./builder.sh"]
+
 CMD ["pnpm", "run", "build"]
