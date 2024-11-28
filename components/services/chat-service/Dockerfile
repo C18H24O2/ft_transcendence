@@ -28,5 +28,5 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY service-runtime ./service_runtime
 COPY chat-service/*.py ./ 
 
-ENTRYPOINT ["python3",  "chat-service.py"]
+ENTRYPOINT ["gunicorn", "chat-service:app", "--bind", "0.0.0.0:6969"]
 

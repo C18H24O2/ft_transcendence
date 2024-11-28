@@ -5,7 +5,7 @@ import { io, Manager } from 'socket.io-client';
 // });
 // const socket = manager.socket("/", {
 // });
-const socket = io("https://localhost:8043/", {transports: ['websocket']});
+const socket = io();
 socket.on("connect_error", (err) => {
   // the reason of the error, for example "xhr poll error"
   console.log("SOCKET CONNET ERROR");
