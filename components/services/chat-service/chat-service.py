@@ -2,7 +2,7 @@ import socketio
 import threading
 import re
 
-sio = socketio.Server()
+sio = socketio.Server(cors_allowed_origins='*', logger=True)
 
 MESSAGE_HISTORY_LIMIT = 100
 users = {}
@@ -23,6 +23,14 @@ def register(sid, username):
         blocklists[sid] = []
         print(f"{username} registered with ID {sid}")
         broadcast_user_list()
+
+@sio.event
+def connection_error(err):
+    print("====== SOCKET CONNECTION ERROR =======")
+    print(err.req)
+    print(err.code)
+    print(err.message)
+    print(err.context)
 
 @sio.event
 def private_message(sid, data):
@@ -116,11 +124,13 @@ def broadcast_user_list():
         sio.emit("user_list", user_list, room=sid)
 
 
-if __name__ == "__main__":
+app = socketio.WSGIApp(sio)
+
+if __name__ == "__main____":
     import eventlet
     import eventlet.wsgi
 
     bind = ('0.0.0.0', 6969)
 
     print(f"Starting chat-service on {bind}")
-    app = eventlet.wsgi.server(eventlet.listen(bind), socketio.WSGIApp(sio))
+    eventlet.wsgi.server(eventlet.listen(bind), app) 

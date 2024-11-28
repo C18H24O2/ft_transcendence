@@ -15,8 +15,10 @@
 		<!-- Common stuff -->
 		<link rel="icon" href="/assets/img/logo.webp" type="image/icon"/>
 		<link rel="stylesheet" href="/shared.css">
+        <link rel="stylesheet" href="chat/chat.css">
 		<title>{{ title }} &mdash; {{ website_title }}</title>
 		<script defer type="module" src="/shared.js"></script>
+        <script defer type="module" src="chat/chat.js"></script>
 	</head>
 
 	<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300" hx-ext="spa-tools, preload">
@@ -127,5 +129,30 @@
 				</div>
 			</section> 
 		</main>
+        <!-- Button to toggle chat visibility -->
+        <button id="toggle-chat-btn">{% translate 'buttons.chat.' %}</button>
+
+        <!-- Chat container -->
+        <div id="chat-container" class="hidden">
+            <!-- Button to close chat -->
+            <button id="close-chat-btn" class="close-btn">X</button>
+            <div id="friend-list">
+                <h3>{% translate 'placeholders.friends' %}</h3>
+                <ul id="users">
+                <!-- Friend list populated dynamically -->
+                </ul>
+                <div id="invite-btn">
+                    <button id="game-invite-btn">Invite</button>
+                </div>
+            </div>
+            <div id="chat-box">
+                <h3>Chat</h3>
+                <ul id="messages"></ul>
+                <div id="message-box">
+                    <input type="text" id="message-input" placeholder="sex"/><!--{% placeholders.message_send %}" /> -->
+                    <button id="send-btn">{% translate 'button.chat_send' %}</button>
+                </div>
+            </div>
+        </div>
 	</body>
 </html>

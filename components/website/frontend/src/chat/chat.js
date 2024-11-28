@@ -1,7 +1,22 @@
-import io from 'socket.io-client';
+import { io, Manager } from 'socket.io-client';
 
-const socket = io();
+// const manager = new Manager("wss://localhost:8043/ws/v1/", {
+//     reconnectionDelayMax: 10000,
+// });
+// const socket = manager.socket("/", {
+// });
+const socket = io("https://localhost:8043/", {transports: ['websocket']});
+socket.on("connect_error", (err) => {
+  // the reason of the error, for example "xhr poll error"
+  console.log("SOCKET CONNET ERROR");
+  console.log(err.message);
 
+  // some additional description, for example the status code of the initial HTTP response
+  console.log(err.description);
+
+  // some additional context, for example the XMLHttpRequest object
+  console.log(err.context);
+}); 
 const toggleChatBtn = document.getElementById('toggle-chat-btn');
 const closeChatBtn = document.getElementById('close-chat-btn');
 const chatContainer = document.getElementById('chat-container');
