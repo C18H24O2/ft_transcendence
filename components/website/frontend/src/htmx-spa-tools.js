@@ -33,7 +33,7 @@ function handleBeforeSwap(event) {
 		}
 	}
 	if (target === undefined) {
-		console.error("Found hx-spa-pick attribute with undefined target on:", requestElement)
+		console.warn("Found hx-spa-pick attribute with undefined target on:", requestElement)
 		return;
 	}
 	const parser = new DOMParser();
@@ -41,7 +41,7 @@ function handleBeforeSwap(event) {
 	const injectedScripts = htmlResponse.querySelectorAll("script");
 	const elem = htmlResponse.querySelector(target);
 	if (!elem) {
-		console.error(`hx-spa-pick attribute '${target}' was not found.`);
+		console.warn(`hx-spa-pick attribute '${target}' was not found.`);
 		return;
 	}
 	let scriptHtml = "";
@@ -54,7 +54,7 @@ function handleBeforeSwap(event) {
 	} else if (swapType === "outerHTML") {
 		event.detail.serverResponse = elem.outerHTML + scriptHtml;
 	} else {
-		console.error("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
+		console.warn("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
 	}
 }
 
