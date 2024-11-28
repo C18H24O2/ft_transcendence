@@ -12,6 +12,7 @@ LANGUAGES = [
     ('fr', 'Français'),
     ('es', "Español"),
     ('x-crmt', "Cramptés"),
+	('x-gpt', "ChatGPT")
 ]
 
 lang_data = {}
