@@ -11,8 +11,10 @@
 		"main": "Bienvenue sur le feur",
 		"login": "Apagnan",
 		"register": "Quoicoubeh",
-		"games/pong": "Quoi? Feur!",
-		"games/pong-tournament": "Quoi? Feur!",
+		"games": {
+			"pong": "Quoi? Feur!",
+			"pong-tournament": "Quoi? Feur!"
+		},
 		"chat": "e-dating",
 		"account": "(ceux qui savent)"
 	},

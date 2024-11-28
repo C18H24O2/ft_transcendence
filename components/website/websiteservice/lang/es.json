@@ -11,8 +11,10 @@
 		"main": "Bienvenido al sitio web",
 		"login": "Iniciar sesión",
 		"register": "Registrar",
-		"games/pong": "¿Ping? ¡Pong!",
-		"games/pong-tournament": "¿Ping? ¡Pong!",
+		"games": {
+			"pong": "¿Ping? ¡Pong!",
+			"pong-tournament": "¿Ping? ¡Pong!"
+		},
 		"chat": "Chat en vivo",
 		"account": "Cuentas"
 	},
