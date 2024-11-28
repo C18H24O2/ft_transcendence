@@ -1,9 +1,7 @@
 import './pong-game/3dpong.js'
 import { startMatch, viewSwitch, gameObjects } from './pong-game/3dpong.js'
 
-console.log("ping?");
 function pong() {
-	console.log("pong!");
 	let playerlist = [];
 	let origPlayerlist = [];
 	let next_playerlist = [];
@@ -53,12 +51,12 @@ function pong() {
 			let data = new FormData(form);
 			let name = data.get("player-name");
 			if (!name) return;
-			if (name == "debug-test") {
-				for (let i = 0; i < 32; i++) {
-					addPlayer("Tournament Player #" + (i + 1));
-				}
-				return;
-			}
+			//if (name == "debug-test") {
+			//	for (let i = 0; i < 32; i++) {
+			//		addPlayer("Tournament Player #" + (i + 1));
+			//	}
+			//	return;
+			//}
 			addPlayer(name);
 			data.set("player-name", "");
 		};
@@ -101,13 +99,13 @@ function pong() {
 		{
 			let winner;
 
-			console.log("shittishng");
 			if (gameObjects.paddle1.score < SCORE_TO_WIN && gameObjects.paddle2.score < SCORE_TO_WIN)
 				return;
 			
 			if (winnerTimeout < 5) {
 				if (winnerTimeout == 0) {
 					console.log("we got a winner boys");
+					//TODO: toast
 
 					if (gameObjects.paddle1.score >= SCORE_TO_WIN)
 						winner = 1;
@@ -130,6 +128,7 @@ function pong() {
 						if (next_playerlist.length < 2)
 						{
 							console.log(next_playerlist[0] + " wins the tournament!");
+							//TODO: toast
 							clearInterval(intervalid);
 							intervalid = -1;
 							form.style.display = "";
@@ -162,6 +161,7 @@ function pong() {
 			playerlist = [...origPlayerlist];
 			if (playerlist.length < 2)
 				return ("must at least have 2 players");
+				//TODO: toast
 			
 			winnerTimeout = 0;
 			gameField.scrollIntoView();
