@@ -44,7 +44,7 @@
 					>
 						<i class="inline" data-feather="home"></i> {% translate 'button.home' %}
 					</button>
-					<button onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %} </button>
+					<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %} </button>
 					<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
 						{% for i in languages %}
 							{% if i.0 == lang %}

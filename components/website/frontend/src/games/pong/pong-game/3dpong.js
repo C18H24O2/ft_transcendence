@@ -18,17 +18,9 @@ let canvas = document.getElementById("gameField");
 /**@type {WebGLRenderingContext} */
 let gl = canvas.getContext("webgl", {alpha: true});
 
-htmx.onLoad(e => {
-	initDone = false;
-	matchEnded = false;
-	canvas = document.getElementById("gameField");
-	gl = canvas.getContext("webgl", {alpha: true});
-	resetMatch();
-});
-
-
 	//used to be able to keep track of theme changes
-let currentTheme = getTheme();
+let currentTheme;
+let newTheme;
 
 	//global gameobjects container for ease of use
 let gameObjects = {};
@@ -44,9 +36,6 @@ function resizeCanvas(size)
 	gl.viewport(0,0,gl.canvas.width, gl.canvas.height);
 }
 
-if (gl.canvas.height < 1920 || gl.canvas.width < 1920 || gl.canvas.height != gl.canvas.width)
-	resizeCanvas(1920);
-
 const height = gl.canvas.height / 2;
 const width = gl.canvas.width / 2;
 const viewMatrix = mat4.create();
@@ -54,8 +43,8 @@ const projectionMatrix = mat4.create();
 const projectionViewMatrix = mat4.create();
 
 	//Score containers
-const scoreP1 = document.getElementById("score-player");
-const scoreP2 = document.getElementById("score-opponent");
+let scoreP1 = document.getElementById("score-player");
+let scoreP2 = document.getElementById("score-opponent");
 
 	//Game Objects Size
 //Because I am dumb and do not know how to write code, these dimensions are half of the size of the actual object, 
@@ -86,6 +75,15 @@ const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps
 const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
 const BASE_PADDLE_SPEED = paddleHeight / 12;
 
+htmx.onLoad(e => {
+	initDone = false;
+	matchEnded = false;
+	canvas = document.getElementById("gameField");
+	scoreP1 = document.getElementById("score-player");
+	scoreP2 = document.getElementById("score-opponent");
+	gl = canvas.getContext("webgl", {alpha: true});
+});
+
 	//Function Setter, value initialisation and shader compilation
 export function startMatch(player1 = "player1", player2 = "player2", max_score = 0)
 {
@@ -93,11 +91,23 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 	{
 		document.addEventListener('keydown', keyDown);
 		document.addEventListener('keyup', keyUp);
+
+		currentTheme = getTheme();
+		newTheme = currentTheme;
+		let changeTheme = document.getElementById('change-theme-button');
+		if (changeTheme)
+		{
+			changeTheme.addEventListener('click', () => {
+				newTheme = getTheme();
+			})
+		}
 		if (!gl)
 		{
 			console.warning('Your browser does not support webgl, consider using a different browser to access this functionnality');
 			return;
 		}
+		if (gl.canvas.height < 1920 || gl.canvas.width < 1920 || gl.canvas.height != gl.canvas.width)
+			resizeCanvas(1920);
 
 		setClearColor("crust", gl);
 		const programInfo = initShaders(gl);
@@ -115,13 +125,13 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 
 	let then = Date.now();
 	let deltaTime = 0;
-	requestAnimationFrame(render);
 	function render() {
-		// console.log("3d ponge");
 		let now = Date.now();
 		deltaTime = now - then;
+		if (deltaTime > 20)
+			console.log(deltaTime);
 		then = now;
-		if (getTheme() != currentTheme)
+		if (newTheme != currentTheme)
 		{
 			currentTheme = getTheme();
 			setClearColor("crust", gl);
@@ -133,9 +143,10 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		moveBall(deltaTime);
 		checkGoal(max_score);
 		drawScene();
-		if (!matchEnded)
-			requestAnimationFrame(render);
+		if (matchEnded)
+			clearInterval(intervalId);
 	}
+	let intervalId = setInterval(render, 16.6);
 }
 
 	//set the paddles and the balls on the field
