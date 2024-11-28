@@ -1,5 +1,6 @@
 import socketio
 import threading
+import re
 
 sio = socketio.Server()
 
@@ -19,7 +20,7 @@ def sanitize_message(text):
 def register(sid, username):
     with lock:
         users[sid] = {"id": sid, "username": username}
-		blocklists[sid] = []
+        blocklists[sid] = []
         print(f"{username} registered with ID {sid}")
         broadcast_user_list()
 
@@ -33,13 +34,13 @@ def private_message(sid, data):
         sio.emit("error", {"message": "Invalid recipient or sender."}, room=sid)
         return
 	
-	with lock:
+    with lock:
         if sid in blocklists.get(recipient_id, []):
             print(f"Message blocked: {users[sid]['username']} -> {users[recipient_id]['username']}")
             sio.emit("error", {"message": "Message could not be delivered. The recipient has blocked you."}, room=sid)
             return
 
-	sanitized_message = sanitize_message(message)
+    sanitized_message = sanitize_message(message)
 
     with lock:
         # Save message in history
@@ -92,7 +93,7 @@ def unblock_user(sid, data):
 def disconnect(sid):
     with lock:
         user = users.pop(sid, None)
-		blocklists.pop(sid, None)
+        blocklists.pop(sid, None)
         if user:
             print(f"{user['username']} disconnected.")
             broadcast_user_list()
@@ -103,7 +104,7 @@ def save_message(sender_id, recipient_id, sender_name, text):
     if key not in message_history:
         message_history[key] = []
     message_history[key].append({"sender": sender_name, "text": text})
-	if len(message_history[key]) > MESSAGE_HISTORY_LIMIT:
+    if len(message_history[key]) > MESSAGE_HISTORY_LIMIT:
         message_history[key].pop(0)
 
 
@@ -119,4 +120,7 @@ if __name__ == "__main__":
     import eventlet
     import eventlet.wsgi
 
-    app = eventlet.wsgi.server(eventlet.listen(('0.0.0.0', 8043)), sio)
+    bind = ('0.0.0.0', 6969)
+
+    print(f"Starting chat-service on {bind}")
+    app = eventlet.wsgi.server(eventlet.listen(bind), socketio.WSGIApp(sio))

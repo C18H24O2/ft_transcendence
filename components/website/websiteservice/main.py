@@ -86,6 +86,7 @@ def main(_request):
         title = title[1:]
     if title.endswith('/'):
         title = title[:-1]
+    title = title.replace('/', '.')
     if title == '':
         title = 'main'
     print("Title:", title)
