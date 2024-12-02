@@ -7,10 +7,11 @@ import traceback
 
 def message(name: str):
     """Decorator for message handlers
-    This basically tries to use the function arguments as the required message properties
-    in the json payload received by the service queue.
+    This basically tries to use the function arguments as the required
+    message properties in the json payload received by the service queue.
 
-    Note: This decorator is also looked-up by the service queue to find the message handlers
+    Note: This decorator is also looked-up by the service queue to find
+    the message handlers
     """
     def decorator(func):
         func.message_name = name
@@ -21,10 +22,15 @@ def message(name: str):
             print(f"\targument {arg}")
             arg_type = func.__annotations__.get(arg)
             if arg_type is None:
-                raise Exception(f"Error while registering message handler {name} at func '{func.__name__}': argument '{arg}' has no type annotation")
+                raise Exception(
+                    "Error while registering message handler "
+                    f"{name} at func '{func.__name__}': argument '{arg}'"
+                    " has no type annotation"
+                )
             print(f"\targument type {arg_type}")
         return func
     return decorator
+
 
 def internal_service_launch(self):
     """Internal function for launching a service
@@ -37,7 +43,7 @@ def scan_for_handlers(self):
     """Scans the service class for message handlers
     """
     message_handlers = {}
-    for name, func in self.__class__.__dict__.items():
+    for _, func in self.__class__.__dict__.items():
         if hasattr(func, "message_name"):
             print(f"Found message handler {func.__name__}")
             message_handlers[func.message_name] = func

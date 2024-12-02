@@ -9,18 +9,20 @@ JWT_ALGORITHM = 'HS256'
 JWT_EXP_DELTA_SECONDS = 3600 * 24 * 30 # 30 days
 JWT_EXP_DELTA = timedelta(seconds=JWT_EXP_DELTA_SECONDS)
 
+
 def generate_jwt(user: User) -> str:
     return jwt.encode({
-        'uid': user.id, # yes id exists, shut up mypy 
+        'uid': user.id, # yes id exists, shut up mypy
         'exp': datetime.now(timezone.utc) + JWT_EXP_DELTA,
     }, JWT_SECRET, JWT_ALGORITHM)
+
 
 def validate_jwt(token: str) -> tuple[bool, User | None]:
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         if payload['exp'] < datetime.now(timezone.utc):
             return False, None
-        return True, User.get(User.id == payload['uid']) # mypy ferme ta gueule putain
+        return True, User.get(User.id == payload['uid'])
     except jwt.ExpiredSignatureError:
         pass
     except jwt.InvalidTokenError:
@@ -31,10 +33,13 @@ def validate_jwt(token: str) -> tuple[bool, User | None]:
 
 
 class AuthController:
-    def is_logged(self, token: str) -> tuple[bool, User | None]:
+    def is_logged(self, token: str) -> bool:
         if not token:
-            return False, None
-        return validate_jwt(token)
+            return False
+        valid, user = validate_jwt(token)
+        if user is None:
+            return False
+        return valid
 
     def authenticate(self, username: str, password: str) -> str:
         if username == "admin" and password == "password":
@@ -50,7 +55,15 @@ class AuthService(Service):
     @message("login")
     def login(self, username: str, password: str) -> str:
         return self.controller.authenticate(username, password)
-        
+
+    @message("is_logged")
+    def is_logged(self, token: str) -> bool:
+        return self.controller.is_logged(token)
+
+    @message("test")
+    def test(self) -> str:
+        return "test"
+
 
 def launch():
     Service.run(AuthService)

@@ -16,16 +16,16 @@ services:
 
   # RabbitMQ is a fast message queue, used for quick inter-service communication
   rabbitmq:
-    image: "rabbitmq:3.13.4-management"
     env_file: ../../.env
-    environment:
-      RABBITMQ_ENABLED_PLUGINS_FILE: /rabbitmq_plugins.er
+    build:
+      context: rabbitmq
+      dockerfile: Dockerfile
     networks:
       - services
       - nginx
       - prometheus
-    volumes:
-      - ./rabbitmq/enabled-plugins.er:/rabbitmq_plugins.er
+    # volumes:
+    #   - ./rabbitmq/enabled-plugins.er:/etc/rabbitmq/enabled_plugins:ro
     ports: #TODO: this is for development only, to remove later
       - "5672:5672"
     healthcheck:

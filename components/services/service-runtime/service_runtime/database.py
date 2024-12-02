@@ -4,7 +4,7 @@ import peewee
 
 
 env = os.environ.copy()
-postgres_host = env.get("POSTGRES_HOST", "localhost")
+postgres_host = env.get("POSTGRES_HOST", "0.0.0.0")
 postgres_port = env.get("POSTGRES_PORT", "5432")
 postgres_user = env.get("POSTGRES_USER", "guest")
 postgres_password = env.get("POSTGRES_PASSWORD", "guest")
@@ -17,8 +17,15 @@ env["POSTGRES_DB"] = postgres_database
 
 database = None
 
+
 def provide_database():
     global database
     if database is None:
-        database = peewee.PostgresqlDatabase(postgres_database, host=postgres_host, port=postgres_port, user=postgres_user, password=postgres_password)
+        database = peewee.PostgresqlDatabase(
+            postgres_database,
+            host=postgres_host,
+            port=postgres_port,
+            user=postgres_user,
+            password=postgres_password
+        )
     return database

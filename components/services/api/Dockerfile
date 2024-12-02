@@ -18,6 +18,9 @@ RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
 
 FROM python:3.12-slim AS runtime
 
+RUN apt update
+RUN apt install -y wget
+
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"
 

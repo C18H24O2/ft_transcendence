@@ -5,6 +5,7 @@ import sys
 
 
 def main():
+    print("api-service")
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "api.settings")
     try:

@@ -52,7 +52,7 @@ class FlangoHandler:
         if path[1] is None:
             return part == path[0]
         (_, param_type) = path[1]
-        return self._parse_type(param_type, part) != None
+        return self._parse_type(param_type, part) is not None
 
     def matches_path(self, request):
         path = request.path
@@ -67,7 +67,7 @@ class FlangoHandler:
             if not self.matches_part(part, self.paths[i]):
                 return False
         return True
-            
+
     def extract_params(self, path):
         if path.startswith('/'):
             path = path[1:]
@@ -90,6 +90,9 @@ class FlangoHandler:
     def handle(self, request):
         params = self.extract_params(request.path)
         print(f"Handling {self.name} with params {params}")
+        # get handler function params
+        handler_params = self.fn.__code__.co_varnames[1:]
+        print(f"Handler params: {handler_params}")
         return self.fn(request, *params)
 
 
@@ -104,7 +107,11 @@ class FlangoApp:
     def _gen_error(self, msg, status) -> HttpResponse:
         # mypy: ignore
         # pyright: ignore
-        return HttpResponse(json.dumps({'error': msg, 'status': status}), status=status, content_type="text/json")
+        return HttpResponse(
+            json.dumps({'error': msg, 'status': status}),
+            status=status,
+            content_type="text/json"
+        )
 
     def log(self, msg, *args):
         print("[Flango]", msg, *args)
@@ -139,7 +146,7 @@ class FlangoApp:
             print(f"Request took {time.time() - time_start}s")
             return resp
         except Exception as e:
-            self.log(f"Error while handling request:", traceback.format_exc())
+            self.log(f"Error while handling request: {traceback.format_exc()}")
             return self._gen_error(str(e), 500)
 
     def _handle_request(self, request, *args, **kwargs):
@@ -155,7 +162,7 @@ class FlangoApp:
                 resp['Allow'] = ', '.join([handler.method for handler in matches_path])
                 return resp
             return self._ambiguous
-        
+
         # If there's only one match, check the method
         target = matches_path[0]
         if target.matches_method(request):
@@ -170,7 +177,7 @@ class FlangoApp:
         resp = self._gen_error("Method not allowed", 405)
         resp['Allow'] = target.method
         return resp
-        
+
     def handle_response(self, resp, name):
         if resp is None:
             return self._gen_error("Not found", 404)
@@ -180,5 +187,9 @@ class FlangoApp:
             status = 200
             if "status" in resp:
                 status = int(resp["status"])
-            return HttpResponse(json.dumps(resp), content_type="text/json", status=status)
+            return HttpResponse(
+                json.dumps(resp),
+                content_type="text/json",
+                status=status
+            )
         raise Exception(f"Invalid response type from handler {name}")
