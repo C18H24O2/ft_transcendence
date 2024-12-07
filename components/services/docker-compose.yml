@@ -27,7 +27,7 @@ services:
     # volumes:
     #   - ./rabbitmq/enabled-plugins.er:/etc/rabbitmq/enabled_plugins:ro
     ports: #TODO: this is for development only, to remove later
-      - "5672:5672"
+      - "7815:7815"
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
       interval: 5s

@@ -42,7 +42,7 @@ class LoggingStream(io.TextIOWrapper):
             line = caller.lineno
             function = caller.function
         except IndexError as e:
-            print(f"Error getting caller: {e}")
+            self.__stream.write(f"Error getting caller: {e}\n")
             file = "?"
             line = 0
             function = "?"

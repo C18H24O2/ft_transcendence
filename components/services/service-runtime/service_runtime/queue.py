@@ -26,23 +26,26 @@ class ServiceQueue:
     """A simple queue class for inter-service communication
     """
 
-    __connection: Optional[pika.BlockingConnection]
-    __channel: Optional[pika.adapters.blocking_connection.BlockingChannel]
+    __connection: pika.BlockingConnection
+    __channel: pika.adapters.blocking_connection.BlockingChannel
     __connected: bool
 
-    __queues: list[tuple[str]]
-    __callbacks: list[tuple[str, QueueCallback]]
+    __queue: Optional[pika.spec.Queue]
+    __callback: Optional[QueueCallback]
+    __name: str
 
-    def __init__(self):
-        self.__connection = None
-        self.__channel = None
+    def __init__(self, name: str):
         self.__connected = False
-        self.__queues = []
-        self.__callbacks = []
+        self.__queue = None
+        self.__name = name
 
-    def __enter__(self):
         try:
             print(f"Initializing RabbitMQ connection ({rabbitmq_host}:{rabbitmq_port})...")
+            # print(f"Host: {rabbitmq_host}")
+            # print(f"Port: {rabbitmq_port}")
+            # print(f"Username: {rabbitmq_user}")
+            # print(f"Password: {rabbitmq_password}")
+
             self.__connection = pika.BlockingConnection(pika.ConnectionParameters(
                 host=rabbitmq_host,
                 port=rabbitmq_port,
@@ -50,22 +53,27 @@ class ServiceQueue:
             ))
             self.__channel = self.__connection.channel()
             self.__connected = True
-            self.__define_queues()
+
+            self.__channel.exchange_declare(
+                exchange=self.__name,
+            )
         except Exception as e:
-            print(f"Failed to initialize RabbitMQ connection")
-            self.__connection = None
-            self.__channel = None
+            print(f"Failed to initialize RabbitMQ connection: {str(e)}")
             self.__connected = False
             raise e
-        return self
-    
-    def __define_queues(self):
-        assert self.__channel is not None
 
-        for queue_details in self.__queues:
-            (queue_name,) = queue_details
-            print(f"Declaring queue '{queue_name}'")
-            self.__channel.queue_declare(queue=queue_name, durable=True)
+    def __enter__(self):
+
+        self.__queue = self.__channel.queue_declare(
+            queue='',
+            exclusive=True,
+        )
+
+        self.__channel.queue_bind(
+            exchange=self.__name,
+            queue=self.__queue.method.queue,
+        )
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         if not self.__connected:
@@ -75,36 +83,27 @@ class ServiceQueue:
         print("Closing connection...")
         self.__connection.close()
 
-    def declare_queue(self, queue_name: str) -> str:
-        if self.__connected:
-            raise Exception("Cannot declare queues after connection is established")
-        self.__queues.append((queue_name,))
-        return queue_name
+    def set_callback_handler(self, callback: QueueCallback) -> None:
+        self.__callback = callback
 
-    def publish(self, queue_id: str, message: str) -> None:
-        if not self.__connected:
-            raise Exception("Cannot publish before connection is established")
-        assert self.__channel is not None
-        print(f"Publishing to {queue_id}: {message}")
-        self.__channel.basic_publish(exchange="", routing_key=queue_id, body=message)
 
-    def add_consumer(self, queue_id: str, callback: QueueCallback) -> None:
-        if self.__connected:
-            raise Exception("Cannot add consumers after connection is established")
-        self.__callbacks.append((queue_id, callback))
 
     def consume(self) -> None:
         if not self.__connected:
             raise Exception("Cannot consume before connection is established")
         assert self.__channel is not None
+        assert self.__queue is not None
 
-        if len(self.__callbacks) == 0:
-            raise Exception("No consumers registered")
+        if self.__callback is None:
+            raise Exception("No callback handler registered")
+        assert self.__callback is not None
 
-        for queue_details in self.__callbacks:
-            (queue_id, callback) = queue_details
-            print(f"Adding consumer for queue {queue_id}")
-            self.__channel.basic_consume(queue=queue_id, on_message_callback=callback, auto_ack=True)
+        self.__channel.basic_qos(prefetch_count=1)
+        self.__channel.basic_consume(
+            queue=self.__queue.method.queue,
+            on_message_callback=self.__callback,
+            auto_ack=False
+        )
 
         print("Starting consuming...")
         self.__channel.start_consuming()

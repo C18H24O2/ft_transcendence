@@ -1,11 +1,9 @@
-from .logger import hijack_stdout
 from .queue import ServiceQueue
-from .database import provide_database
-from .models import all_models
-import traceback
+import functools
+from typing import Callable
 
 
-def message(name: str):
+def message(func: Callable):
     """Decorator for message handlers
     This basically tries to use the function arguments as the required
     message properties in the json payload received by the service queue.
@@ -13,8 +11,11 @@ def message(name: str):
     Note: This decorator is also looked-up by the service queue to find
     the message handlers
     """
+    name = func.__name__
+    setattr(func, "__SERVICE_METHOD", name)
+
+    @functools.wraps(func)
     def decorator(func):
-        func.message_name = name
         # get function arguments (names)
         args = func.__code__.co_varnames[:func.__code__.co_argcount]
         print(f"Registering message handler {name} for {func.__name__}")
@@ -32,50 +33,6 @@ def message(name: str):
     return decorator
 
 
-def internal_service_launch(self):
-    """Internal function for launching a service
-    """
-    print(f"Launching service {self.__class__}")
-    print("This is insane")
-
-
-def scan_for_handlers(self):
-    """Scans the service class for message handlers
-    """
-    message_handlers = {}
-    for _, func in self.__class__.__dict__.items():
-        if hasattr(func, "message_name"):
-            print(f"Found message handler {func.__name__}")
-            message_handlers[func.message_name] = func
-    return message_handlers
-
-
-def service(id: str):
-    """Decorator for service classes
-    """
-    def decorator(service_class):
-        service_class.service_id = id
-        service_class._IS_AT_SERVICE = True
-        orig_init = service_class.__init__
-
-        def await_connections(self):
-            print("Awaiting connections")
-
-        def le_init(self, *args, **kwargs):
-            self.database = provide_database()
-            self.database.create_tables(all_models)
-            self.queue = ServiceQueue()
-            self.message_handlers = scan_for_handlers(self)
-            orig_init(self, *args, **kwargs)
-            self._await_connections()
-
-        service_class._await_connections = await_connections
-        service_class._service_launch = internal_service_launch
-
-        service_class.__init__ = le_init
-        return service_class
-    return decorator
-
 class Service:
     """Base class for all services
     """
@@ -88,29 +45,30 @@ class Service:
         pass
 
     @staticmethod
-    def run(service_class: type) -> None:
+    def run(service_module: object) -> None:
         """Runs the provided service class
 
         Args:
             service_class (type): The service class to run
         """
-        hijack_stdout()
+        globals = service_module.__dict__
+        if "service_name" not in globals:
+            raise Exception(f"Service {service_module} does not have a service_name")
+        service_name = globals["service_name"]
+        print(f"Running service {service_name}")
 
-        # Check if the service class is decorated with @service
-        if not hasattr(service_class, "_IS_AT_SERVICE"):
-            raise Exception(f"Service class {service_class} is not decorated with @service")
+        service_queue = ServiceQueue(service_name)
 
-        print(f"Running service {service_class}")
+        # get functions from the module
+        functions = dict([(f, v) for f, v in service_module.__dict__.items() if not f.startswith("__") and hasattr(v, "__SERVICE_METHOD")])
+        for f, v in functions.items():
+            pass
 
-        # Instantiate and run the service class
-        service = None
-        try:
-            service = service_class()
-        except Exception as e:
-            if e is KeyboardInterrupt:
-                if hasattr(service, "shutdown"):
-                    service.shutdown() # mypy: ignore
-                return
-            formatted = "\n".join(traceback.format_exception(e))
-            print(f"Failed to instantiate service {service_class}:\n{formatted}")
+        def handle_everything(channel, method, properties, body):
+            print(f"Received message: {body}")
+            channel.basic_ack(delivery_tag=method.delivery_tag)
             return
+
+        with service_queue as queue:
+            queue.set_callback_handler(handle_everything)
+            queue.consume()
