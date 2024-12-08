@@ -87,6 +87,8 @@ htmx.onLoad(e => {
 	//Function Setter, value initialisation and shader compilation
 export function startMatch(player1 = "player1", player2 = "player2", max_score = 0)
 {
+	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number")
+		return;
 	if (initDone === false)
 	{
 		document.addEventListener('keydown', keyDown);
@@ -144,7 +146,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		if (matchEnded)
 			clearInterval(intervalId);
 	}
-	let intervalId = setInterval(render, 16.6);
+	let intervalId = setInterval(render, (1000 / 60));
 }
 
 	//set the paddles and the balls on the field
