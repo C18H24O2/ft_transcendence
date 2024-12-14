@@ -1,5 +1,5 @@
 import { getTheme } from '../../theme.js'
-import { startMatch } from  './pong-game/3dpong.js'
+import { startMatch, pongSetPlayerMove } from  './pong-game/3dpong.js'
 
 const keyMap = {
 	83: 0,	//player 1 down
@@ -26,4 +26,4 @@ function keyDown(event)
 	}
 }
 
-startMatch(keyDownFunc = keyDown, keyUpFunc = keyUp);
+startMatch("player1", "player2", 0, keyDown, keyUp);

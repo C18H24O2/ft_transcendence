@@ -1,5 +1,5 @@
 import './pong-game/3dpong.js'
-import { startMatch, viewSwitch, gameObjects } from './pong-game/3dpong.js'
+import { startMatch, viewSwitch, gameObjects, pongSetPlayerMove } from './pong-game/3dpong.js'
 
 function pong() {
 	let playerlist = [];

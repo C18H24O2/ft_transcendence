@@ -387,7 +387,7 @@ let keyPress = [
 	false,	//player 2 up
 ];
 
-function pong_set_player_move(index, value)
+export function pongSetPlayerMove(index, value)
 {
 	if (typeof(index) !== "number" || typeof(value) !== "boolean")
 		return;
