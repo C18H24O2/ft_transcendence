@@ -19,9 +19,12 @@ services:
   # other services and stores it in a time series database, to be
   # accessed and used by Grafana.
   prometheus:
-    image: prom/prometheus:v2.55.1
+    #image: prom/prometheus:v2.55.1
+    build:
+      context: prometheus
+      dockerfile: Dockerfile
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      #- ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -42,13 +45,16 @@ services:
 
   # Grafana is a dashboarding and data visualization tool.
   grafana:
-    image: grafana/grafana:11.3.0-ubuntu
+    build:
+      context: grafana
+      dockerfile: Dockerfile
+    #image: grafana/grafana:11.3.0-ubuntu
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/sources:/etc/grafana/provisioning/datasources
-      - ./grafana/dashboard-providers:/etc/grafana/provisioning/dashboards
-      - ./grafana/dashboards:/dashboards
+        #- ./grafana/grafana.ini:/etc/grafana/grafana.ini
+        #- ./grafana/sources:/etc/grafana/provisioning/datasources
+        #- ./grafana/dashboard-providers:/etc/grafana/provisioning/dashboards
+        #- ./grafana/dashboards:/dashboards
     env_file: ../../.env
     environment:
       - GF_USERS_ALLOW_SIGN_UP=false

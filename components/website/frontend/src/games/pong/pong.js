@@ -12,7 +12,7 @@ function keyUp(event)
 {
 	const moveIndex = keyMap[event.keyCode];
 	if (moveIndex !== undefined) {
-		pong_set_player_move(moveIndex, false);
+		pongSetPlayerMove(moveIndex, false);
 	}
 }
 
@@ -20,7 +20,7 @@ function keyDown(event)
 {
 	const moveIndex = keyMap[event.keyCode];
 	if (moveIndex !== undefined) {
-		pong_set_player_move(moveIndex, true);
+		pongSetPlayerMove(moveIndex, true);
 		if (moveIndex > 1)
 			event.preventDefault();
 	}
