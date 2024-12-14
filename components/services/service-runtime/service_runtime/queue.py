@@ -9,7 +9,7 @@ import os
 from typing import Optional, Callable
 
 env = os.environ.copy()
-rabbitmq_host = env.get("RABBITMQ_HOST", "rabbitmq") # rabbitmq container name on the docker network
+rabbitmq_host = env.get("RABBITMQ_HOST", "rabbitmq")
 rabbitmq_port = env.get("RABBITMQ_NODE_PORT", "5672")
 rabbitmq_user = env.get("RABBITMQ_DEFAULT_USER", "guest")
 rabbitmq_password = env.get("RABBITMQ_DEFAULT_PASS", "guest")
@@ -18,15 +18,37 @@ env["RABBITMQ_PORT"] = rabbitmq_port
 env["RABBITMQ_USER"] = rabbitmq_user
 env["RABBITMQ_PASSWORD"] = rabbitmq_password
 
-# channel: pika.channel.Channel - method: pika.spec.Basic.Deliver - properties: pika.spec.BasicProperties - body: bytes
-
 QueueCallback = Callable[[pika.channel.Channel, pika.spec.Basic.Deliver, pika.spec.BasicProperties, bytes], None]
+
+connection: Optional[pika.BlockingConnection] = None
+
+
+def pika_internal_connection() -> pika.BlockingConnection:
+    global connection
+    if connection is None:
+        print(f"Initializing RabbitMQ connection ({rabbitmq_host}:{rabbitmq_port})...")
+        # print(f"Host: {rabbitmq_host}")
+        # print(f"Port: {rabbitmq_port}")
+        # print(f"Username: {rabbitmq_user}")
+        # print(f"Password: {rabbitmq_password}")
+        connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host=rabbitmq_host,
+            port=rabbitmq_port,
+            credentials=pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
+        ))
+    return connection
+
+
+def pika_provide_channel() -> pika.adapters.blocking_connection.BlockingChannel:
+    """Creates a new channel for the connection
+    """
+    return pika_internal_connection().channel()
+
 
 class ServiceQueue:
     """A simple queue class for inter-service communication
     """
 
-    __connection: pika.BlockingConnection
     __channel: pika.adapters.blocking_connection.BlockingChannel
     __connected: bool
 
@@ -40,19 +62,7 @@ class ServiceQueue:
         self.__name = name
 
         try:
-            print(f"Initializing RabbitMQ connection ({rabbitmq_host}:{rabbitmq_port})...")
-            # print(f"Host: {rabbitmq_host}")
-            # print(f"Port: {rabbitmq_port}")
-            # print(f"Username: {rabbitmq_user}")
-            # print(f"Password: {rabbitmq_password}")
-
-            self.__connection = pika.BlockingConnection(pika.ConnectionParameters(
-                host=rabbitmq_host,
-                port=rabbitmq_port,
-                credentials=pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
-            ))
-            self.__channel = self.__connection.channel()
-            self.__connected = True
+            self.__channel = pika_provide_channel()
 
             self.__channel.exchange_declare(
                 exchange=self.__name,
@@ -78,15 +88,9 @@ class ServiceQueue:
     def __exit__(self, exc_type, exc_value, traceback):
         if not self.__connected:
             return
-        assert self.__connection is not None
-
-        print("Closing connection...")
-        self.__connection.close()
 
     def set_callback_handler(self, callback: QueueCallback) -> None:
         self.__callback = callback
-
-
 
     def consume(self) -> None:
         if not self.__connected:
