@@ -85,14 +85,14 @@ htmx.onLoad(e => {
 });
 
 	//Function Setter, value initialisation and shader compilation
-export function startMatch(player1 = "player1", player2 = "player2", max_score = 0)
+export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, keyDownFunc, keyUpFunc)
 {
-	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number")
+	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(keyDownFunc) !== "function" || typeof(keyUpFunc)  !== "function")
 		return;
 	if (initDone === false)
 	{
-		document.addEventListener('keydown', keyDown);
-		document.addEventListener('keyup', keyUp);
+		document.addEventListener('keydown', keyDownFunc);
+		document.addEventListener('keyup', keyUpFunc);
 
 		currentTheme = getTheme();
 		newTheme = currentTheme;
@@ -387,27 +387,9 @@ let keyPress = [
 	false,	//player 2 up
 ];
 
-const keyMap = {
-	83: 0,	//player 1 down
-	87: 1,	//player 1 up
-	40: 2,	//player 2 down
-	38: 3,	//player 2 up
-};
-
-function keyUp(event)
+function pong_set_player_move(index, value)
 {
-	const moveIndex = keyMap[event.keyCode];
-	if (moveIndex !== undefined) {
-		keyPress[moveIndex] = false;
-	}
-}
-
-function keyDown(event)
-{
-	const moveIndex = keyMap[event.keyCode];
-	if (moveIndex !== undefined) {
-		keyPress[moveIndex] = true;
-		if (moveIndex > 1)
-			event.preventDefault();
-	}
+	if (typeof(index) !== "number" || typeof(value) !== "boolean")
+		return;
+	keyPress[index] = value;
 }
