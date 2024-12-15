@@ -36,8 +36,8 @@ function resizeCanvas(size)
 	gl.viewport(0,0,gl.canvas.width, gl.canvas.height);
 }
 
-const height = gl.canvas.height / 2;
-const width = gl.canvas.width / 2;
+export const height = gl.canvas.height / 2;
+export const width = gl.canvas.width / 2;
 const viewMatrix = mat4.create();
 const projectionMatrix = mat4.create();
 const projectionViewMatrix = mat4.create();
@@ -48,11 +48,11 @@ let scoreP2 = document.getElementById("score-opponent");
 
 	//Game Objects Size
 //Because I am dumb and do not know how to write code, these dimensions are half of the size of the actual object, 
-const base = height / 5;
-const paddleHeight = base;
-const paddleWidth = paddleHeight / 9;
-const paddleDepth = paddleHeight;	
-const ballSize = paddleHeight / 10;
+export const base = height / 5;
+export const paddleHeight = base;
+export const paddleWidth = paddleHeight / 9;
+export const paddleDepth = paddleHeight;	
+export const ballSize = paddleHeight / 10;
 
 	//Camera values (mostly perspective camera, but some are reused)
 //camera fov + distance to get similar results between orthographic camera and perspective camera
@@ -68,12 +68,12 @@ let initDone = false;
 let matchEnded = false;
 
 	//Values for the game difficulty ramp up and reset
-let speedMult = 1; //Multiplier for speed, increases
-const BASE_BALL_SPEED = height / 160;
-const MAX_BALL_SPEED_MULTIPLIER = 20; //how fast the ball can go
-const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps up
-const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
-const BASE_PADDLE_SPEED = paddleHeight / 12;
+export let speedMult = 1; //Multiplier for speed, increases
+export const BASE_BALL_SPEED = height / 160;
+export const MAX_BALL_SPEED_MULTIPLIER = 20; //how fast the ball can go
+export const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps up
+export const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
+export const BASE_PADDLE_SPEED = paddleHeight / 12;
 
 htmx.onLoad(e => {
 	initDone = false;
@@ -85,15 +85,12 @@ htmx.onLoad(e => {
 });
 
 	//Function Setter, value initialisation and shader compilation
-export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, keyDownFunc, keyUpFunc)
+export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc)
 {
-	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(keyDownFunc) !== "function" || typeof(keyUpFunc)  !== "function")
+	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(playerMoveFunc) != "function" || playerMoveFunc.length != 1)
 		return;
 	if (initDone === false)
 	{
-		document.addEventListener('keydown', keyDownFunc);
-		document.addEventListener('keyup', keyUpFunc);
-
 		currentTheme = getTheme();
 		newTheme = currentTheme;
 		let changeTheme = document.getElementById('change-theme-button');
@@ -139,7 +136,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 			gameObjects.paddle2.shape.updateColor();
 			gameObjects.ball.shape.updateColor();
 		}
-		movePlayers(deltaTime);
+		playerMoveFunc(deltaTime);
 		moveBall(deltaTime);
 		checkGoal(max_score);
 		drawScene();
@@ -337,59 +334,4 @@ function ballCollide(ball) {
 	}
 
 	return false; // No collision with paddles
-}
-
-function movePlayers(deltaTime)
-{
-	const speed = (BASE_PADDLE_SPEED * (1 + ((speedMult / MAX_BALL_SPEED_MULTIPLIER) * MAX_PADDLE_SPEED_MULTIPLIER)) * (deltaTime / 10));
-	const limit = height - paddleHeight;
-
-	if (keyPress[0] ^ keyPress[1])
-	{
-		if (keyPress[0] && gameObjects.paddle1.y > -limit)
-		{
-			let paddle = gameObjects.paddle1;
-			paddle.move([0, -speed, 0]);
-			if (paddle.y < -limit)
-				paddle.setPos([paddle.x, -limit, paddle.z]);
-		}
-		if (keyPress[1] && gameObjects.paddle1.y < limit)
-		{
-			let paddle = gameObjects.paddle1;
-			paddle.move([0, speed, 0]);
-			if (paddle.y > limit)
-				paddle.setPos([paddle.x, limit, paddle.z]);
-		}
-	}
-	if (keyPress[2] ^ keyPress[3])
-	{
-		if (keyPress[2] && gameObjects.paddle2.y >= -limit)
-		{
-			let paddle = gameObjects.paddle2;
-			paddle.move([0, -speed, 0]);
-			if (paddle.y < -limit)
-				paddle.setPos([paddle.x, -limit, paddle.z]);
-		}
-		if (keyPress[3] && gameObjects.paddle2.y < limit)
-		{
-			let paddle = gameObjects.paddle2;
-			paddle.move([0, speed, 0]);
-			if (paddle.y > limit)
-				paddle.setPos([paddle.x, limit, paddle.z]);
-		}
-	}
-}
-
-let keyPress = [
-	false,	//player 1 down
-	false,	//player 1 up
-	false,	//player 2 down
-	false,	//player 2 up
-];
-
-export function pongSetPlayerMove(index, value)
-{
-	if (typeof(index) !== "number" || typeof(value) !== "boolean")
-		return;
-	keyPress[index] = value;
 }
