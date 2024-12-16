@@ -10,7 +10,7 @@
 </head>
 <body>
     <!-- Button to toggle chat visibility -->
-    <button id="toggle-chat-btn">{% translate 'buttons.chat.' %}</button>
+    <button id="toggle-chat-btn">{% translate 'buttons.chat' %}</button>
 
     <!-- Chat container -->
     <div id="chat-container" class="hidden">
@@ -25,7 +25,7 @@
         <div id="chat-box">
             <ul id="messages"></ul>
             <div id="message-box">
-                <input type="text" id="message-input" placeholder="{% placeholders.message_send %}" />
+                <input type="text" id="message-input" placeholder="{% translate 'placeholders.message_send' %}" />
                 <button id="send-btn">{% translate 'button.chat_send' %}</button>
             </div>
         </div>
