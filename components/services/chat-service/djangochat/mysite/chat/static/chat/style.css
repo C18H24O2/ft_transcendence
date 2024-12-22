@@ -1,0 +1,176 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#toggle-chat-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#chat-container {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 35%;
+    min-width: 520px;
+    height: 100vh;
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    display: flex;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    flex-direction: row;
+    overflow: hidden; /* Prevents overflow */
+}
+
+/* Initially hide the chat container */
+#chat-container.hidden {
+    display: none;
+}
+
+/* Close button to hide chat */
+#close-chat-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#profile-btn {
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    height: 30px;
+    box-sizing: border-box;
+}
+
+/* Friend list styling */
+#friend-list {
+    width: 120px;
+    background: #e0e0e0;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+#friend-list h3 {
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+#friend-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#friend-list ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space between name and dot */
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+    white-space: normal; /* Allow text wrapping */
+    word-break: break-all; /* Break long words into multiple lines */
+    overflow: hidden; /* Prevent overflow */
+    max-width: 100%; /* Prevent it from stretching */
+}
+
+#friend-list ul li:hover {
+    background: #d1d1d1;
+}
+
+/* Unread message dot */
+#friend-list ul li .unread-dot {
+    width: 8px;
+    height: 8px;
+    background: red;
+    border-radius: 50%;
+    margin-left: 5px;
+    display: none; /* Initially hidden */
+}
+
+#invite-btn {
+    width: 120px;
+    background: #e0e0e0;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    height: 30px;
+    box-sizing: border-box;
+}
+
+#game-invite-btn {
+    position: absolute;
+    width: 100px;
+    padding: 10px;
+    box-sizing: border-box;
+    bottom: 10px;
+}
+
+#chat-box {
+    flex: 1; /* Makes the chat area take up the remaining space */
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: 100%; /* Ensure chat area takes full available height */
+    overflow-y: auto; /* Prevent overflow of messages */
+}
+
+#chat-box h3 {
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+#chat-box ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+    word-break: break-word; /* Ensure messages break properly */
+}
+
+#message-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Keep input and button aligned */
+    padding: 20px;
+}
+
+#chat-log {
+    resize: none;
+    height: 90%;
+    width: 95%;
+    margin-top: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#message-box input {
+    padding: 10px;
+    width: 80%;
+    margin-right: 10px;
+}
+
+#message-box button {
+    padding: 10px;
+    cursor: pointer;
+}
