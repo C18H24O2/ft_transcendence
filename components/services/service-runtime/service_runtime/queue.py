@@ -50,14 +50,12 @@ class ServiceQueue:
     """
 
     __channel: pika.adapters.blocking_connection.BlockingChannel
-    __connected: bool
 
     __queue: Optional[pika.spec.Queue]
     __callback: Optional[QueueCallback]
     __name: str
 
     def __init__(self, name: str):
-        self.__connected = False
         self.__queue = None
         self.__name = name
 
@@ -66,35 +64,34 @@ class ServiceQueue:
 
             self.__channel.exchange_declare(
                 exchange=self.__name,
+                exchange_type='direct',
             )
+            print(f"Exchange {self.__name} declared")
         except Exception as e:
             print(f"Failed to initialize RabbitMQ connection: {str(e)}")
-            self.__connected = False
             raise e
 
     def __enter__(self):
-
         self.__queue = self.__channel.queue_declare(
             queue='',
             exclusive=True,
         )
 
+        queue_name: str = self.__queue.method.queue
         self.__channel.queue_bind(
             exchange=self.__name,
-            queue=self.__queue.method.queue,
+            queue=queue_name,
         )
+        print(f"Queue {queue_name} bound to exchange {self.__name}")
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if not self.__connected:
-            return
+        pass
 
     def set_callback_handler(self, callback: QueueCallback) -> None:
         self.__callback = callback
 
     def consume(self) -> None:
-        if not self.__connected:
-            raise Exception("Cannot consume before connection is established")
         assert self.__channel is not None
         assert self.__queue is not None
 
@@ -103,8 +100,10 @@ class ServiceQueue:
         assert self.__callback is not None
 
         self.__channel.basic_qos(prefetch_count=1)
+        queue_name: str = self.__queue.method.queue
+        print(f"Setting up consuming from queue {queue_name}")
         self.__channel.basic_consume(
-            queue=self.__queue.method.queue,
+            queue=queue_name,
             on_message_callback=self.__callback,
             auto_ack=False
         )

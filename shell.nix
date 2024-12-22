@@ -8,6 +8,7 @@ pkgs.mkShell {
     nodejs_22
     poetry
     python312
+    typescript
   ] ++ (with pkgs.python312Packages; [
     pyjwt
     markupsafe

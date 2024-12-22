@@ -64,11 +64,17 @@ class Service:
         for f, v in functions.items():
             pass
 
-        def handle_everything(channel, method, properties, body):
+        def handle_everything(channel, method, props, body):
             print(f"Received message: {body}")
+            print(f"> Delivery tag: {method.delivery_tag}")
+            print(f"> Response ID: {props.reply_to}")
+            print(f"> Correlation ID: {props.correlation_id}")
             channel.basic_ack(delivery_tag=method.delivery_tag)
             return
 
         with service_queue as queue:
             queue.set_callback_handler(handle_everything)
             queue.consume()
+
+        from service_runtime.queue import pika_internal_connection
+        pika_internal_connection().close()
