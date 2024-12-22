@@ -71,7 +71,7 @@ function keyDown(event)
 
 
 //not sure if its needed but might as well add it
-function swapPlayer()
+export function swapPlayer()
 {
 	player_controlled = player_controlled == "paddle1" ? "paddle2" : "paddle1";
 	if (player_controlled == "paddle1") 

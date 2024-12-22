@@ -87,7 +87,7 @@ htmx.onLoad(e => {
 	//Function Setter, value initialisation and shader compilation
 export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc)
 {
-	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(playerMoveFunc) != "function" || playerMoveFunc.length != 1)
+	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(playerMoveFunc) != "function" || playerMoveFunc.length == 0)
 		return;
 	if (initDone === false)
 	{
@@ -136,7 +136,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 			gameObjects.paddle2.shape.updateColor();
 			gameObjects.ball.shape.updateColor();
 		}
-		playerMoveFunc(deltaTime);
+		playerMoveFunc(deltaTime, movementProviders);
 		moveBall(deltaTime);
 		checkGoal(max_score);
 		drawScene();
