@@ -1,3 +1,5 @@
+// @ts-check
+
 import {BASE_PADDLE_SPEED, MAX_BALL_SPEED_MULTIPLIER, MAX_PADDLE_SPEED_MULTIPLIER, speedMult, height, paddleHeight } from './3dpong.js'
 import { gameObjects } from './3dpong.js';
 
@@ -6,7 +8,7 @@ export function movePlayers(deltaTime)
 	const speed = (BASE_PADDLE_SPEED * (1 + ((speedMult / MAX_BALL_SPEED_MULTIPLIER) * MAX_PADDLE_SPEED_MULTIPLIER)) * (deltaTime / 10));
 	const limit = height - paddleHeight;
 
-	if (keyPress[0] ^ keyPress[1])
+	if (keyPress[0] !== keyPress[1])
 	{
 		if (keyPress[0] && gameObjects.paddle1.y > -limit)
 		{
@@ -23,7 +25,7 @@ export function movePlayers(deltaTime)
 				paddle.setPos([paddle.x, limit, paddle.z]);
 		}
 	}
-	if (keyPress[2] ^ keyPress[3])
+	if (keyPress[2] !== keyPress[3])
 	{
 		if (keyPress[2] && gameObjects.paddle2.y >= -limit)
 		{
@@ -49,6 +51,10 @@ let keyPress = [
 	false,	//player 2 up
 ];
 
+/**
+ * @param {string | number} index
+ * @param {boolean} value
+ */
 function pongSetPlayerMove(index, value)
 {
 	if (typeof(index) !== "number" || typeof(value) !== "boolean")

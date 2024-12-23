@@ -1,3 +1,5 @@
+// @ts-check
+
 const defaultLight = 'catppuccin-latte';
 const defaultDark = 'catppuccin-mocha';
 
@@ -14,15 +16,19 @@ const themes = [
 
 document.addEventListener('DOMContentLoaded', updateTheme);
 
+/**
+ * Get the current theme
+ * 
+ * @returns {string} theme name
+ */
 export function getTheme() {
     return localStorage.getItem(themeKey) || defaultTheme;
 }
 
 export function updateTheme() {
-    let theme = localStorage.getItem(themeKey);
-    if (!theme) {
+    let theme = localStorage.getItem(themeKey) || defaultTheme;
+    if (localStorage.getItem(themeKey) === null) {
         localStorage.setItem(themeKey, defaultTheme);
-        theme = defaultTheme;
     }
 
     for (const className of document.body.classList) {
@@ -47,4 +53,5 @@ export function toggleTheme() {
     updateTheme();
 }
 
+// @ts-ignore
 window.toggleTheme = toggleTheme;

@@ -1,35 +1,45 @@
-import { mat4 } from 'gl-matrix'
+// @ts-check
+
+import { mat4, vec3 } from 'gl-matrix'
 import { initBuffers3d } from './webgl-initbuffers';
 import { getCatppuccinRGB } from './colorUtils';
 
-class Shape3d
-{
+/**
+ * @property {WebGLRenderingContext} gl
+ * @property {Object} programInfo
+ * @property {WebGLTexture} texture
+ * @property {string} colorName
+ * @property {number} vertexCount
+ * @property {mat4} normalMatrix
+ * @property {mat4} modelMatrix
+ */
+class Shape3d {
 	/**
-	 * 
-	 * @param {WebGLRenderingContext} gl 
-	 * @param {ProgramInfo} programInfo 
-	 * @param {Array} vertice 
-	 * @param {Array} color 
+	 * @param {WebGLRenderingContext} gl
+	 * @param {Object} programInfo
+	 * @param {mat4} modelMatrix
+	 * @param {number[]} vertices
+	 * @param {number[]} indices
+	 * @param {WebGLTexture} texture
+	 * @param {string} colorName
 	 */
-	constructor(gl, programInfo, modelMatrix, vertice, indices, texture, colorName)
-	{
-		/** @type {WebGLRenderingContext} */
+	constructor(gl, programInfo, modelMatrix, vertices, indices, texture, colorName) {
 		this.gl = gl;
 		this.programInfo = programInfo;
-		this.vertexCount = indices.length;
 		this.texture = texture;
 		this.colorName = colorName || "blue";
-		this.buffers = initBuffers3d(gl, vertice, indices);
+		this.vertexCount = indices.length;
+		this.buffers = initBuffers3d(gl, vertices, indices);
 		this.modelMatrix = modelMatrix || mat4.create();
 		this.normalMatrix = mat4.create();
 		this.mtpMatrix = mat4.create();
 	}
+
 	/**
-	 * 
 	 * @param {mat4} ProjectionViewMatrix 
+	 * @param {mat4} viewMatrix
 	 */
-	draw(ProjectionViewMatrix, viewMatrix)
-	{
+	draw(ProjectionViewMatrix, viewMatrix) {
 		//set each of the buffers webgl should use to draw the object
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.position);
 		this.gl.vertexAttribPointer(this.programInfo.attribLocation.vertexPosition, 3, this.gl.FLOAT, false, 0, 0);
@@ -47,16 +57,16 @@ class Shape3d
 
 		//which Shaders webgl should use to render this object
 		this.gl.useProgram(this.programInfo.program);
-		
+
 		//Create the ProjectionViewModelMatrix to actually get a shape in the 3d Space
 		mat4.identity(this.mtpMatrix);
-		mat4.multiply(this.mtpMatrix,this.mtpMatrix, ProjectionViewMatrix);
+		mat4.multiply(this.mtpMatrix, this.mtpMatrix, ProjectionViewMatrix);
 		mat4.multiply(this.mtpMatrix, this.mtpMatrix, this.modelMatrix);
 
 		//Create the normals from the model and view Matrix (lighting)
 		mat4.multiply(this.normalMatrix, viewMatrix, this.modelMatrix);
 		mat4.invert(this.normalMatrix, this.normalMatrix);
-		mat4.transpose(this.normalMatrix, this.normalMatrix);		
+		mat4.transpose(this.normalMatrix, this.normalMatrix);
 
 		//Pass the matrices to the shaders
 		this.gl.uniformMatrix4fv(this.programInfo.uniformLocation.mtpMatrix, false, this.mtpMatrix);
@@ -69,20 +79,36 @@ class Shape3d
 
 		this.gl.drawElements(this.gl.TRIANGLES, this.vertexCount, this.gl.UNSIGNED_SHORT, 0);
 	}
-	rotate(radians, axis)
-	{
+
+	/**
+	 * @param {number} radians
+	 * @param {vec3} axis
+	 * @return {Shape3d} this
+	 */
+	rotate(radians, axis) {
 		mat4.rotate(this.modelMatrix, this.modelMatrix, radians, axis);
+		return this;
 	}
-	translate(amount)
-	{
+
+	/**
+	 * @param {vec3} amount
+	 * @return {Shape3d} this
+	 */
+	translate(amount) {
 		mat4.translate(this.modelMatrix, this.modelMatrix, amount);
+		return this;
 	}
-	scale(vector)
-	{
-		mat4.scale(this.modelMatrix,this.modelMatrix, vector);
+
+	/**
+	 * @param {vec3} vector
+	 * @return {Shape3d} this
+	 */
+	scale(vector) {
+		mat4.scale(this.modelMatrix, this.modelMatrix, vector);
+		return this;
 	}
-	updateColor()
-	{
+
+	updateColor() {
 		this.gl.deleteTexture(this.texture);
 		const texture = this.gl.createTexture();
 
@@ -92,8 +118,11 @@ class Shape3d
 		this.gl.generateMipmap(this.gl.TEXTURE_2D);
 		this.texture = texture;
 	}
-	changeColor(colorName)
-	{
+
+	/**
+	 * @param {String} colorName
+	 */
+	changeColor(colorName) {
 		this.colorName = colorName;
 		this.updateColor();
 	}

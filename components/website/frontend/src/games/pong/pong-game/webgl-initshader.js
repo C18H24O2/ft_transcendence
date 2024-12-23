@@ -1,16 +1,43 @@
+// @ts-check
+
 import { vsSource } from "./webgl-shaders";
 import { fsSource } from "./webgl-shaders";
 
 /**
- * 
- * @param {WebGLRenderingContext} gl 
- * @returns {ProgramInfo}
+ * @typedef {Object} ProgramInfo
+ * @property {WebGLProgram} program
+ * @property {AttribLocation} attribLocation
+ * @property {UniformLocation} uniformLocation
  */
 
+/**
+ * @typedef {Object} AttribLocation
+ * @property {GLint} vertexPosition
+ * @property {GLint} textureCoord
+ * @property {GLint} vertexNormal
+ */
+
+/**
+ * @typedef {Object} UniformLocation
+ * @property {WebGLUniformLocation | null} mtpMatrix
+ * @property {WebGLUniformLocation | null} normalMatrix
+ * @property {WebGLUniformLocation | null} Sampler
+ */
+
+/**
+ * @param {WebGLRenderingContext} gl 
+ * @returns {ProgramInfo | null} programInfo
+ */
 function initShaders(gl)
 {
 	const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+	if (!vertexShader) {
+		return null;
+	}
 	const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+	if (!fragmentShader) {
+		return null;
+	}
 
 	const shaderProgram = gl.createProgram();
 	gl.attachShader(shaderProgram, vertexShader);
@@ -23,7 +50,7 @@ function initShaders(gl)
 		return null;
 	}
 	
-	const programInfo = {
+	return {
 		program: shaderProgram,
 		attribLocation: {
 			vertexPosition: gl.getAttribLocation(shaderProgram, "vertPosition"),
@@ -36,29 +63,35 @@ function initShaders(gl)
 			Sampler: gl.getUniformLocation(shaderProgram, "uSampler"),
 		}
 	};
-	return programInfo;
 }
 
+/**
+ * @param {WebGLRenderingContext} gl
+ * @param {number} value
+ * @returns {string} the name of the constant
+ */
 function getWebGLConstantName(gl, value) {
 	for (let name in gl) {
 		if (gl[name] === value) {
 			return name;
 		}
 	}
-	return null;
+	return "Unknown WebGL Constant: " + value;
 }
 
 /**
- * 
  * @param {WebGLRenderingContext} gl 
  * @param {GLenum} type 
  * @param {String} source 
- * @returns {WebGLShader}
+ * @returns {WebGLShader | null}
  */
-
 function loadShader(gl, type, source)
 {
 	const shader = gl.createShader(type);
+	if (!shader) {
+		console.warn(`ERROR: could not create shader: ${getWebGLConstantName(gl, type)}`);
+		return null;
+	}
 
 	gl.shaderSource(shader, source);
 	gl.compileShader(shader);

@@ -83,6 +83,7 @@ function spaHandleEvent(name, event) {
 	return true;
 }
 
+// @ts-ignore
 htmx.defineExtension('spa-tools', {
 	onEvent: spaHandleEvent,
 });

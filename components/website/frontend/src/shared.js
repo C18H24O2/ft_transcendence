@@ -1,3 +1,5 @@
+// @ts-check
+
 import './theme.js';
 import './lang.js';
 

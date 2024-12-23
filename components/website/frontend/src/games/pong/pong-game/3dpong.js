@@ -1,21 +1,32 @@
+// @ts-check
+
 import { getTheme } from '../../../theme.js'
 import { initShaders } from './webgl-initshader.js';
-import { Shape3d } from './webgl-shape.js';
 import { mat4 } from 'gl-matrix';
 import { ShapeMaker, GameObject } from './pong-classes.js';
 import { getCatppuccinWEBGL } from './colorUtils.js';
 
+/**
+ * @param {string} colorName
+ * @param {WebGLRenderingContext} setgl
+ */
 function setClearColor(colorName, setgl)
 {
 	const bgColor = getCatppuccinWEBGL(colorName);
 	setgl.clearColor(bgColor.r, bgColor.g, bgColor.b, 1);
 }
 
-	//Getting the webgl context
-/**@type {HTMLCanvasElement} */
+/**
+ * Getting the webgl context
+ * @type {HTMLCanvasElement}
+ */
+// @ts-ignore
 let canvas = document.getElementById("gameField");
 
-/**@type {WebGLRenderingContext} */
+/**
+ * @type {WebGLRenderingContext}
+ */
+// @ts-ignore
 let gl = canvas.getContext("webgl", {alpha: true});
 
 	//used to be able to keep track of theme changes
@@ -75,18 +86,28 @@ export const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast i
 export const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
 export const BASE_PADDLE_SPEED = paddleHeight / 12;
 
-htmx.onLoad(e => {
+// @ts-ignore
+htmx.onLoad(_ => {
 	initDone = false;
 	matchEnded = false;
+	
+	// @ts-ignore
 	canvas = document.getElementById("gameField");
+	// @ts-ignore
+	gl = canvas.getContext("webgl", {alpha: true});
+
 	scoreP1 = document.getElementById("score-player");
 	scoreP2 = document.getElementById("score-opponent");
-	gl = canvas.getContext("webgl", {alpha: true});
 });
 
 	//Function Setter, value initialisation and shader compilation
 export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc)
 {
+	if (!gl)
+	{
+		console.warn('Your browser does not support webgl, consider using a different browser to access this functionnality');
+		return;
+	}
 	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(playerMoveFunc) != "function" || playerMoveFunc.length == 0)
 		return;
 	if (initDone === false)
@@ -98,13 +119,9 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		{
 			changeTheme.addEventListener('click', () => {
 				newTheme = getTheme();
-			})
+			});
 		}
-		if (!gl)
-		{
-			console.warn('Your browser does not support webgl, consider using a different browser to access this functionnality');
-			return;
-		}
+		
 		if (gl.canvas.height < 1920 || gl.canvas.width < 1920 || gl.canvas.height != gl.canvas.width)
 			resizeCanvas(1920);
 
@@ -120,7 +137,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 		initDone = true;
 	}
-	resetMatch(1, player1, player2);
+	resetMatch(1); //, player1, player2);
 
 	let then = Date.now();
 	let deltaTime = 0;
@@ -136,7 +153,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 			gameObjects.paddle2.shape.updateColor();
 			gameObjects.ball.shape.updateColor();
 		}
-		playerMoveFunc(deltaTime, movementProviders);
+		playerMoveFunc(deltaTime);
 		moveBall(deltaTime);
 		checkGoal(max_score);
 		drawScene();
@@ -147,6 +164,9 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 }
 
 	//set the paddles and the balls on the field
+/**
+ * @param {import("./webgl-initshader.js").ProgramInfo | null} programInfo
+ */
 function initShapes(programInfo)
 {
 	const xTranslate = width - paddleWidth;
@@ -183,6 +203,7 @@ export function viewSwitch()
 	mat4.identity(projectionViewMatrix);
 	mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 }
+// @ts-ignore
 window.viewSwitch = viewSwitch;
 
 
@@ -255,23 +276,46 @@ function checkGoal(max_score)
 	}
 }
 
-function BoundingBox(x, y, width, height)
+/**
+ * @typedef {Object} BoundingBox
+ * @property {number} minX
+ * @property {number} minY
+ * @property {number} maxX
+ * @property {number} maxY
+ * @property {(other: BoundingBox) => boolean} collides
+ */
+
+/**
+ * @param {number} x
+ * @param {number} y
+ * @param {number} width
+ * @param {number} height
+ * @returns {BoundingBox} 
+ */
+function boundingBox(x, y, width, height)
 {
 	let minX = x - width, maxX = x + width;
 	let minY = y - height, maxY = y + height;
 
-	return {minX, minY, maxX, maxY};
+	return {
+		minX, 
+		minY, 
+		maxX, 
+		maxY,
+		collides(other) {
+			let A_Left_B = this.maxX < other.minX;
+			let A_Right_B = this.minX > other.maxX;
+			let A_Above_B = this.maxY < other.minY;
+			let A_Below_B = this.minY > other.maxY;
+			return !(A_Left_B || A_Right_B || A_Above_B || A_Below_B);
+		}
+	};
 }
 
-function boundingBoxCollide(bBoxA, bBoxB)
-{
-	let A_Left_B = bBoxA.maxX < bBoxB.minX;
-	let A_Right_B = bBoxA.minX > bBoxB.maxX;
-	let A_Above_B = bBoxA.maxY < bBoxB.minY;
-	let A_Below_B = bBoxA.minY > bBoxB.maxY;
-	return !(A_Left_B || A_Right_B || A_Above_B || A_Below_B);
-}
-
+/**
+ * @param {number} deltaTime
+ * 
+ */
 function moveBall(deltaTime) {
 	let ball = gameObjects.ball;
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
@@ -289,6 +333,9 @@ function moveBall(deltaTime) {
 	}
 }
 
+/**
+ * @param {GameObject} ball
+ */
 function ballCollide(ball) {
 	let paddle;
 
@@ -304,10 +351,10 @@ function ballCollide(ball) {
 
 	if (ballXSide >= limit)
 	{
-		const ballBoundingBox = BoundingBox(ball.x, ball.y, ballSize, ballSize);
-		const paddleBoundingBox = BoundingBox(paddle.x, paddle.y, paddleWidth, paddleHeight);
+		const ballBoundingBox = boundingBox(ball.x, ball.y, ballSize, ballSize);
+		const paddleBoundingBox = boundingBox(paddle.x, paddle.y, paddleWidth, paddleHeight);
 
-		if (boundingBoxCollide(ballBoundingBox, paddleBoundingBox)) {
+		if (ballBoundingBox.collides(paddleBoundingBox)) {
 			ball.setPos([(limit - ballSize) * Math.sign(ball.x), ball.y, ball.z]);
 			ball.speedX = -ball.speedX;
 

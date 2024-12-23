@@ -1,9 +1,20 @@
+// @ts-check
+
 import { Shape3d } from "./webgl-shape";
 import { getCatppuccinRGB } from "./colorUtils";
 import { mat4 } from "gl-matrix";
 
 export class ShapeMaker
 {
+	/**
+	 * @param {WebGLRenderingContext} gl
+	 * @param {Object} programInfo
+	 * @param {mat4} modelMatrix
+	 * @param {number} paddleHeight
+	 * @param {number} paddleWidth
+	 * @param {number} paddleDepth
+	 * @param {String} colorName
+	 */
 	static makeShape(gl, programInfo, modelMatrix, paddleHeight, paddleWidth, paddleDepth, colorName)
 	{	
 		const paddleVertices = [
@@ -64,17 +75,31 @@ export class ShapeMaker
 	}
 }
 
+/**
+ * @prop {Shape3d} shape
+ * @prop {number} x
+ * @prop {number} y
+ * @prop {number} z
+ */
 export class GameObject
 {
-	constructor(shape, x, y, z)
+	/**
+	 * @param {Shape3d} shape
+	 * @param {number} [x]
+	 * @param {number} [y]
+	 * @param {number} [z]
+	 */
+	constructor(shape, x = 0, y = 0, z = 0)
 	{
-		/**@type {Shape3d}*/
 		this.shape = shape;
-		this.x = x || 0;
-		this.y = y || 0;
-		this.z = z || 0;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 	
+	/**
+	 * @param {[number, number, number]} coordinates
+	 */
 	setPos(coordinates)
 	{
 		this.x = coordinates[0];
@@ -82,6 +107,9 @@ export class GameObject
 		this.z = coordinates[2];
 	}
 	
+	/**
+	 * @param {[number, number, number]} vector
+	 */
 	move(vector)
 	{
 		this.x += vector[0];
@@ -89,6 +117,10 @@ export class GameObject
 		this.z += vector[2];
 	}
 
+	/**
+	 * @param {mat4} ProjectionMatrix
+	 * @param {mat4} viewMatrix
+	 */
 	draw(ProjectionMatrix, viewMatrix)
 	{
 		mat4.identity(this.shape.modelMatrix);

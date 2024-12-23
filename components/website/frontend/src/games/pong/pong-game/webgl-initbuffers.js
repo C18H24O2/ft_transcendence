@@ -1,37 +1,55 @@
-function initBuffers3d(gl, vertices, indices)
-{
-	const positionBuffer = createNewPositionBuffer(gl, vertices);
-	const textureBuffer = createNewTextureBuffer(gl);
-	const indexBuffer = createNewIndexBuffer(gl, indices);
-	const normalBuffer = createNewNormalBuffer(gl, calculateVertexNormals(vertices, indices));
+// @ts-check
 
-	const buffers = {
-		normal: normalBuffer,
-		position: positionBuffer,
-		textureCoord: textureBuffer,
-		indices: indexBuffer,
-	};
-	return buffers;
+/**
+ * @typedef {Object} Buffers
+ * @property {WebGLBuffer} normal
+ * @property {WebGLBuffer} position
+ * @property {WebGLBuffer} textureCoord
+ * @property {WebGLBuffer} indices
+ */
+
+/**
+ * @param {WebGLRenderingContext} gl
+ * @param {number[]} vertices
+ * @param {number[]} indices
+ * @returns {Buffers}
+ */
+function initBuffers3d(gl, vertices, indices) {
+    const positionBuffer = createNewPositionBuffer(gl, vertices);
+    const textureBuffer = createNewTextureBuffer(gl);
+    const indexBuffer = createNewIndexBuffer(gl, indices);
+    const normalBuffer = createNewNormalBuffer(gl, calculateVertexNormals(vertices, indices));
+
+    return {
+        normal: normalBuffer,
+        position: positionBuffer,
+        textureCoord: textureBuffer,
+        indices: indexBuffer,
+    };
 }
 
 /**
- * 
  * @param {WebGLRenderingContext} gl 
- * @param {Float64Array | Float32Array } normals 
+ * @param {Float64Array} normals
+ * @returns {WebGLBuffer}
  */
-function createNewNormalBuffer(gl, normals)
-{
-	const normalBuffer = gl.createBuffer();
+function createNewNormalBuffer(gl, normals) {
+    const normalBuffer = gl.createBuffer();
 
-	gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, normals, gl.STATIC_DRAW);
 
-	return normalBuffer;
+    return normalBuffer;
 }
 
+/**
+ * @param {number[]} vertices
+ * @param {number[]} indices
+ * @returns {Float64Array}
+ */
 function calculateVertexNormals(vertices, indices) {
-    const vertexNormals = new Array(vertices.length).fill(0);
-    
+    const vertexNormals = new Float64Array(vertices.length).fill(0);
+
     // Step 1: Calculate face normals
     for (let i = 0; i < indices.length; i += 3) {
         const i0 = indices[i] * 3;
@@ -82,70 +100,61 @@ function calculateVertexNormals(vertices, indices) {
 }
 
 /**
- * 
  * @param {WebGLRenderingContext} gl
- * @param {Float64Array | Float32Array} positions
+ * @param {number[]} indices
  * @returns {WebGLBuffer}
  */
+function createNewIndexBuffer(gl, indices) {
+    const indexBuffer = gl.createBuffer();
 
-function createNewIndexBuffer(gl, indices)
-{
-	const indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
 
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-
-	return indexBuffer;
+    return indexBuffer;
 }
 
 /**
- * 
  * @param {WebGLRenderingContext} gl
- * @param {Float64Array | Float32Array} positions
+ * @param {number[]} positions
  * @returns {WebGLBuffer}
  */
+function createNewPositionBuffer(gl, positions) {
+    const positionBuffer = gl.createBuffer();
 
-function createNewPositionBuffer(gl, positions)
-{
-	const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-	return positionBuffer;
+    return positionBuffer;
 }
 
 /**
- * 
  * @param {WebGLRenderingContext} gl
- * @param {Float64Array | Float32Array} colors
  * @returns {WebGLBuffer}
  */
-function createNewTextureBuffer(gl)
-{
-	const textureBuffer = gl.createBuffer();
+function createNewTextureBuffer(gl) {
+    const textureBuffer = gl.createBuffer();
 
 
-	//We make the texture fit to the size of the face its on
-	const textureCoords = [
-		// Front
-		0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-		// Back
-		0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-		// Top
-		0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-		// Bottom
-		0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-		// Right
-		0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-		// Left
-		0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	];
+    //We make the texture fit to the size of the face its on
+    const textureCoords = [
+        // Front
+        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+        // Back
+        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+        // Top
+        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+        // Bottom
+        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+        // Right
+        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+        // Left
+        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+    ];
 
-	gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
 
-	return textureBuffer;
+    return textureBuffer;
 }
 
 export { initBuffers3d }; 

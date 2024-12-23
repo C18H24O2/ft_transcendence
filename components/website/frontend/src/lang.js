@@ -1,19 +1,25 @@
+// @ts-check
 
 //For the translations
-export function change_lang(value)
-{
+export function change_lang(value) {
 	var current = getCookie('ft-lang');
 
-	if (value !== current)
-	{
+	if (value !== current) {
 		setCookie('ft-lang', value);
 		location.reload();
 	}
 }
+
+// @ts-ignore
 window.change_lang = change_lang;
 
 //My dumbass thought it reset the cookie, sources seem to say otherwise, put nothing in days to have it as a temporary cookie
-function setCookie(name,value,days) {
+/**
+ * @param {string} name
+ * @param {string | undefined} value
+ * @param {number | undefined} [days]
+ */
+function setCookie(name, value, days) {
 	var expires = "";
 	if (days) {
 		var date = new Date();
@@ -23,7 +29,12 @@ function setCookie(name,value,days) {
 	document.cookie = name + "=" + (value || "")  + expires + "; SameSite=Strict" + "; path=/";
 }
 
-//get a cookie by name
+/**
+ * Gets a cookie by its name.
+ * 
+ * @param {string} name
+ * @returns {string | null} 
+ */
 function getCookie(name) {
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');
