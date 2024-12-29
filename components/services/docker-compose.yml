@@ -1,8 +1,8 @@
-name: ft_trans-backend
+name: ft_trans-services
 
 include:
   - ./postgres.docker-compose.yml
-  - ./services.docker-compose.yml
+  # - ./microservices/docker-compose.yml
 
 networks:
   services:
@@ -13,24 +13,57 @@ volumes:
   db:
 
 services:
-
-  # RabbitMQ is a fast message queue, used for quick inter-service communication
-  rabbitmq:
+  # The global database, used for storing users, scores, game data, etc.
+  # We're using PostgreSQL as per the subject's requirements
+  postgres:
+    image: "postgres:17.2-alpine3.21"
     env_file: ../../.env
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - services 
+    ports: #TODO: this is for development only, to remove later
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: "pg_isready -U $POSTGRES_USER"
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # RabbitMQ is a fast message queue, used for quick inter-process communication
+  rabbitmq:
     build:
       context: rabbitmq
       dockerfile: Dockerfile
+    env_file: ../../.env
     networks:
       - services
       - nginx
       - prometheus
-    # volumes:
-    #   - ./rabbitmq/enabled-plugins.er:/etc/rabbitmq/enabled_plugins:ro
     ports: #TODO: this is for development only, to remove later
       - "7815:7815"
+    restart: unless-stopped
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
       interval: 5s
       timeout: 30s
       retries: 10
+
+  # The primary API service, 
+  api-service:
+    build:
+      context: api
+      dockerfile: Dockerfile
+    env_file: ../../.env
+    networks:
+      - services
+    ports:
+      - "6969:6969"
     restart: unless-stopped
+    stop_signal: SIGINT
+    healthcheck:
+      test: ["CMD-SHELL", "wget -U 'ft_trans-healthcheck/1.0' -O /dev/null http://localhost:6969/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
