@@ -1,11 +1,10 @@
-#!/nix/store/z7xxy35k7620hs6fn6la5fg2lgklv72l-python3-3.12.4/bin/python
+#!/usr/bin/env python3
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
 
 
 def main():
-    print("api-service")
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "api.settings")
     try:

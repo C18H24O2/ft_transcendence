@@ -1,8 +1,11 @@
-FROM python:3.12-bookworm AS builder
+FROM python:3.12.8-alpine3.21
 
-WORKDIR /service_runtime
+WORKDIR /service-runtime
 
 COPY . .
+
+# for healthchecks and whatnot
+RUN apk add --no-cache curl
 
 RUN pip install poetry==1.8.5
 
@@ -11,14 +14,7 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
-RUN poetry install --no-dev --no-interaction --no-ansi && poetry build
-
-FROM python:3.12-bookworm AS runtime
-
 WORKDIR /app
 
-COPY --from=builder /service_runtime/dist /tmp/service_runtime
-
-RUN pip install /tmp/service_runtime/*.whl
-
-CMD ["python", "-m", "service_runtime.test"]
+# otherwise poetry will shit itself
+RUN touch README.md

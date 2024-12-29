@@ -1,7 +1,6 @@
 name: ft_trans-services
 
 include:
-  - ./postgres.docker-compose.yml
   # - ./microservices/docker-compose.yml
 
 networks:
@@ -31,6 +30,18 @@ services:
       timeout: 5s
       retries: 5
 
+  valkey:
+    image: "valkey/valkey:8.0.1-alpine3.20"
+    env_file: ../../.env
+    networks:
+      - valkey
+    restart: unless-stopped
+    healthcheck:
+      test: "valkey-cli ping"
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   # RabbitMQ is a fast message queue, used for quick inter-process communication
   rabbitmq:
     build:
@@ -50,10 +61,19 @@ services:
       timeout: 30s
       retries: 10
 
+  # A hacky way to get docker-compose to build an image for us. yeah, sexy.
+  service-runtime-builder:
+    image: ft_trans-service_runtime
+    build:
+      context: service-runtime
+      dockerfile: Dockerfile
+    env_file: ../../.env
+    restart: no
+
   # The primary API service, 
   api-service:
     build:
-      context: api
+      context: api-service
       dockerfile: Dockerfile
     env_file: ../../.env
     networks:
@@ -67,3 +87,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    depends_on:
+      service-runtime-builder:
+        condition: service_completed_successfully
