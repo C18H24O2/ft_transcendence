@@ -19,16 +19,18 @@ services:
   # other services and stores it in a time series database, to be
   # accessed and used by Grafana.
   prometheus:
-    #image: prom/prometheus:v2.55.1
     build:
       context: prometheus
       dockerfile: Dockerfile
+      args:
+        PROM_ADMIN_PASSWD_HASH: ${PROM_ADMIN_PASSWD_HASH}
+    env_file: ../../.env
     volumes:
-      #- ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
+      - '--web.config.file=/etc/prometheus/web-config.yml'
       - '--web.external-url=/prometheus/'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
@@ -38,9 +40,9 @@ services:
       - nginx
     restart: unless-stopped
     healthcheck:
-      test: "wget -O /dev/null http://localhost:9090 || exit 1"
-      interval: 10s
-      timeout: 10s
+      test: "wget -O /dev/null http://admin:$$PROM_ADMIN_PASSWD@localhost:9090 || exit 1"
+      interval: 5s
+      timeout: 5s
       retries: 3
 
   # Grafana is a dashboarding and data visualization tool.
@@ -48,13 +50,10 @@ services:
     build:
       context: grafana
       dockerfile: Dockerfile
-    #image: grafana/grafana:11.3.0-ubuntu
+      args:
+        PROM_ADMIN_PASSWD: ${PROM_ADMIN_PASSWD}
     volumes:
       - grafana_data:/var/lib/grafana
-        #- ./grafana/grafana.ini:/etc/grafana/grafana.ini
-        #- ./grafana/sources:/etc/grafana/provisioning/datasources
-        #- ./grafana/dashboard-providers:/etc/grafana/provisioning/dashboards
-        #- ./grafana/dashboards:/dashboards
     env_file: ../../.env
     environment:
       - GF_USERS_ALLOW_SIGN_UP=false

@@ -62,7 +62,7 @@
     ]
   },
   "description": "A new RabbitMQ Management Overview",
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,

@@ -71,7 +71,7 @@
       }
     ]
   },
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "gnetId": 1860,
   "graphTooltip": 1,

@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "service-runtime"
+version = "0.2.0"
+description = "A custom runtime for microservices"
+authors = ["xtrm <ft@xtrm.me>"]
+license = "ISC"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

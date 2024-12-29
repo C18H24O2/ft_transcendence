@@ -16,7 +16,7 @@
     ]
   },
   "description": "Simple exporter for cadvisor only",
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 6,
