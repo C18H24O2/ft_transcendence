@@ -39,6 +39,13 @@ let keyPress = [
 	false,	//player 2 up
 ];
 
+/**
+ * 
+ * @param {number} index 
+ * @param {boolean} value 
+ * @returns 
+ */
+
 export function pongSetPlayerMove(index, value)
 {
 	if (typeof(index) !== "number" || typeof(value) !== "boolean")

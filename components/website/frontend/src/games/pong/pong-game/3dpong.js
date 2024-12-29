@@ -6,6 +6,7 @@ import { mat4 } from 'gl-matrix';
 import { ShapeMaker, GameObject } from './pong-classes.js';
 import { getCatppuccinWEBGL } from './colorUtils.js';
 
+
 /**
  * @param {string} colorName
  * @param {WebGLRenderingContext} setgl
@@ -101,7 +102,15 @@ htmx.onLoad(_ => {
 });
 
 	//Function Setter, value initialisation and shader compilation
-export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc)
+/**
+ * 
+ * @param {String} player1 
+ * @param {String} player2 
+ * @param {Number} max_score 
+ * @param {Function} playerMoveFunc 
+ * @param {Array} movementProviders 
+ */
+export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc, movementProviders)
 {
 	if (!gl)
 	{
@@ -153,7 +162,10 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 			gameObjects.paddle2.shape.updateColor();
 			gameObjects.ball.shape.updateColor();
 		}
-		playerMoveFunc(deltaTime);
+		movementProviders.forEach(element => {
+			element.pollPlayer();
+		});
+		playerMoveFunc(deltaTime, movementProviders);
 		moveBall(deltaTime);
 		checkGoal(max_score);
 		drawScene();
@@ -208,6 +220,10 @@ window.viewSwitch = viewSwitch;
 
 
 //clear the gameField
+/**
+ * 
+ * @param {WebGLRenderingContext} gl_to_clear 
+ */
 function clearScene(gl_to_clear)
 {
 	gl_to_clear.clearDepth(1.0);
@@ -228,6 +244,10 @@ function drawScene()
 
 //code for player and ball movement under here
 
+/**
+ * 
+ * @param {Number} side 
+ */
 function reset(side = 0)
 {
 	const xTranslate = width - paddleWidth;
@@ -241,17 +261,27 @@ function reset(side = 0)
 	speedMult = 1;
 }
 
+/**
+ * 
+ * @param {Number} side 
+ */
 function resetMatch(side = 0)
 {
 	gameObjects.paddle1.score = 0;
 	gameObjects.paddle2.score = 0;
 
-	scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
-	scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
+	if (scoreP2 != null)
+		scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
+	if (scoreP1 != null)
+		scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
 	reset(side);
 	matchEnded = false;
 }
 
+/**
+ * 
+ * @param {Number} max_score 
+ */
 function checkGoal(max_score)
 {
 	let ball = gameObjects.ball;	
@@ -260,7 +290,8 @@ function checkGoal(max_score)
 		if (ball.x < -width)
 		{
 			gameObjects.paddle2.score += 1;
-			scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
+			if (scoreP2 != null)
+				scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
 			if (max_score != 0 && gameObjects.paddle2.score >= max_score)
 				matchEnded = true;
 			reset(-1);
@@ -268,7 +299,8 @@ function checkGoal(max_score)
 		if (ball.x > width)
 		{
 			gameObjects.paddle1.score += 1;
-			scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
+			if (scoreP1 != null)
+				scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
 			if (max_score != 0 && gameObjects.paddle1.score >= max_score)
 				matchEnded = true;
 			reset(1);
@@ -278,18 +310,18 @@ function checkGoal(max_score)
 
 /**
  * @typedef {Object} BoundingBox
- * @property {number} minX
- * @property {number} minY
- * @property {number} maxX
- * @property {number} maxY
+ * @property {Number} minX
+ * @property {Number} minY
+ * @property {Number} maxX
+ * @property {Number} maxY
  * @property {(other: BoundingBox) => boolean} collides
  */
 
 /**
- * @param {number} x
- * @param {number} y
- * @param {number} width
- * @param {number} height
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} width
+ * @param {Number} height
  * @returns {BoundingBox} 
  */
 function boundingBox(x, y, width, height)
@@ -313,7 +345,7 @@ function boundingBox(x, y, width, height)
 }
 
 /**
- * @param {number} deltaTime
+ * @param {Number} deltaTime
  * 
  */
 function moveBall(deltaTime) {
