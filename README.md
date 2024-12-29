@@ -38,20 +38,20 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [x] (Major) Implementing remote authentication (OAuth2) + JWT `kiroussa`
 
 - **Gameplay and User Experience**
-  - [ ] (Major) Remote players `lvincent` `gpouzet`
+  - [x] (Major) Remote players `lvincent` `gpouzet`
   - [ ] (Major) Multiplayer (> 2 players)
   - [ ] (Major) Add another Game (w/ User History & Matchmaking)
   - [ ] (Minor) Game customization options 
   - [x] (Major) Live chat `gpouzet`
 
 - **AI / Algorithm**
-  - [ ] (Major) Introduce an AI opponent
+  - [x] (Major) Introduce an AI opponent
   - [ ] (Minor) User and Game stats dashboard
 
 - **Cybersecurity**
-  - [x] (Major) Implement WAF/ModSecurity w/ Hardened Configuration and HashiCorp Vault for Secrets Management `kiroussa`
+  - [x] (Major) :question: Implement WAF/ModSecurity w/ Hardened Configuration and HashiCorp Vault for Secrets Management `kiroussa`
   - [ ] (Minor) GDPR Compliance options with User Anonymization, local data management, and account deletion
-  - [x] (Major) Implement Two-Factor Authentication (2FA)
+  - [x] (Major) :question: Implement Two-Factor Authentication (2FA)
 
 - **Devops**
   - [ ] (Major) Infrastructure setup for log management
@@ -62,14 +62,14 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [x] (Major) ✅ Use of ~~advanced~~ 3D techniques. `lvincent`
 
 - **Accessibility**
-  - [ ] (Minor) Support on all devices
+  - [ ] (Minor) :question: Support on all devices
   - [x] (Minor) ✅ Expanding Browser compatibility `?`
   - [x] (Minor) ✅ Multiple language support `lvincent`
-  - [ ] (Minor) Add accessibility for visually impaired users
+  - [ ] (Minor) :question: Add accessibility for visually impaired users
   - [x] (Minor) ✅ Server-Side Rendering (SSR) integration `kiroussa`
 
 - **Server-Side Pong**
-  - [ ] (Major) Replace basic pong with server-side pong and implementing an API `kiroussa` `lvincent`
+  - [x] (Major) Replace basic pong with server-side pong and implementing an API `kiroussa` `lvincent`
   - [ ] (Major) Enabling pong gameplay via CLI against web users with API integration
 
 <!-- MODULES_END -->

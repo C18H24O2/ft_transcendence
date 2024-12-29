@@ -84,7 +84,7 @@ services:
     restart: unless-stopped
     stop_signal: SIGINT
     healthcheck:
-      test: ["CMD-SHELL", "wget -U 'ft_trans-healthcheck/1.0' -O /dev/null http://localhost:6969/health || exit 1"]
+      test: ["CMD-SHELL", "curl -H 'ft_trans-healthcheck/1.0' http://localhost:6969/health || exit 1"]
       interval: 5s
       timeout: 5s
       retries: 5
