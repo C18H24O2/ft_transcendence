@@ -130,17 +130,18 @@
 			</section> 
 		</main>
         <!-- Button to toggle chat visibility -->
-        <button id="toggle-chat-btn">{% translate 'buttons.chat.' %}</button>
-
+<!--        <button id="toggle-chat-btn">{% translate 'buttons.chat.' %}</button>
+-->
         <!-- Chat container -->
-        <div id="chat-container" class="hidden">
-            <!-- Button to close chat -->
-            <button id="close-chat-btn" class="close-btn">X</button>
+<!--        <div id="chat-container" class="hidden">
+-->            <!-- Button to close chat -->
+<!--            <button id="close-chat-btn">Hide Chat</button>
             <div id="friend-list">
                 <h3>{% translate 'placeholders.friends' %}</h3>
+                <button id="profile-btn">Profile</button>
                 <ul id="users">
-                <!-- Friend list populated dynamically -->
-                </ul>
+-->                <!-- Friend list populated dynamically -->
+<!--                </ul>
                 <div id="invite-btn">
                     <button id="game-invite-btn">Invite</button>
                 </div>
@@ -148,11 +149,13 @@
             <div id="chat-box">
                 <h3>Chat</h3>
                 <ul id="messages"></ul>
+                <textarea id="chat-log" readonly></textarea><br>
                 <div id="message-box">
-                    <input type="text" id="message-input" placeholder="sex"/><!--{% placeholders.message_send %}" /> -->
-                    <button id="send-btn">{% translate 'button.chat_send' %}</button>
-                </div>
+                    <input type="text" id="message-input" placeholder="sex"/>--><!--{% placeholders.message_send %}" /> -->
+<!--                    <input id="chat-message-submit" type="button" value="Send">
+-->                 <!--  <button id="send-btn">{% translate 'button.chat_send' %}</button>-->
+<!--                </div>
             </div>
         </div>
-	</body>
+-->	</body>
 </html>
