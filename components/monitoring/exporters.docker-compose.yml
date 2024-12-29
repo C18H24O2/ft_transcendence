@@ -1,5 +1,6 @@
 networks:
   prometheus:
+  valkey:
   # A linked network with nginx to access internal (metrics) endpoints
   nginx_internal:
 
@@ -60,6 +61,20 @@ services:
     networks:
       - prometheus
     restart: unless-stopped
+
+  # Exports metrics from Valkey
+  valkey-exporter:
+    image: oliver006/redis_exporter:v1.67.0-alpine
+    env_file: ../../.env
+    networks:
+      - prometheus
+      - valkey
+    command:
+      - '--redis.addr=valkey:6379'
+    restart: unless-stopped
+    depends_on:
+      valkey:
+        condition: service_healthy
 
 # Note: There are other containers in the project that provide prometheus metrics endpoints:
 # - RabbitMQ

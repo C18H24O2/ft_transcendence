@@ -10,6 +10,7 @@ pkgs.mkShell {
     python312
     typescript
   ] ++ (with pkgs.python312Packages; [
+    bcrypt
     pyjwt
     markupsafe
     gunicorn

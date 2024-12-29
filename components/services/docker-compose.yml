@@ -7,6 +7,7 @@ networks:
   services:
   nginx:
   prometheus:
+  valkey:
 
 volumes:
   db:
