@@ -1,6 +1,5 @@
 import { startMatch } from "./pong-game/3dpong";
-import * as pong_ai from "./pong-game/pongAi";
-import * as pong_pvp from "./pong-game/pongAi";
+import { PlayerMovementProvider, AiMovementProvider, movePlayers } from "./pong-game/pongNewMovement";
 
 let mode = false; //false is pvp, true is against ai opponent
 let player1 = "player1";
@@ -13,20 +12,12 @@ function pong()
 
 	function start_a_game()
 	{
-		if (mode)
-		{
-			pong_pvp.remove_controls();
-			pong_ai.init_controls();
-			startMatch(player1, player2, SCORE_TO_WIN, pong_ai.movePlayers);
-		}
-		else
-		{
-			pong_ai.remove_controls();
-			pong_pvp.init_controls();
-			startMatch(player1, player1, SCORE_TO_WIN, pong_pvp.movePlayers);
-		}
+		let player1_provider = new PlayerMovementProvider({83: 0, 87: 1}, "paddle1");
+		let player2_provider = new AiMovementProvider("paddle2");
+		startMatch(player1, player2, SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
 	}
 	window.start_a_game = start_a_game;
+	start_a_game();
 }
 
 pong();

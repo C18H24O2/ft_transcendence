@@ -82,10 +82,10 @@ let matchEnded = false;
 	//Values for the game difficulty ramp up and reset
 export let speedMult = 1; //Multiplier for speed, increases
 export const BASE_BALL_SPEED = height / 160;
-export const MAX_BALL_SPEED_MULTIPLIER = 20; //how fast the ball can go
+export const MAX_BALL_SPEED_MULTIPLIER = 8; //how fast the ball can go
 export const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps up
 export const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
-export const BASE_PADDLE_SPEED = paddleHeight / 12;
+export const BASE_PADDLE_SPEED = paddleHeight / 15;
 
 // @ts-ignore
 htmx.onLoad(_ => {
@@ -117,7 +117,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		console.warn('Your browser does not support webgl, consider using a different browser to access this functionnality');
 		return;
 	}
-	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(playerMoveFunc) != "function" || playerMoveFunc.length == 0)
+	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(playerMoveFunc) != "function" || playerMoveFunc.length == 0 || typeof(movementProviders) != "object")
 		return;
 	if (initDone === false)
 	{
@@ -144,6 +144,9 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		else
 			mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
 		mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
+		movementProviders.forEach(element => {
+			element.initMovement();
+		});
 		initDone = true;
 	}
 	resetMatch(1); //, player1, player2);
@@ -350,6 +353,7 @@ function boundingBox(x, y, width, height)
  */
 function moveBall(deltaTime) {
 	let ball = gameObjects.ball;
+	//console.log(ball.speedX);
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 

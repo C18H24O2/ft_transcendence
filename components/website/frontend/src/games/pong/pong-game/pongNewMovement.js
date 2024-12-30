@@ -69,7 +69,7 @@ class MovementProvider
 /**
  * @prop {Object} key_map
  */
-class PlayerMovementProvider extends MovementProvider
+export class PlayerMovementProvider extends MovementProvider
 {
 	constructor(keymap, paddle_name)
 	{
@@ -80,13 +80,15 @@ class PlayerMovementProvider extends MovementProvider
 		}
 		else
 			this.keymap = {};
+		this.keyDown = this.keyDown.bind(this);
+		this.keyUp = this.keyUp.bind(this);
 	}
 	keyUp(event)
 	{
 		const moveIndex = this.keymap[event.keyCode];
 		if (moveIndex !== undefined) {
 			event.preventDefault();
-			this.keymap[moveIndex] = false;
+			this.key_values[moveIndex] = false;
 		}
 	}
 	keyDown(event)
@@ -94,7 +96,7 @@ class PlayerMovementProvider extends MovementProvider
 		const moveIndex = this.keymap[event.keyCode];
 		if (moveIndex !== undefined) {
 			event.preventDefault();
-			this.keymap[moveIndex] = true;
+			this.key_values[moveIndex] = true;
 		}
 	}
 	initMovement()
@@ -108,20 +110,21 @@ class PlayerMovementProvider extends MovementProvider
  * @prop {Number} polling_id
  * @prop {Array} current_representation
  */
-class AiMovementProvider extends MovementProvider
+export class AiMovementProvider extends MovementProvider
 {
 	constructor(paddle_name)
 	{
 		super(paddle_name);
 		this.polling_id = null;
 		this.current_representation = [0, 0];
+		this.updateObjects = this.updateObjects.bind(this);
 	}
 	updateObjects()
 	{
 		this.current_representation[0] = gameObjects[this.paddle_name].y;
 		this.current_representation[1] = gameObjects.ball.y;
 	}
-	selectAction()
+	pollPlayer()
 	{
 		if (this.current_representation[1] < this.current_representation[0])
 		{
