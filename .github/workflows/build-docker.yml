@@ -32,24 +32,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-  
 
-      - name: Build service-runtime image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./components/services/service-runtime
-          push: false
-          tags: ft_trans-service_runtime:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
-          load: true
-
-      - name: List images
-        run: |
-          docker image ls -a
-
       - name: Build the stack
-        uses: hoverkraft-tech/compose-action@v2.0.2
-        # with:
-        #   up-flags: "--build -d"
+        run: |
+          docker compose build
 
       - name: Print cache stats
         run: |
