@@ -32,9 +32,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-  
 
-      - name: Build custom images
+      - name: Build service-runtime image
         run: |
-          docker compose build service-runtime-builder
+          docker build -t ft_trans-service_runtime:latest ./components/services/service-runtime
 
       - name: Build the stack
         run: |

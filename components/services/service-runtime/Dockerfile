@@ -4,10 +4,9 @@ WORKDIR /service-runtime
 
 COPY . .
 
-# for healthchecks and whatnot
-RUN apk add --no-cache curl
+RUN apk add --no-cache curl poetry
 
-RUN pip install poetry==1.8.5
+# RUN pip install poetry==1.8.5
 
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
