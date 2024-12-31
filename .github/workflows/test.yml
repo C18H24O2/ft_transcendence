@@ -21,6 +21,9 @@ jobs:
         run: |
           bash ./scripts/create_env_files.sh
 
+      - name: Setup nix shell
+        uses: nicknovitski/nix-develop@v1
+
       - name: Run tests
         run: |
           make test
