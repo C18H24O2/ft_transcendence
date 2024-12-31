@@ -1,4 +1,4 @@
-FROM ft_trans-service_runtime:latest
+FROM ft_trans-service_runtime
 
 WORKDIR /app
 

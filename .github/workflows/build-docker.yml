@@ -34,7 +34,16 @@ jobs:
 
       - name: Build service-runtime image
         run: |
-          docker build -t ft_trans-service_runtime:latest ./components/services/service-runtime
+          docker compose build service-runtime-builder
+          # docker build -t ft_trans-service_runtime:latest ./components/services/service-runtime
+
+      - name: List images
+        run: |
+          docker image ls -a
+
+      - name: Build api-service
+        run: |
+          docker compose build api-service
 
       - name: Build the stack
         run: |
