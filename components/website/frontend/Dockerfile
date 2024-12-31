@@ -1,4 +1,4 @@
-FROM node:22.4.0-alpine3.19
+FROM node:22.12.0-alpine3.19
 
 COPY . /app
 
