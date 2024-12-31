@@ -6,6 +6,13 @@ on:
       - docs
     paths-ignore:
       - '**.md'
+    # only run when a Docker-related file changes
+    paths:
+      - '**.Dockerfile'
+      - '**Dockerfile'
+      - '.github/workflows/build-docker.yml'
+      - '.env.example'
+      - '**docker-compose.yml'
   workflow_dispatch:
 
 jobs:
