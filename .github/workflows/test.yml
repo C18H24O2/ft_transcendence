@@ -1,4 +1,4 @@
-name: Build with Docker Compose
+name: Run tests
 
 on:
   push:
@@ -21,14 +21,7 @@ jobs:
         run: |
           bash ./scripts/create_env_files.sh
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build the stack
+      - name: Run tests
         run: |
-          docker compose build
+          make test
 
-      - name: Test-Run the stack
-        run: |
-          docker compose up -d
-          docker compose down -v
