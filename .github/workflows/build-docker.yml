@@ -17,12 +17,12 @@ jobs:
         with:
           submodules: true
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Create .env files
         run: |
           bash ./scripts/create_env_files.sh
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Cache Docker layers
         uses: actions/cache@v4
@@ -33,21 +33,23 @@ jobs:
             ${{ runner.os }}-buildx-  
 
       - name: Build service-runtime image
-        run: |
-          docker compose build service-runtime-builder
-          # docker build -t ft_trans-service_runtime:latest ./components/services/service-runtime
+        uses: docker/build-push-action@v5
+        with:
+          context: ./components/services/service-runtime
+          push: false
+          tags: ft_trans-service_runtime:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          load: true
 
       - name: List images
         run: |
           docker image ls -a
 
-      - name: Build api-service
-        run: |
-          docker compose build api-service
-
       - name: Build the stack
-        run: |
-          docker compose build
+        uses: hoverkraft-tech/compose-action@v2.0.2
+        # with:
+        #   up-flags: "--build -d"
 
       - name: Print cache stats
         run: |
