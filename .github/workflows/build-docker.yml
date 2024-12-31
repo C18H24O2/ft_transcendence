@@ -24,33 +24,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-  
-
       - name: Build the stack
         run: |
           docker compose build
 
-      - name: Print cache stats
+      - name: Test-Run the stack
         run: |
-          echo 1
-          docker image ls
-          echo 2
-          docker system df
-          echo a
-          ls -lh /tmp/
-          echo b
-          ls -lh /tmp/.buildx-cache
-
-      # Temp fix
-      # https://github.com/docker/build-push-action/issues/252
-      # https://github.com/moby/buildkit/issues/1896
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          docker compose up -d
+          docker compose down -v
+        
