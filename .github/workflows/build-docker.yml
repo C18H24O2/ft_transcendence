@@ -32,7 +32,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-  
 
-      - name: Pull & Build with docker-compose
+      - name: Build custom images
+        run: |
+          docker compose build service-runtime-builder
+
+      - name: Build the stack
         run: |
           docker compose pull
           docker compose build
