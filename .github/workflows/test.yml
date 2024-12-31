@@ -21,6 +21,9 @@ jobs:
         run: |
           bash ./scripts/create_env_files.sh
 
+      - name: Install nix
+        uses: DeterminateSystems/nix-installer-action@main
+
       - name: Setup nix shell
         uses: nicknovitski/nix-develop@v1
 
