@@ -25,7 +25,7 @@ importers:
         version: 2.1.0
       htmx.org:
         specifier: ^2.0.3
-        version: 2.0.3
+        version: 2.0.4
       socket.io-client:
         specifier: ^4.8.1
         version: 4.8.1
@@ -688,8 +688,8 @@ packages:
   htmx-ext-preload@2.1.0:
     resolution: {integrity: sha512-or/BOusAgeIXHRdw+DvP4aPh+/tkafu6RjDLB+5x0r11HCdV2krhPTp81xS9Gj6+LHSAAwy0v6Jn4VRPH3FnDg==}
 
-  htmx.org@2.0.3:
-    resolution: {integrity: sha512-AeoJUAjkCVVajbfKX+3sVQBTCt8Ct4lif1T+z/tptTXo8+8yyq3QIMQQe/IT+R8ssfrO1I0DeX4CAronzCL6oA==}
+  htmx.org@2.0.4:
+    resolution: {integrity: sha512-HLxMCdfXDOJirs3vBZl/ZLoY+c7PfM4Ahr2Ad4YXh6d22T5ltbTXFFkpx9Tgb2vvmWFMbIc3LqN2ToNkZJvyYQ==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -1699,7 +1699,7 @@ snapshots:
 
   htmx-ext-preload@2.1.0: {}
 
-  htmx.org@2.0.3: {}
+  htmx.org@2.0.4: {}
 
   ignore@5.3.2: {}
 
