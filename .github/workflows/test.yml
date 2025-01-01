@@ -1,0 +1,33 @@
+name: Run tests
+
+on:
+  push:
+    branches-ignore:
+      - docs
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Create .env files
+        run: |
+          bash ./scripts/create_env_files.sh
+
+      - name: Install nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Setup nix shell
+        uses: nicknovitski/nix-develop@v1
+
+      - name: Run tests
+        run: |
+          make test
+

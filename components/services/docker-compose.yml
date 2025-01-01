@@ -62,32 +62,26 @@ services:
       timeout: 30s
       retries: 10
 
-  # A hacky way to get docker-compose to build an image for us. yeah, sexy.
-  service-runtime-builder:
-    image: ft_trans-service_runtime
-    build:
-      context: service-runtime
-      dockerfile: Dockerfile
-    env_file: ../../.env
-    restart: no
-
-  # The primary API service, 
+  # The API service
   api-service:
     build:
-      context: api-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: service.Dockerfile
+      args:
+        app_name: api-service
     env_file: ../../.env
+    command:
+      - manage.py
+      - runserver
+      - "0.0.0.0:6969"
     networks:
       - services
     ports:
-      - "6969:6969"
+      - "6969:6969" #TODO: this is for development only, to remove later
     restart: unless-stopped
     stop_signal: SIGINT
     healthcheck:
-      test: ["CMD-SHELL", "curl -H 'ft_trans-healthcheck/1.0' http://localhost:6969/health || exit 1"]
+      test: "curl -H 'ft_trans-healthcheck/1.0' http://localhost:6969/health"
       interval: 5s
       timeout: 5s
       retries: 5
-    depends_on:
-      service-runtime-builder:
-        condition: service_completed_successfully

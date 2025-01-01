@@ -21,6 +21,9 @@ dev:
 	pnpm run --prefix components/website/frontend dev
 
 ensure-frontend-not-fucked:
+	pnpm install --prefix components/website/frontend
 	pnpm run --prefix components/website/frontend build
 
-.PHONY: up down re dev
+test: ensure-frontend-not-fucked
+
+.PHONY: up down re dev ensure-frontend-not-fucked test

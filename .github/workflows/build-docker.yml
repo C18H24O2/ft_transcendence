@@ -1,0 +1,41 @@
+name: Build with Docker Compose
+
+on:
+  push:
+    branches-ignore:
+      - docs
+    paths-ignore:
+      - '**.md'
+    # only run when a Docker-related file changes
+    paths:
+      - '**.Dockerfile'
+      - '**Dockerfile'
+      - '.github/workflows/build-docker.yml'
+      - '.env.example'
+      - '**docker-compose.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Create .env files
+        run: |
+          bash ./scripts/create_env_files.sh
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build the stack
+        run: |
+          docker compose build
+
+      - name: Test-Run the stack
+        run: |
+          docker compose up -d
+          docker compose down -v
