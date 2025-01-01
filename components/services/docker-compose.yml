@@ -76,12 +76,14 @@ services:
       - "0.0.0.0:6969"
     networks:
       - services
-    ports:
-      - "6969:6969" #TODO: this is for development only, to remove later
+    expose:
+      - "6969"
+    # ports:
+      # - "6969:6969" #TODO: this is for development only, to remove later
     restart: unless-stopped
     stop_signal: SIGINT
     healthcheck:
-      test: "curl -H 'ft_trans-healthcheck/1.0' http://localhost:6969/health"
+      test: "wget -qO- http://0.0.0.0:6969/health"
       interval: 5s
       timeout: 5s
       retries: 5

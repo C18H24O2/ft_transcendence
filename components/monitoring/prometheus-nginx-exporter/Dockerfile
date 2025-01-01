@@ -2,13 +2,12 @@ FROM golang:1.20.5-buster AS build
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
+COPY go.mod go.sum ./
 
 RUN go mod download && go mod verify
 
 COPY cmd/exporter/ ./cmd/exporter
-COPY basic_collector.go basic.go .
+COPY basic_collector.go basic.go ./
 
 RUN go build -o /exporter cmd/exporter/main.go
 

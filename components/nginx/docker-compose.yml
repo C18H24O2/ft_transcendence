@@ -18,14 +18,14 @@ services:
       - nginx_internal
       - services
     ports:
-      - "8069:80"
-      - "8043:443"
-      - "6943:6943"
+      - "8043:443"      # HTTPS
+      - "6943:6943"     # Vault
+      # - "14321:14321" # Internal health & metrics
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:14321/health || exit 1"]
+      test: "wget -qO- http://0.0.0.0:14321/health"
       timeout: 5s
-      retries: 5
+      retries: 3
       interval: 5s
     volumes:
       - "./config/nginx.conf:/etc/nginx/nginx.conf"

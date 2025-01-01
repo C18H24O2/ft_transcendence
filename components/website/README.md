@@ -1,6 +1,6 @@
 # website-service
 
-> The frontend provider server, serving Server-Rendered (SSR'd) content to nginx
+> The frontend, providing Server-Rendered (SSR'd) content to nginx
 
 ## required tools + nix
 

@@ -1,14 +1,16 @@
 [tool.poetry]
 name = "websiteservice"
-version = "0.1.0"
-description = ""
-authors = []
+version = "0.2.0"
+description = "The frontend, providing Server-Rendered (SSR'd) content to nginx"
+authors = ["kiroussa <ft@xtrm.me>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 django = "^5.0.6"
+gunicorn = "^23.0.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+

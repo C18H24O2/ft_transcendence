@@ -24,8 +24,6 @@ services:
       - nginx_internal
     volumes:
       - nginx_logs:/nginx-logs
-    ports:
-      - 9150:9150
     restart: unless-stopped
     depends_on:
       nginx:
