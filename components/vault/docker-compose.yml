@@ -10,7 +10,7 @@ volumes:
 services:
   # Use HashiCorp's Vault for credentials and secrets management (TLS config, API keys, passwords, etc..).
   vault:
-    image: "hashicorp/vault:1.18.1"
+    image: "hashicorp/vault:1.18.3"
     # environment:
       # VAULT_ADDR: http://vault:8200
       # VAULT_DEV_LISTEN_ADDRESS: http://0.0.0.0:8200
