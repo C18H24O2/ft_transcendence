@@ -4,8 +4,6 @@ on:
   push:
     branches-ignore:
       - docs
-    paths-ignore:
-      - '**.md'
     # only run when a Docker-related file changes
     paths:
       - '**.Dockerfile'
