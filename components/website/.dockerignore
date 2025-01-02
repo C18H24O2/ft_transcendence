@@ -1,6 +1,5 @@
-frontend/
+frontend/node_modules
 templates
 .envrc
 flake.*
 README.md
-node_modules
