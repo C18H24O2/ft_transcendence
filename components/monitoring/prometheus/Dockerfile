@@ -1,4 +1,4 @@
-FROM prom/prometheus:v3.0.1
+FROM prom/prometheus:v3.1.0
 ARG PROM_ADMIN_PASSWD_HASH
 
 COPY ./prometheus.yml /etc/prometheus/prometheus.yml
