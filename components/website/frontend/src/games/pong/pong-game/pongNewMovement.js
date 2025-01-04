@@ -144,6 +144,6 @@ export class AiMovementProvider extends MovementProvider
 	}
 	initMovement()
 	{
-		this.polling_id = setInterval(this.updateObjects , 1000);
+		this.polling_id = setInterval(this.updateObjects, 1000);
 	}
 }

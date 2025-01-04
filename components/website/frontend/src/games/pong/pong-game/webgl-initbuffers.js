@@ -37,7 +37,7 @@ function createNewNormalBuffer(gl, normals) {
     const normalBuffer = gl.createBuffer();
 
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, normals, gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 
     return normalBuffer;
 }
