@@ -43,10 +43,9 @@ WORKDIR /app
 COPY website/frontend/ ./ 
 
 # Remove the node_modules folder, just in case it hasn't been ignored.
-RUN rm -rf node_modules
-
 # Get pnpm from corepack, install the dependencies, build and package everything
-RUN corepack enable pnpm \
+RUN rm -rf node_modules \
+	&& corepack enable \
 	&& corepack use pnpm@latest \
 	&& pnpm install \
 	&& pnpm run build \

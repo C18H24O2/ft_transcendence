@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ../../../.env
+source ../../.env
 
 export POSTGRES_USER
 export POSTGRES_PASSWORD
@@ -11,4 +11,4 @@ export RABBITMQ_DEFAULT_USER
 export RABBITMQ_DEFAULT_PASS
 export RABBITMQ_HOST=0.0.0.0
 
-python3 ../service-runtime/launcher.py auth-service.py
+service-launch auth-service.py

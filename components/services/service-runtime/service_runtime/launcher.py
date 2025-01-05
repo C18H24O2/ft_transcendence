@@ -4,13 +4,17 @@
 import os
 import sys
 import time
-from service_runtime.service import Service
-from service_runtime.logger import hijack_stdout
+from .service import Service
+from .logger import hijack_stdout
+import importlib.util
 
-if __name__ == "__main__":
+
+def wrapped_start() -> int:
+    print("Launching service")
+    print(sys.argv)
     if len(sys.argv) != 2:
         print("Usage: python3 launcher.py <path/to/your-service.py>")
-        sys.exit(1)
+        return 1
 
     target_file = sys.argv[1]
     if not os.path.exists(target_file):
@@ -23,7 +27,6 @@ if __name__ == "__main__":
 
     print(f"Loading service {target_file}")
     current_time = time.time()
-    import importlib.util
     spec = importlib.util.spec_from_file_location("service", target_file)
     loader = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(loader)
@@ -40,4 +43,5 @@ if __name__ == "__main__":
         import traceback
         print(f"Failed to run service {target_file}: {e}")
         print(f"Traceback:\n{traceback.format_exc()}")
-        sys.exit(1)
+        return 1
+    return 0

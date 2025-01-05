@@ -6,7 +6,7 @@ import pika.channel
 import pika.exceptions
 import pika.spec
 import os
-from typing import Optional, Callable
+from typing import Callable, Optional
 
 env = os.environ.copy()
 rabbitmq_host = env.get("RABBITMQ_HOST", "rabbitmq")
@@ -20,12 +20,12 @@ env["RABBITMQ_PASSWORD"] = rabbitmq_password
 
 QueueCallback = Callable[[pika.channel.Channel, pika.spec.Basic.Deliver, pika.spec.BasicProperties, bytes], None]
 
-connection: Optional[pika.BlockingConnection] = None
+connection: pika.BlockingConnection | None = None
 
 
-def pika_internal_connection() -> pika.BlockingConnection:
+def pika_internal_connection(init: bool = True) -> pika.BlockingConnection | None:
     global connection
-    if connection is None:
+    if connection is None and init:
         print(f"Initializing RabbitMQ connection ({rabbitmq_host}:{rabbitmq_port})...")
         # print(f"Host: {rabbitmq_host}")
         # print(f"Port: {rabbitmq_port}")
@@ -42,7 +42,9 @@ def pika_internal_connection() -> pika.BlockingConnection:
 def pika_provide_channel() -> pika.adapters.blocking_connection.BlockingChannel:
     """Creates a new channel for the connection
     """
-    return pika_internal_connection().channel()
+    if (conn := pika_internal_connection()) is None:
+        raise Exception("No RabbitMQ connection available")
+    return conn.channel()
 
 
 class ServiceQueue:

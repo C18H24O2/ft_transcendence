@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ../../../.env
+source ../../.env
 
 export POSTGRES_USER
 export POSTGRES_PASSWORD

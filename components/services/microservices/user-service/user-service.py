@@ -7,7 +7,13 @@ AuthService = remote_service("auth-service", ["is_logged"])
 
 class UserController:
     def create_user(self, username: str, email: str, password: str) -> str:
-        return User.create(username=username, email=email, passwordHash=passwordHash, displayName=username, profilePicture="")
+        return User.create(
+            username=username,
+            email=email,
+            passwordHash=passwordHash,
+            displayName=username,
+            profilePicture=""
+        )
 
 
 @service(id="user-service")
