@@ -60,6 +60,10 @@ class MovementProvider
 	{
 		return;
 	}
+	destroyMovement()
+	{
+		return;
+	}
 	pollPlayer()
 	{
 		return;
@@ -101,8 +105,15 @@ export class PlayerMovementProvider extends MovementProvider
 	}
 	initMovement()
 	{
+		console.log("setup movement");
 		document.addEventListener('keydown', this.keyDown);
 		document.addEventListener('keyup', this.keyUp);
+	}
+	destroyMovement()
+	{
+		console.log("destroyed movement");
+		document.removeEventListener('keydown', this.keyDown);
+		document.removeEventListener('keyup', this.keyUp);
 	}
 }
 
@@ -115,7 +126,7 @@ export class AiMovementProvider extends MovementProvider
 	constructor(paddle_name)
 	{
 		super(paddle_name);
-		this.polling_id = null;
+		this.polling_id = undefined;
 		this.current_representation = [0, 0];
 		this.updateObjects = this.updateObjects.bind(this);
 	}
@@ -145,5 +156,10 @@ export class AiMovementProvider extends MovementProvider
 	initMovement()
 	{
 		this.polling_id = setInterval(this.updateObjects, 1000);
+	}
+	destroyMovement()
+	{
+		if (this.polling_id != undefined)
+			clearInterval(this.polling_id);
 	}
 }

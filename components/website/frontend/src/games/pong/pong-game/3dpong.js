@@ -144,9 +144,6 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		else
 			mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
 		mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
-		movementProviders.forEach(element => {
-			element.initMovement();
-		});
 		initDone = true;
 	}
 	resetMatch(1); //, player1, player2);
@@ -175,6 +172,9 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		if (matchEnded)
 			clearInterval(intervalId);
 	}
+	movementProviders.forEach(element => {
+		element.initMovement();
+	});
 	let intervalId = setInterval(render, (1000 / 60));
 }
 

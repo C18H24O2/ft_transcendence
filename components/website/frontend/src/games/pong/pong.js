@@ -14,7 +14,7 @@ function pong()
 	{
 		let player1_provider = new PlayerMovementProvider({83: 0, 87: 1}, "paddle1");
 		//let player2_provider = new AiMovementProvider("paddle2");
-		let player2_provider = new PlayerMovementProvider({38: 0, 40: 1}, "paddle2");
+		let player2_provider = new PlayerMovementProvider({40: 0, 38: 1}, "paddle2");
 		startMatch(player1, player2, SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
 	}
 	window.start_a_game = start_a_game;

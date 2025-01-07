@@ -1,6 +1,6 @@
 import {BASE_PADDLE_SPEED, MAX_BALL_SPEED_MULTIPLIER, MAX_PADDLE_SPEED_MULTIPLIER, speedMult, height, paddleHeight, gameObjects } from './pong-game/3dpong.js'
 import { startMatch } from './pong-game/3dpong.js';
-import * as pong_pvp from "./pong-game/pongMovement.js";
+import { PlayerMovementProvider, AiMovementProvider, movePlayers } from "./pong-game/pongNewMovement";
 
 function pong() {
 	let playerlist = [];
@@ -8,6 +8,9 @@ function pong() {
 	let next_playerlist = [];
 	let toRemove = [];
 	let intervalid = -1; //to stop the poller once there is no match left to do
+
+	let player1_provider = new PlayerMovementProvider({83: 0, 87: 1}, "paddle1");
+	let player2_provider = new PlayerMovementProvider({40: 0, 38: 1}, "paddle2");
 
 	const SCORE_TO_WIN = 5;
 
@@ -121,7 +124,7 @@ function pong() {
 					else
 						next_playerlist.push(player2);
 					if (playerlist.length == 1)
-						next_playerlist.push(playerlist.shift());why
+						next_playerlist.push(playerlist.shift());
 
 					listSection.scrollIntoView();
 					if (playerlist.length == 0)
@@ -136,7 +139,8 @@ function pong() {
 							playerlist = [...origPlayerlist];
 							toRemove = [];
 							renderList();
-							pong_pvp.remove_controls();
+							player1_provider.destroyMovement();
+							player2_provider.destroyMovement();
 							return;
 						}
 						playerlist = next_playerlist.splice(0, next_playerlist.length);
@@ -153,7 +157,9 @@ function pong() {
 				winnerTimeout = 0;
 				gameField.scrollIntoView();
 				renderList();
-				startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, pong_pvp.movePlayers);
+				player1_provider.destroyMovement();
+				player2_provider.destroyMovement();
+				startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
 			}
 		}
 
@@ -165,11 +171,10 @@ function pong() {
 				return ("must at least have 2 players");
 				//TODO: toast
 			
-			pong_pvp.init_controls();
 			winnerTimeout = 0;
 			gameField.scrollIntoView();
 			//start the first game, it will then refresh itself automatically
-			startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, pong_pvp.movePlayers);
+			startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
 			intervalid = setInterval(pollGame, 1000);
 			toRemove = [];
 			renderList();
