@@ -33,7 +33,7 @@ RUN pip install -U poetry --no-cache-dir \
 
 # The node-builder image is where the frontend files will be built,
 # to be served by the website-service.
-FROM node:22.12.0-alpine3.21 AS node-builder
+FROM node:22.13.0-alpine3.21 AS node-builder
 LABEL maintainer="kiroussa <ft@xtrm.me>"
 
 # we're so back.
