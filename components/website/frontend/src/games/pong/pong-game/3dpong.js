@@ -86,6 +86,7 @@ export const MAX_BALL_SPEED_MULTIPLIER = 8; //how fast the ball can go
 export const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps up
 export const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
 export const BASE_PADDLE_SPEED = paddleHeight / 15;
+export const FRAMERATE = 1000 / 60; //60 fps
 
 // @ts-ignore
 htmx.onLoad(_ => {
@@ -146,7 +147,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 		initDone = true;
 	}
-	resetMatch(1); //, player1, player2);
+	resetMatch(1);
 
 	let then = Date.now();
 	let deltaTime = 0;
@@ -175,7 +176,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 	movementProviders.forEach(element => {
 		element.initMovement();
 	});
-	let intervalId = setInterval(render, (1000 / 60));
+	let intervalId = setInterval(render, FRAMERATE);
 }
 
 	//set the paddles and the balls on the field

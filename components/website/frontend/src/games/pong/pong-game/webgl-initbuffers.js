@@ -30,14 +30,14 @@ function initBuffers3d(gl, vertices, indices) {
 
 /**
  * @param {WebGLRenderingContext} gl 
- * @param {Float64Array} normals
+ * @param {Float32Array} normals
  * @returns {WebGLBuffer}
  */
 function createNewNormalBuffer(gl, normals) {
     const normalBuffer = gl.createBuffer();
 
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, normals, gl.STATIC_DRAW);
 
     return normalBuffer;
 }
@@ -45,10 +45,10 @@ function createNewNormalBuffer(gl, normals) {
 /**
  * @param {number[]} vertices
  * @param {number[]} indices
- * @returns {Float64Array}
+ * @returns {Float32Array}
  */
 function calculateVertexNormals(vertices, indices) {
-    const vertexNormals = new Float64Array(vertices.length).fill(0);
+    const vertexNormals = new Float32Array(vertices.length).fill(0);
 
     // Step 1: Calculate face normals
     for (let i = 0; i < indices.length; i += 3) {
