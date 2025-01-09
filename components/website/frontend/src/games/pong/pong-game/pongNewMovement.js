@@ -49,7 +49,7 @@ export function movePlayers(deltaTime, movementProviders)
  * @prop {String} paddle_name
  * @prop {[boolean, boolean]} key_values
  */
-class MovementProvider
+export class MovementProvider
 {
 	constructor(paddle_name = "paddle1")
 	{
@@ -65,6 +65,10 @@ class MovementProvider
 		return;
 	}
 	pollPlayer()
+	{
+		return;
+	}
+	resetPlayer()
 	{
 		return;
 	}
@@ -131,6 +135,15 @@ export class AiMovementProvider extends MovementProvider
 		this.then = Date.now();
 		this.updateObjects = this.updateObjects.bind(this);
 	}
+	initMovement()
+	{
+		this.polling_id = setInterval(this.updateObjects, 1000);
+	}
+	destroyMovement()
+	{
+		if (this.polling_id != undefined)
+			clearInterval(this.polling_id);
+	}
 	updateObjects()
 	{
 		this.current_representation[0] = gameObjects[this.paddle_name].y;
@@ -158,12 +171,12 @@ export class AiMovementProvider extends MovementProvider
 				this.current_representation[0] = limit;
 		}
 
-		if (this.current_representation[1] < this.current_representation[0])
+		if (this.current_representation[1] < this.current_representation[0] - paddleHeight / 4)
 		{
 			this.key_values[0] = true;
 			this.key_values[1] = false;
 		}
-		else if (this.current_representation[1] > this.current_representation[0])
+		else if (this.current_representation[1] > this.current_representation[0] + paddleHeight / 4)
 		{
 			this.key_values[1] = true;
 			this.key_values[0] = false;
@@ -174,13 +187,10 @@ export class AiMovementProvider extends MovementProvider
 			this.key_values[1] = false;
 		}
 	}
-	initMovement()
+	resetPlayer()
 	{
-		this.polling_id = setInterval(this.updateObjects, 1000);
-	}
-	destroyMovement()
-	{
-		if (this.polling_id != undefined)
-			clearInterval(this.polling_id);
+		this.then = Date.now();
+		this.current_representation = [0, 0];
+		this.key_values = [false, false];
 	}
 }

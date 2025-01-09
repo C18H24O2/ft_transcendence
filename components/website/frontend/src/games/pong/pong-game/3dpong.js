@@ -5,6 +5,7 @@ import { initShaders } from './webgl-initshader.js';
 import { mat4 } from 'gl-matrix';
 import { ShapeMaker, GameObject } from './pong-classes.js';
 import { getCatppuccinWEBGL } from './colorUtils.js';
+import { MovementProvider } from './pongNewMovement.js';
 
 
 /**
@@ -147,7 +148,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 		initDone = true;
 	}
-	resetMatch(1);
+	resetMatch(1, movementProviders);
 
 	let then = Date.now();
 	let deltaTime = 0;
@@ -251,14 +252,19 @@ function drawScene()
 /**
  * 
  * @param {Number} side 
+ * @param {[MovementProvider, MovementProvider]} movementProviders
  */
-function reset(side = 0)
+function reset(side = 0, movementProviders)
 {
 	const xTranslate = width - paddleWidth;
 
 	gameObjects.paddle1.setPos([-xTranslate, 0, 0]);
 	gameObjects.paddle2.setPos([xTranslate, 0, 0]);
 	gameObjects.ball.setPos([0, 0, 0]);
+
+	movementProviders.forEach(element => {
+		element.resetPlayer();
+	});
 
 	gameObjects.ball.speedX = BASE_BALL_SPEED * Math.sign(side);
 	gameObjects.ball.speedY = 0;
@@ -268,8 +274,9 @@ function reset(side = 0)
 /**
  * 
  * @param {Number} side 
+ * @param {[MovementProvider, MovementProvider]} movementProviders
  */
-function resetMatch(side = 0)
+function resetMatch(side = 0, movementProviders)
 {
 	gameObjects.paddle1.score = 0;
 	gameObjects.paddle2.score = 0;
@@ -278,7 +285,7 @@ function resetMatch(side = 0)
 		scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
 	if (scoreP1 != null)
 		scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
-	reset(side);
+	reset(side, movementProviders);
 	matchEnded = false;
 }
 
