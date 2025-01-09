@@ -162,10 +162,10 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 			gameObjects.paddle2.shape.updateColor();
 			gameObjects.ball.shape.updateColor();
 		}
+		playerMoveFunc(deltaTime, movementProviders);
 		movementProviders.forEach(element => {
 			element.pollPlayer();
 		});
-		playerMoveFunc(deltaTime, movementProviders);
 		moveBall(deltaTime);
 		checkGoal(max_score);
 		drawScene();

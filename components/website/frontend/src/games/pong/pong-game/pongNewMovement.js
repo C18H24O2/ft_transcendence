@@ -128,15 +128,36 @@ export class AiMovementProvider extends MovementProvider
 		super(paddle_name);
 		this.polling_id = undefined;
 		this.current_representation = [0, 0];
+		this.then = Date.now();
 		this.updateObjects = this.updateObjects.bind(this);
 	}
 	updateObjects()
 	{
 		this.current_representation[0] = gameObjects[this.paddle_name].y;
 		this.current_representation[1] = gameObjects.ball.y;
+		this.then = Date.now();
 	}
 	pollPlayer()
 	{
+		let now = Date.now();
+		let deltaTime = now - this.then;
+		this.then = now;
+
+		const speed = (BASE_PADDLE_SPEED * (1 + ((speedMult / MAX_BALL_SPEED_MULTIPLIER) * MAX_PADDLE_SPEED_MULTIPLIER)) * (deltaTime / 10));
+		const limit = height - paddleHeight;
+		if (this.key_values[0] == true)
+		{
+			this.current_representation[0] -= speed;
+			if (this.current_representation[0] < -limit)
+				this.current_representation[0] = -limit;
+		}
+		if (this.key_values[1] == true)
+		{
+			this.current_representation[0] += speed;
+			if (this.current_representation[0] > limit)
+				this.current_representation[0] = limit;
+		}
+
 		if (this.current_representation[1] < this.current_representation[0])
 		{
 			this.key_values[0] = true;
