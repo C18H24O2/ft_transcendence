@@ -110,7 +110,7 @@ htmx.onLoad(_ => {
  * @param {String} player2 
  * @param {Number} max_score 
  * @param {Function} playerMoveFunc 
- * @param {Array} movementProviders 
+ * @param {[MovementProvider, MovementProvider]} movementProviders 
  */
 export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc, movementProviders)
 {
@@ -169,7 +169,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 			element.pollPlayer();
 		});
 		moveBall(deltaTime);
-		checkGoal(max_score);
+		checkGoal(max_score, movementProviders);
 		drawScene();
 		if (matchEnded)
 			clearInterval(intervalId);
@@ -293,7 +293,7 @@ function resetMatch(side = 0, movementProviders)
  * 
  * @param {Number} max_score 
  */
-function checkGoal(max_score)
+function checkGoal(max_score, movementProviders)
 {
 	let ball = gameObjects.ball;	
 	if (ball.x < -width || ball.x > width)
@@ -305,7 +305,7 @@ function checkGoal(max_score)
 				scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
 			if (max_score != 0 && gameObjects.paddle2.score >= max_score)
 				matchEnded = true;
-			reset(-1);
+			reset(-1, movementProviders);
 		}
 		if (ball.x > width)
 		{
@@ -314,7 +314,7 @@ function checkGoal(max_score)
 				scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
 			if (max_score != 0 && gameObjects.paddle1.score >= max_score)
 				matchEnded = true;
-			reset(1);
+			reset(1, movementProviders);
 		}
 	}
 }
