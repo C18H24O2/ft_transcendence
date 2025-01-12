@@ -1,4 +1,4 @@
-# [ft_trans](https://cdn.intra.42.fr/pdf/pdf/133398/en.subject.pdf) [![Build with Docker Compose](https://github.com/C18H24O2/ft_transcendence/actions/workflows/build-docker.yml/badge.svg)](https://github.com/C18H24O2/ft_transcendence/actions/workflows/build-docker.yml) [![Run tests](https://github.com/C18H24O2/ft_transcendence/actions/workflows/test.yml/badge.svg)](https://github.com/C18H24O2/ft_transcendence/actions/workflows/test.yml)
+# [ft_trans](https://cdn.intra.42.fr/pdf/pdf/133398/en.subject.pdf) [![CodeFactor](https://www.codefactor.io/repository/github/c18h24o2/ft_transcendence/badge/main)](https://www.codefactor.io/repository/github/c18h24o2/ft_transcendence/overview/main) [![Build with Docker Compose](https://github.com/C18H24O2/ft_transcendence/actions/workflows/build-docker.yml/badge.svg)](https://github.com/C18H24O2/ft_transcendence/actions/workflows/build-docker.yml) [![Run tests](https://github.com/C18H24O2/ft_transcendence/actions/workflows/test.yml/badge.svg)](https://github.com/C18H24O2/ft_transcendence/actions/workflows/test.yml)
 
 > Ping? Pong! Now with a side of `Uncaught TypeError: this.document is undefined`
 
