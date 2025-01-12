@@ -6,8 +6,8 @@ START_MARKER = "MODULES_START"
 END_MARKER = "MODULES_END"
 
 if __name__ == "__main__":
-    total_minor = 0
-    total_major = 0
+    majors = []
+    minors = []
     with open("README.md", "r") as f:
         lines = f.readlines()
         in_modules = False
@@ -32,12 +32,16 @@ if __name__ == "__main__":
                         sys.exit(1)
                     title = line[8:]
                     if line.lower().startswith("(minor"):
-                        print("Found minor:", title)
-                        total_minor += 1
+                        minors.append(title)
                     else:
-                        print("Found major:", title)
-                        total_major += 1
+                        majors.append(title)
+    for m in majors:
+        print("Found major:", m)
+    for m in minors:
+        print("Found minor:", m)
     print("\n\nTotal modules:")
+    total_major = len(majors)
+    total_minor = len(minors)
     print("> Major:", total_major)
     print("> Minor:", total_minor)
     e_total = total_major + int(total_minor / 2.0)
