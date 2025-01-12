@@ -195,10 +195,21 @@ function initShapes(programInfo)
 	gameObjects.paddle1 = paddle1;
 	gameObjects.paddle2 = paddle2;
 	gameObjects.ball = ball;
+	
+	
+
+	//debug
+	let my_paddle = new GameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "red"));
+	let my_ball = new GameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), ballSize, ballSize, ballSize, "red"));
+	gameObjects.my_ball = my_ball;
+	gameObjects.my_paddle = my_paddle;
+	gameObjects.my_ball.setPos([0, 0, 0]);
+	gameObjects.my_paddle.setPos([xTranslate, 0, 0]);
 
 	gameObjects.paddle1.setPos([-xTranslate, 0, 0]);
 	gameObjects.paddle2.setPos([xTranslate, 0, 0]);
 	gameObjects.ball.setPos([0, 0, 0]);
+
 
 	gameObjects.ball.speedX = BASE_BALL_SPEED;
 	gameObjects.ball.speedY = 0;
@@ -241,10 +252,10 @@ function clearScene(gl_to_clear)
 function drawScene()
 {	
 	clearScene(gl);
-
-	gameObjects.paddle1.draw(projectionViewMatrix, viewMatrix);
-	gameObjects.paddle2.draw(projectionViewMatrix, viewMatrix);
-	gameObjects.ball.draw(projectionViewMatrix, viewMatrix);
+	for (const element in gameObjects)
+	{
+		gameObjects[element].draw(projectionViewMatrix, viewMatrix);
+	}
 }
 
 //code for player and ball movement under here
@@ -361,13 +372,19 @@ function boundingBox(x, y, width, height)
  */
 function moveBall(deltaTime) {
 	let ball = gameObjects.ball;
-	//console.log(ball.speedX);
+	// console.log("real: " + deltaTime);
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
+
+
+	// console.log("before steps: x=" + ball.x + " y=" + ball.y)
+	console.log(`[GM] move ${movementX}*${movementY}`)
 
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
 	const stepY = movementY / steps;
+
+	console.log(`[GM] running ${steps} times ${stepX}*${stepY}`)
 
 	for (let i = 0; i < steps; i++) {
 		ball.move([stepX, stepY, 0]);
@@ -375,6 +392,9 @@ function moveBall(deltaTime) {
 			break;
 		}
 	}
+
+	// console.log("after steps: x=" + ball.x + " y=" + ball.y)
+
 }
 
 /**

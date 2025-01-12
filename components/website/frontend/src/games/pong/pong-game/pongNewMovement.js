@@ -1,7 +1,10 @@
 // @ts-check
 
-import { BASE_PADDLE_SPEED, MAX_BALL_SPEED_MULTIPLIER, MAX_PADDLE_SPEED_MULTIPLIER, speedMult, height, width, paddleHeight, paddleWidth, ballSize } from './3dpong.js'
+import { BASE_PADDLE_SPEED, MAX_BALL_SPEED_MULTIPLIER, MAX_PADDLE_SPEED_MULTIPLIER, speedMult, height, width, paddleHeight, paddleWidth, ballSize, BASE_BALL_SPEED } from './3dpong.js'
 import { gameObjects } from './3dpong.js';
+import { GameObject } from './pong-classes.js';
+
+import { ShapeMaker } from './pong-classes.js';
 
 
 export function movePlayers(deltaTime, movementProviders)
@@ -124,11 +127,18 @@ export class PlayerMovementProvider extends MovementProvider
 function moveBall(deltaTime, ball_representation)
 {
 	let movementX = speedMult * ball_representation[2] * (deltaTime / 10);
-	let movementY = speedMult * ball_representation[2] * (deltaTime / 10);
+	let movementY = speedMult * ball_representation[3] * (deltaTime / 10);
+	// console.log("expected:" + deltaTime);
+
+	// console.log("before steps: x=" + ball_representation[0] + " y=" + ball_representation[1])
+	console.log(`[AI] move ${movementX}*${movementY}`)
+	
 
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
 	const stepY = movementY / steps;
+
+	console.log(`[AI] running ${steps} times ${stepX}*${stepY}`)
 
 	for (let i = 0; i < steps; i++)
 	{
@@ -137,6 +147,8 @@ function moveBall(deltaTime, ball_representation)
 		if (ballCollide(ball_representation))
 			break;
 	}
+
+	// console.log("after steps: x=" + ball_representation[0] + " y=" + ball_representation[1])
 }
 
 function ballCollide(ball_representation)
@@ -152,7 +164,7 @@ function ballCollide(ball_representation)
 	{
 		ball_representation[1] = (height - ballSize) * Math.sign(ball_representation[1]);
 		ball_representation[3] = -ball_representation[3];
-		return (true)
+		return (false)
 	}
 	return false;
 }
@@ -210,13 +222,15 @@ export class AiMovementProvider extends MovementProvider
 		}
 		
 		moveBall(deltaTime, this.ball_representation);
+		//console.log(this.current_paddle_pos)
+		//console.log(this.ball_representation);
 
-		if (this.ball_representation[0] < this.current_paddle_pos - paddleHeight / 4)
+		if (this.ball_representation[1] < this.current_paddle_pos - paddleHeight / 4)
 		{
 			this.key_values[0] = true;
 			this.key_values[1] = false;
 		}
-		else if (this.ball_representation[0] > this.current_paddle_pos + paddleHeight / 4)
+		else if (this.ball_representation[1] > this.current_paddle_pos + paddleHeight / 4)
 		{
 			this.key_values[1] = true;
 			this.key_values[0] = false;
@@ -226,11 +240,15 @@ export class AiMovementProvider extends MovementProvider
 			this.key_values[0] = false;
 			this.key_values[1] = false;
 		}
+
+		gameObjects.my_ball.setPos([this.ball_representation[0], this.ball_representation[1], 0]);
+		gameObjects.my_paddle.setPos([gameObjects.my_paddle.x, this.current_paddle_pos, 0]);
 	}
 	resetPlayer()
 	{
 		this.then = Date.now();
-		this.current_representation = [0, 0];
+		this.current_paddle_pos = 0;
+		this.ball_representation = [0, 0, BASE_BALL_SPEED, 0];
 		this.key_values = [false, false];
 	}
 }
