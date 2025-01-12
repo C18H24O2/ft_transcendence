@@ -19,7 +19,6 @@ const vsSource =
 		gl_Position = mtpMatrix * vertPosition;
 		vTextureCoord = textureCoord;
 
-
 		// Apply lighting effect
 
 		highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);

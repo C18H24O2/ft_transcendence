@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import sys
 
 START_MARKER = "MODULES_START"
@@ -31,9 +30,8 @@ if __name__ == "__main__":
                     if line[0] != '(':
                         print("Error parsing line:", orig)
                         sys.exit(1)
-                    minor = True if line.lower().startswith("(minor") else False
                     title = line[8:]
-                    if minor:
+                    if line.lower().startswith("(minor"):
                         print("Found minor:", title)
                         total_minor += 1
                     else:
@@ -47,4 +45,3 @@ if __name__ == "__main__":
     print("\nTotal project grade:")
     points = 30 + total_minor * 5 + total_major * 10
     print(f"> Points: {points}/125")
-

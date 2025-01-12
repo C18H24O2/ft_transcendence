@@ -34,7 +34,7 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [ ] (Major) Store the score of a tournament in a Blockchain
 
 - **User Management**
-  - [x] (Major) Standard user management, authentication, users across tournaments `kiroussa` `lvincent`
+  - [ ] (Major) Standard user management, authentication, users across tournaments `kiroussa` `lvincent`
   - [x] (Major) Implementing remote authentication (OAuth2) + JWT `kiroussa`
 
 - **Gameplay and User Experience**
