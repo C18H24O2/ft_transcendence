@@ -6,8 +6,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user_name = f"user"
-        self.room_group_name = f"chat_transcendence"
+        self.user_name = "user"
+        self.room_group_name = "chat_transcendence"
         message = self.user_name + " has joined\n"
 
         # Join room group

@@ -18,6 +18,7 @@ pkgs.mkShell {
     peewee
     pyright
     django
+    channels
     black
     mypy
   ]);

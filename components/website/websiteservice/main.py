@@ -10,7 +10,7 @@ import os
 import json
 
 
-DEBUG = True
+DEBUG = False
 SECRET_KEY = os.environ.get('DJANGO_SECRET', get_random_secret_key())
 ROOT_URLCONF = __name__
 
@@ -30,7 +30,7 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
-STATICFILES_DIRS = [ # Sorry mom and dad.
+STATICFILES_DIRS = [  # Sorry mom and dad.
     "/app/dist/static",
     "/app/dist/assets",
     "/app/dist",
