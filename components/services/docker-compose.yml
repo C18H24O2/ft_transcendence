@@ -34,8 +34,8 @@ services:
   valkey:
     image: "valkey/valkey:8.0.2-alpine3.21"
     env_file: ../../.env
-    environment:
-      - VALKEY_EXTRA_FLAGS="-p 6942"
+    # environment:
+    #   - VALKEY_EXTRA_FLAGS=" --port 6942"
     networks:
       - valkey
     ports: #TODO: this is for development only, to remove later
