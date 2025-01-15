@@ -12,7 +12,9 @@ class LoggingStream(io.TextIOWrapper):
     __stream: io.TextIOWrapper
     __buffer: str
 
-    def __init__(self, stream: io.TextIOWrapper):
+    def __init__(self, stream: io.TextIOWrapper | None):
+        if stream is None:
+            raise Exception("LoggingStream: stream cannot be None")
         self.__stream = stream
         self.__buffer = ""
 

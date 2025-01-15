@@ -1,6 +1,8 @@
 from .queue import ServiceQueue
 import functools
 from typing import Callable
+import json
+import pika
 
 
 def message(func: Callable):
@@ -69,6 +71,19 @@ class Service:
             print(f"> Delivery tag: {method.delivery_tag}")
             print(f"> Response ID: {props.reply_to}")
             print(f"> Correlation ID: {props.correlation_id}")
+            data = json.loads(body)
+            print(f"Data: {data}")
+            channel.basic_publish(
+                    exchange='',
+                    routing_key=props.reply_to,
+                    body="john rabbit",
+                    properties=pika.BasicProperties(
+                        content_type='application/json',
+                        delivery_mode=1,
+                        # reply_to=props.reply_to,
+                        correlation_id=props.correlation_id,
+                    )
+                )
             channel.basic_ack(delivery_tag=method.delivery_tag)
             return
 

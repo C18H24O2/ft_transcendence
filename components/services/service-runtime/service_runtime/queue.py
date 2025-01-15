@@ -64,10 +64,9 @@ class ServiceQueue:
         try:
             self.__channel = pika_provide_channel()
 
-            self.__channel.exchange_declare(
-                exchange=self.__name,
-                exchange_type='direct',
-            )
+            # self.__channel.exchange_declare(
+            #     exchange='',
+            # )
             print(f"Exchange {self.__name} declared")
         except Exception as e:
             print(f"Failed to initialize RabbitMQ connection: {str(e)}")
@@ -75,16 +74,14 @@ class ServiceQueue:
 
     def __enter__(self):
         self.__queue = self.__channel.queue_declare(
-            queue='',
-            exclusive=True,
+            queue=self.__name,
         )
 
-        queue_name: str = self.__queue.method.queue
-        self.__channel.queue_bind(
-            exchange=self.__name,
-            queue=queue_name,
-        )
-        print(f"Queue {queue_name} bound to exchange {self.__name}")
+        # self.__channel.queue_bind(
+        #     exchange='',
+        #     queue=self.__name,
+        # )
+        print(f"Queue {self.__name} bound to exchange '<default exchange>'")
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -102,10 +99,9 @@ class ServiceQueue:
         assert self.__callback is not None
 
         self.__channel.basic_qos(prefetch_count=1)
-        queue_name: str = self.__queue.method.queue
-        print(f"Setting up consuming from queue {queue_name}")
+        print(f"Setting up consuming from queue {self.__name}")
         self.__channel.basic_consume(
-            queue=queue_name,
+            queue=self.__name,
             on_message_callback=self.__callback,
             auto_ack=False
         )
