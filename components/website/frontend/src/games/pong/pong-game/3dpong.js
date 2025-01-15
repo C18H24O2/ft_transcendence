@@ -103,6 +103,15 @@ htmx.onLoad(_ => {
 	scoreP2 = document.getElementById("score-opponent");
 });
 
+
+// Some logging for debug purposes
+function debug()
+{
+	console.log(`real position: ${gameObjects.ball.x}*${gameObjects.ball.y} | ai expected position: ${gameObjects.my_ball.x}*${gameObjects.my_ball.y}`)
+	console.log(`real speed: ${gameObjects.ball.speedX}*${gameObjects.ball.speedY} | ai expected speed: ${gameObjects.my_ball.speedX}*${gameObjects.my_ball.speedY}`)
+}
+
+
 	//Function Setter, value initialisation and shader compilation
 /**
  * 
@@ -171,6 +180,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		});
 		checkGoal(max_score, movementProviders);
 		drawScene();
+		debug();
 		if (matchEnded)
 			clearInterval(intervalId);
 	}
@@ -372,19 +382,15 @@ function boundingBox(x, y, width, height)
  */
 function moveBall(deltaTime) {
 	let ball = gameObjects.ball;
-	// console.log("real: " + deltaTime);
+
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 
-
-	// console.log("before steps: x=" + ball.x + " y=" + ball.y)
-	console.log(`[GM] move ${movementX}*${movementY}`)
+	console.log(`[GM] ${movementX}*${movementY} | speedMult: ${speedMult}`);
 
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
 	const stepY = movementY / steps;
-
-	console.log(`[GM] running ${steps} times ${stepX}*${stepY}`)
 
 	for (let i = 0; i < steps; i++) {
 		ball.move([stepX, stepY, 0]);
@@ -392,9 +398,6 @@ function moveBall(deltaTime) {
 			break;
 		}
 	}
-
-	// console.log("after steps: x=" + ball.x + " y=" + ball.y)
-
 }
 
 /**
@@ -435,14 +438,14 @@ function ballCollide(ball) {
 			if (speedMult < MAX_BALL_SPEED_MULTIPLIER) 
 				speedMult = Math.min(speedMult + BALL_SPEED_INCREASE, MAX_BALL_SPEED_MULTIPLIER);
 			
-			return true; // Collision occurred
+			return (true); // Collision occurred
 		}
 	}
 	if (ballYSide >= height) {
 		ball.setPos([ball.x, (height - ballSize) * Math.sign(ball.y), ball.z]);
 		ball.speedY = -ball.speedY;
-		return (true)
+		return (false);
 	}
 
-	return false; // No collision with paddles
+	return (false); // No collision with paddles
 }

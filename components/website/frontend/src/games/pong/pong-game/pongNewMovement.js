@@ -112,58 +112,51 @@ export class PlayerMovementProvider extends MovementProvider
 	}
 	initMovement()
 	{
-		console.log("setup movement");
 		document.addEventListener('keydown', this.keyDown);
 		document.addEventListener('keyup', this.keyUp);
 	}
 	destroyMovement()
 	{
-		console.log("destroyed movement");
 		document.removeEventListener('keydown', this.keyDown);
 		document.removeEventListener('keyup', this.keyUp);
 	}
 }
 
-function moveBall(deltaTime, ball_representation)
+function moveBall(deltaTime, ball)
 {
-	let movementX = speedMult * ball_representation[2] * (deltaTime / 10);
-	let movementY = speedMult * ball_representation[3] * (deltaTime / 10);
-	// console.log("expected:" + deltaTime);
+	let movementX = speedMult * ball.speedX * (deltaTime / 10);
+	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 
-	// console.log("before steps: x=" + ball_representation[0] + " y=" + ball_representation[1])
-	console.log(`[AI] move ${movementX}*${movementY}`)
-	
+	console.log(`[AI] ${movementX}*${movementY} | speedMult: ${speedMult}`);
 
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
 	const stepY = movementY / steps;
 
-	console.log(`[AI] running ${steps} times ${stepX}*${stepY}`)
-
 	for (let i = 0; i < steps; i++)
 	{
-		ball_representation[0] += stepX;
-		ball_representation[1] += stepY;
-		if (ballCollide(ball_representation))
+		ball.move([stepX, stepY, 0]);
+		if (ballCollide(ball))
 			break;
 	}
-
-	// console.log("after steps: x=" + ball_representation[0] + " y=" + ball_representation[1])
 }
 
-function ballCollide(ball_representation)
+function ballCollide(ball)
 {
 
 	const limit = width - (2 * paddleWidth);
-	const ballXSide = Math.abs(ball_representation[0]) + ballSize;
-	const ballYSide = Math.abs(ball_representation[1]) + ballSize;
+	const ballXSide = Math.abs(ball.x) + ballSize;
+	const ballYSide = Math.abs(ball.y) + ballSize;
 
 	if (ballXSide >= limit)
+	{
+		ball.speedX *= -1;
 		return true;
+	}
 	if (ballYSide >= height)
 	{
-		ball_representation[1] = (height - ballSize) * Math.sign(ball_representation[1]);
-		ball_representation[3] = -ball_representation[3];
+		ball.setPos([ball.x, (height - ballSize) * Math.sign(ball.y), ball.z]);
+		ball.speedY = -ball.speedY;
 		return (false)
 	}
 	return false;
@@ -178,25 +171,23 @@ export class AiMovementProvider extends MovementProvider
 	constructor(paddle_name)
 	{
 		super(paddle_name);
-		this.polling_id = undefined;
 		this.current_paddle_pos = 0;
-		this.ball_representation = [0, 0, 0, 0]; //fuck you i'm doing an array
+		this.ball = new GameObject(null, 0, 0, 0);
 		this.then = Date.now();
-		this.updateObjects = this.updateObjects.bind(this);
+		this.last_update = Date.now();
 	}
 	initMovement()
 	{
-		this.polling_id = setInterval(this.updateObjects, 1000);
-	}
-	destroyMovement()
-	{
-		if (this.polling_id != undefined)
-			clearInterval(this.polling_id);
+		this.last_update = Date.now();
+		this.updateObjects();
 	}
 	updateObjects()
 	{
 		this.current_paddle_pos = gameObjects[this.paddle_name].y;
-		this.ball_representation = [gameObjects.ball.x, gameObjects.ball.y, gameObjects.ball.speedX, gameObjects.ball.speedY];
+		this.ball.x = gameObjects.ball.x;
+		this.ball.y = gameObjects.ball.y;
+		this.ball.speedX = gameObjects.ball.speedX;
+		this.ball.speedY = gameObjects.ball.speedY;
 		this.then = Date.now();
 	}
 	pollPlayer()
@@ -205,6 +196,11 @@ export class AiMovementProvider extends MovementProvider
 		let deltaTime = now - this.then;
 		this.then = now;
 
+		if (now - this.last_update >= 1000)
+		{
+			this.last_update = now;
+			this.updateObjects();
+		}
 		const speed = (BASE_PADDLE_SPEED * (1 + ((speedMult / MAX_BALL_SPEED_MULTIPLIER) * MAX_PADDLE_SPEED_MULTIPLIER)) * (deltaTime / 10));
 		const limit = height - paddleHeight;
 		
@@ -221,16 +217,14 @@ export class AiMovementProvider extends MovementProvider
 				this.current_paddle_pos = limit;
 		}
 		
-		moveBall(deltaTime, this.ball_representation);
-		//console.log(this.current_paddle_pos)
-		//console.log(this.ball_representation);
+		moveBall(deltaTime, this.ball);
 
-		if (this.ball_representation[1] < this.current_paddle_pos - paddleHeight / 4)
+		if (this.ball.y < this.current_paddle_pos - paddleHeight / 10)
 		{
 			this.key_values[0] = true;
 			this.key_values[1] = false;
 		}
-		else if (this.ball_representation[1] > this.current_paddle_pos + paddleHeight / 4)
+		else if (this.ball.y > this.current_paddle_pos + paddleHeight / 10)
 		{
 			this.key_values[1] = true;
 			this.key_values[0] = false;
@@ -241,14 +235,16 @@ export class AiMovementProvider extends MovementProvider
 			this.key_values[1] = false;
 		}
 
-		gameObjects.my_ball.setPos([this.ball_representation[0], this.ball_representation[1], 0]);
+		gameObjects.my_ball.setPos([this.ball.x, this.ball.y, 0]);
+		gameObjects.my_ball.speedX = this.ball.speedX;
+		gameObjects.my_ball.speedY = this.ball.speedY;
 		gameObjects.my_paddle.setPos([gameObjects.my_paddle.x, this.current_paddle_pos, 0]);
 	}
 	resetPlayer()
 	{
 		this.then = Date.now();
 		this.current_paddle_pos = 0;
-		this.ball_representation = [0, 0, BASE_BALL_SPEED, 0];
+		this.ball.setPos([0, 0, 0])
 		this.key_values = [false, false];
 	}
 }

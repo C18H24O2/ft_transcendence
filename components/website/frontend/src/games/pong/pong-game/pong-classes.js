@@ -76,7 +76,7 @@ export class ShapeMaker
 }
 
 /**
- * @prop {Shape3d} shape
+ * @prop {Shape3d | null} shape
  * @prop {number} x
  * @prop {number} y
  * @prop {number} z
@@ -84,7 +84,7 @@ export class ShapeMaker
 export class GameObject
 {
 	/**
-	 * @param {Shape3d} shape
+	 * @param {Shape3d | null} shape
 	 * @param {number} [x]
 	 * @param {number} [y]
 	 * @param {number} [z]
@@ -123,6 +123,8 @@ export class GameObject
 	 */
 	draw(ProjectionMatrix, viewMatrix)
 	{
+		if (!(this.shape instanceof Shape3d))
+			return;
 		mat4.identity(this.shape.modelMatrix);
 		this.shape.translate([this.x, this.y, this.z]);
 		this.shape.draw(ProjectionMatrix, viewMatrix);
