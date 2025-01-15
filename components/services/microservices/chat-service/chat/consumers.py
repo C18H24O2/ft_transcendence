@@ -17,6 +17,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat.message", "message": message}
         )
+        await self.send_user_list()
 
     async def disconnect(self, close_code):
         message = self.user_name + " has leaved\n"
@@ -41,3 +42,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({"message": message}))
+
+    async def send_user_list(self):
+        user_list = [
+            {"id": "user1", "username": "Alice"},
+            {"id": "user2", "username": "Bob"},
+        ]  # Example list, replace with dynamic data
+        await self.send(text_data=json.dumps({
+            "type": "user_list",
+            "user_list": user_list
+        }))

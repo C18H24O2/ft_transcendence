@@ -2,6 +2,7 @@ import './chat.css';
 
 const invite = document.querySelector('#game-invite-btn');
 const profile = document.querySelector('#profile-btn');
+const friendList = document.querySelector('#users');
 const chatSocket = new WebSocket(
 //    'wss://'
 //    + window.location.host
@@ -9,6 +10,8 @@ const chatSocket = new WebSocket(
 	//
 	'ws://localhost:18942/chat'
 );
+
+let selectedFriend = null; // Current friend being chatted with
 
 document.querySelector('#toggle-chat-btn').addEventListener('click', () => {
     document.querySelector('#chat-container').classList.toggle('hidden');
@@ -19,8 +22,26 @@ document.querySelector('#close-chat-btn').addEventListener('click', () => {
     document.querySelector('#chat-container').classList.add('hidden');
 });
 
+function updateFriendList(userList) {
+    friendList.innerHTML = ''; // Clear existing friends
+
+    userList.forEach((user) => {
+		const li = document.createElement('li');
+		li.textContent = user.username;
+		li.dataset.userId = user.id;
+
+		li.addEventListener('click', () => {
+                selectedFriend = user.id;
+		});
+		friendList.appendChild(li);
+    });
+}
+
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
+	if (data.type === 'user_list') {
+        updateFriendList(data.user_list);
+    }
     const log = document.querySelector('#chat-log');
     log.value += (data.message + '\n');
     log.scrollTop = log.scrollHeight;
