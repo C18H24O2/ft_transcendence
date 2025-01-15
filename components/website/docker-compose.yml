@@ -1,7 +1,9 @@
 name: ft_trans-backend-website
 
 networks:
-  services:
+  # A network to connect and communicate with rabbitmq
+  rabbitmq:
+  # The englobing network for nginx-served services
   nginx:
 
 services:
@@ -11,7 +13,7 @@ services:
       dockerfile: website/Dockerfile
     env_file: ../../.env
     networks:
-      - services 
+      - rabbitmq
       - nginx
     restart: unless-stopped
     healthcheck:

@@ -1,12 +1,13 @@
 name: ft_trans-nginx
 
 networks:
+  # The englobing network for nginx-served services
   nginx:
-  nginx_internal:
-  services:
+  # A linked network with nginx to access internal (metrics) endpoints
+  nginx-internal:
 
 volumes:
-  nginx_logs:
+  nginx-logs:
     driver: local
 
 services:
@@ -15,12 +16,11 @@ services:
     build: .
     networks:
       - nginx
-      - nginx_internal
-      - services
+      - nginx-internal
     ports:
       - "8043:443"      # HTTPS
       - "6943:6943"     # Vault
-      - "14321:14321" # Internal health & metrics
+      # - "14321:14321" # Internal health & metrics (debug)
     restart: always
     healthcheck:
       test: "wget -qO- http://0.0.0.0:14321/health"
@@ -28,13 +28,13 @@ services:
       retries: 3
       interval: 5s
     volumes:
-      - nginx_logs:/nginx-logs
+      - nginx-logs:/nginx-logs
     depends_on:
       - grafana
       - rabbitmq
       # - website-service
       # - api-service
-      - chat-service
+      # - chat-service
     develop:
       watch:
         - action: sync+restart

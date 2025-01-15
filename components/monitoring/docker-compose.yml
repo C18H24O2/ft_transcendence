@@ -4,15 +4,16 @@ include:
   - exporters.docker-compose.yml
 
 networks:
+  # A network to access prometheus exported data
   prometheus:
+  # A network dedicated to prometheus exporters
+  prometheus-exporters:
+  # The englobing network for nginx-served services
   nginx:
-  nginx_exporter:
 
 volumes:
   prometheus_data:
-    driver: local
   grafana_data:
-    driver: local
 
 services:
   # Prometheus is a monitoring system that scrapes data from
@@ -36,6 +37,7 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
     networks:
+      - prometheus-exporters
       - prometheus
       - nginx
     restart: unless-stopped

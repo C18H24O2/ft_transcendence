@@ -1,0 +1,52 @@
+networks:
+  nginx:
+
+services:
+  #
+  api-service:
+    build:
+      context: ..
+      dockerfile: service.Dockerfile
+      args:
+        app_path: microservices/api-service
+    env_file: ../../../.env
+    networks:
+      - nginx
+      - rabbitmq
+      - postgres
+    command:
+      - "api.wsgi:application"
+    expose:
+      - "6969"
+    restart: unless-stopped
+    stop_signal: SIGINT
+    healthcheck:
+      test: "wget -qO- http://0.0.0.0:6969/health"
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  chat-service:
+    build:
+      context: ..
+      dockerfile: service.Dockerfile
+      args:
+        app_path: microservices/chat-service
+    env_file: ../../../.env
+    networks:
+      - nginx
+      - rabbitmq
+      - postgres
+      - valkey
+    entrypoint: daphne # Override the entrypoint to use daphne since this is ASGI
+    command:
+      - "-b"
+      - "0.0.0.0"
+      - "-p"
+      - "18942"
+      - "chat_service.asgi:application"
+    restart: unless-stopped
+    stop_signal: SIGINT
+    depends_on:
+      valkey:
+        condition: service_healthy

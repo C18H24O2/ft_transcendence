@@ -1,12 +1,18 @@
 name: ft_trans-services
 
 include:
-  # - ./microservices/docker-compose.yml
+  - ./microservices/docker-compose.yml
 
 networks:
-  services:
+  # A network to access postgres databases
+  postgres:
+  # A network to connect and communicate with rabbitmq
+  rabbitmq:
+  # The englobing network for nginx-served services
   nginx:
-  prometheus:
+  # A network dedicated to prometheus exporters
+  prometheus-exporters:
+  # A network for valkey access
   valkey:
 
 volumes:
@@ -21,7 +27,7 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     networks:
-      - services 
+      - postgres
     ports: #TODO: this is for development only, to remove later
       - "5432:5432"
     restart: unless-stopped
@@ -31,6 +37,8 @@ services:
       timeout: 5s
       retries: 5
 
+  # A fast key-value store, used for quick storage access
+  # Valkey is a fork of Redis, backed by the Linux Foundation, and under an open-source license
   valkey:
     build:
       context: containers/valkey
@@ -56,9 +64,9 @@ services:
       dockerfile: Dockerfile
     env_file: ../../.env
     networks:
-      - services
+      - rabbitmq
       - nginx
-      - prometheus
+      - prometheus-exporters
     ports: #TODO: this is for development only, to remove later
       - "7815:7815"
     restart: unless-stopped
@@ -67,50 +75,3 @@ services:
       interval: 5s
       timeout: 30s
       retries: 10
-
-  # The API service
-  api-service:
-    build:
-      context: .
-      dockerfile: service.Dockerfile
-      args:
-        app_path: api-service
-    env_file: ../../.env
-    networks:
-      - services
-    command:
-      - "api.wsgi:application"
-    expose:
-      - "6969"
-    restart: unless-stopped
-    stop_signal: SIGINT
-    healthcheck:
-      test: "wget -qO- http://0.0.0.0:6969/health"
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  chat-service:
-    build:
-      context: .
-      dockerfile: service.Dockerfile
-      args:
-        app_path: microservices/chat-service
-    env_file: ../../.env
-    networks:
-      - services
-      - valkey
-    ports: #TODO: this is for development only, to remove later
-      - "18942:18942"
-    entrypoint: daphne # Override the entrypoint to use daphne since this is ASGI
-    command:
-      - "-b"
-      - "0.0.0.0"
-      - "-p"
-      - "18942"
-      - "chat_service.asgi:application"
-    restart: unless-stopped
-    stop_signal: SIGINT
-    depends_on:
-      valkey:
-        condition: service_healthy

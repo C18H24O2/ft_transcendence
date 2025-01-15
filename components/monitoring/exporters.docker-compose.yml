@@ -1,11 +1,13 @@
 networks:
-  prometheus:
+  # A network dedicated to prometheus exporters
+  prometheus-exporters:
+  # A network for valkey access
   valkey:
   # A linked network with nginx to access internal (metrics) endpoints
-  nginx_internal:
+  nginx-internal:
 
 volumes:
-  nginx_logs:
+  nginx-logs:
     driver: local
 
 services:
@@ -20,10 +22,10 @@ services:
       - '--target.path=/nginx_status-internal'
       - '--target.log=/nginx-logs/access.log'
     networks:
-      - prometheus
-      - nginx_internal
+      - prometheus-exporters
+      - nginx-internal
     volumes:
-      - nginx_logs:/nginx-logs
+      - nginx-logs:/nginx-logs
     restart: unless-stopped
     depends_on:
       nginx:
@@ -43,21 +45,26 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     networks:
-      - prometheus
+      - prometheus-exporters
     restart: unless-stopped
 
   # Analyzes resource usage and performance characteristics of running containers.
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.51.0
-    volumes:
+    volumes: 
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/lib/docker:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
+    ports:
+      - 12294:8080
+    devices:
       - /dev/kmsg:/dev/kmsg
     networks:
-      - prometheus
+      - prometheus-exporters
     restart: unless-stopped
 
   # Exports metrics from Valkey
@@ -65,7 +72,7 @@ services:
     image: oliver006/redis_exporter:v1.67.0-alpine
     env_file: ../../.env
     networks:
-      - prometheus
+      - prometheus-exporters
       - valkey
     command:
       - '--redis.addr=redis://valkey:6942'
