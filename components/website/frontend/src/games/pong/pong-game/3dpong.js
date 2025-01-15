@@ -7,7 +7,6 @@ import { ShapeMaker, GameObject } from './pong-classes.js';
 import { getCatppuccinWEBGL } from './colorUtils.js';
 import { MovementProvider } from './pongNewMovement.js';
 
-
 /**
  * @param {string} colorName
  * @param {WebGLRenderingContext} setgl
@@ -31,17 +30,16 @@ let canvas = document.getElementById("gameField");
 // @ts-ignore
 let gl = canvas.getContext("webgl", {alpha: true});
 
-	//used to be able to keep track of theme changes
+// used to be able to keep track of theme changes
 let currentTheme;
 let newTheme;
 
-	//global gameobjects container for ease of use
+// global gameobjects container for ease of use
 let gameObjects = {};
 
 export { gameObjects };
 
-	//Basic info about the gamefield
-
+// Basic info about the gamefield
 function resizeCanvas(size)
 {
 	gl.canvas.width = size;
@@ -55,32 +53,32 @@ const viewMatrix = mat4.create();
 const projectionMatrix = mat4.create();
 const projectionViewMatrix = mat4.create();
 
-	//Score containers
+// Score containers
 let scoreP1 = document.getElementById("score-player");
 let scoreP2 = document.getElementById("score-opponent");
 
-	//Game Objects Size
-//Because I am dumb and do not know how to write code, these dimensions are half of the size of the actual object, 
+// Game Objects Size
+// Because I am dumb and do not know how to write code, these dimensions are half of the size of the actual object, 
 export const base = height / 5;
 export const paddleHeight = base;
 export const paddleWidth = paddleHeight / 9;
 export const paddleDepth = paddleHeight;	
 export const ballSize = paddleHeight / 10;
 
-	//Camera values (mostly perspective camera, but some are reused)
-//camera fov + distance to get similar results between orthographic camera and perspective camera
+// Camera values (mostly perspective camera, but some are reused)
+// camera fov + distance to get similar results between orthographic camera and perspective camera
 const fieldOfView = (70 * Math.PI) / 180;
 const aspect = width / height;
 const zNear = 0.1;
 const zFar = 7000.0;
 const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
 
-	//for the view switch between 3d and 2d
+// for the view switch between 3d and 2d
 let view = true;
 let initDone = false;
 let matchEnded = false;
 
-	//Values for the game difficulty ramp up and reset
+// Values for the game difficulty ramp up and reset
 export let speedMult = 1; //Multiplier for speed, increases
 export const BASE_BALL_SPEED = height / 160;
 export const MAX_BALL_SPEED_MULTIPLIER = 8; //how fast the ball can go

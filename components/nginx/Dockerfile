@@ -142,10 +142,15 @@ RUN apk add --no-cache pcre-dev \
     zlib-dev \
     ca-certificates
 
+# Copy what we built/copied beforehand
 COPY --from=builder /etc/nginx/certs /etc/nginx/certs
 COPY --from=builder /etc/nginx/modsec /etc/nginx/modsec
 COPY --from=builder /etc/nginx/modules /etc/nginx/modules
 COPY --from=builder /usr/local/modsecurity /usr/local/modsecurity
 COPY --from=builder /usr/local/modsecurity-crs /usr/local/modsecurity-crs
 
-# Files exposed via overwriting /etc/nginx in the docker-compose volumes section
+# Config files
+COPY ./config/nginx.conf /etc/nginx/nginx.conf
+COPY ./config/servers /etc/nginx/conf.d
+
+# yippieeeeeee

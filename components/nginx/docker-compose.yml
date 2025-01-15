@@ -20,20 +20,26 @@ services:
     ports:
       - "8043:443"      # HTTPS
       - "6943:6943"     # Vault
-      # - "14321:14321" # Internal health & metrics
-    restart: unless-stopped
+      - "14321:14321" # Internal health & metrics
+    restart: always
     healthcheck:
       test: "wget -qO- http://0.0.0.0:14321/health"
       timeout: 5s
       retries: 3
       interval: 5s
     volumes:
-      - "./config/nginx.conf:/etc/nginx/nginx.conf"
-      - "./config/servers:/etc/nginx/conf.d"
       - nginx_logs:/nginx-logs
     depends_on:
       - grafana
       - rabbitmq
-      - website-service
-      - api-service
+      # - website-service
+      # - api-service
       - chat-service
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./config/nginx.conf
+          target: /etc/nginx/nginx.conf
+        - action: sync+restart
+          path: ./config/servers
+          target: /etc/nginx/conf.d

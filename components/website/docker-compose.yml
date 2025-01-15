@@ -19,3 +19,13 @@ services:
       interval: 30s
       timeout: 5s
       retries: 5
+    develop:
+      watch:
+        - action: rebuild
+          path: ./frontend
+          ignore:
+          - frontend/node_modules
+        - action: rebuild
+          path: ./websiteservice
+        - action: rebuild
+          path: pyproject.toml
