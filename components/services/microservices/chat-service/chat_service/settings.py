@@ -5,7 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_URLCONF = __name__
 SECRET_KEY = os.environ.get('DJANGO_SECRET', get_random_secret_key())
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*']
 urlpatterns = []
 
@@ -21,7 +21,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6942)],
+            "hosts": [("valkey", 6942)],
         },
     },
 }

@@ -1,9 +1,11 @@
+import './chat.css';
+
 const invite = document.querySelector('#game-invite-btn');
 const profile = document.querySelector('#profile-btn');
 const chatSocket = new WebSocket(
-    'ws://'
+    'wss://'
     + window.location.host
-    + '/ws/chat/'
+    + '/ws/v1/chat/'
 );
 
 document.querySelector('#toggle-chat-btn').addEventListener('click', () => {

@@ -68,7 +68,7 @@ services:
       - prometheus
       - valkey
     command:
-      - '--redis.addr=valkey:6379'
+      - '--redis.addr=redis://valkey:6942'
     restart: unless-stopped
     depends_on:
       valkey:

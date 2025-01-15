@@ -49,9 +49,9 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [ ] (Minor) User and Game stats dashboard
 
 - **Cybersecurity**
-  - [x] (Major) :question: Implement WAF/ModSecurity w/ Hardened Configuration and HashiCorp Vault for Secrets Management `kiroussa`
+  - [ ] (Major) :question: Implement WAF/ModSecurity w/ Hardened Configuration and HashiCorp Vault for Secrets Management `kiroussa`
   - [ ] (Minor) GDPR Compliance options with User Anonymization, local data management, and account deletion
-  - [x] (Major) :question: Implement Two-Factor Authentication (2FA)
+  - [x] (Major) Implement Two-Factor Authentication (2FA)
 
 - **Devops**
   - [ ] (Major) Infrastructure setup for log management
@@ -62,10 +62,10 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [x] (Major) ✅ Use of ~~advanced~~ 3D techniques. `lvincent`
 
 - **Accessibility**
-  - [ ] (Minor) :question: Support on all devices
+  - [ ] (Minor) Support on all devices
   - [x] (Minor) ✅ Expanding Browser compatibility `?`
   - [x] (Minor) ✅ Multiple language support `lvincent`
-  - [ ] (Minor) :question: Add accessibility for visually impaired users
+  - [ ] (Minor) Add accessibility for visually impaired users
   - [x] (Minor) ✅ Server-Side Rendering (SSR) integration `kiroussa`
 
 - **Server-Side Pong**

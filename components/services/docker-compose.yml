@@ -32,17 +32,19 @@ services:
       retries: 5
 
   valkey:
-    image: "valkey/valkey:8.0.2-alpine3.21"
+    build:
+      context: containers/valkey
+      dockerfile: Dockerfile
     env_file: ../../.env
-    # environment:
-    #   - VALKEY_EXTRA_FLAGS=" --port 6942"
     networks:
       - valkey
+    command:
+      - /etc/valkey/valkey-custom.conf
     ports: #TODO: this is for development only, to remove later
       - "6942:6942"
     restart: unless-stopped
     healthcheck:
-      test: "valkey-cli ping"
+      test: "valkey-cli -p 6942 ping"
       interval: 5s
       timeout: 5s
       retries: 5
@@ -50,7 +52,7 @@ services:
   # RabbitMQ is a fast message queue, used for quick inter-process communication
   rabbitmq:
     build:
-      context: rabbitmq
+      context: containers/rabbitmq
       dockerfile: Dockerfile
     env_file: ../../.env
     networks:
@@ -72,7 +74,7 @@ services:
       context: .
       dockerfile: service.Dockerfile
       args:
-        app_name: api-service
+        app_path: api-service
     env_file: ../../.env
     command:
       - manage.py
@@ -82,8 +84,6 @@ services:
       - services
     expose:
       - "6969"
-    # ports:
-      # - "6969:6969" #TODO: this is for development only, to remove later
     restart: unless-stopped
     stop_signal: SIGINT
     healthcheck:
@@ -91,3 +91,28 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: service.Dockerfile
+      args:
+        app_path: microservices/chat-service
+    env_file: ../../.env
+    networks:
+      - services
+      - valkey
+    ports: #TODO: this is for development only, to remove later
+      - "18942:18942"
+    entrypoint: daphne
+    command:
+      - "-b"
+      - "0.0.0.0"
+      - "-p"
+      - "18942"
+      - "chat_service.asgi:application"
+    restart: unless-stopped
+    stop_signal: SIGINT
+    depends_on:
+      valkey:
+        condition: service_healthy
