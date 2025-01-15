@@ -7,6 +7,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user_name = "user"
+#        self.user_name = 
         self.room_group_name = "chat_transcendence"
         message = self.user_name + " has joined\n"
 
@@ -16,10 +17,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat.message", "message": message}
         )
-#       for each user in friendlist
-#           channel_layer = db_user:channel
-#           await channel_layer.send("channel_name", {
-#               "type": "chat.message", "message": message})
 
     async def disconnect(self, close_code):
         message = self.user_name + " has leaved\n"

@@ -3,9 +3,11 @@ import './chat.css';
 const invite = document.querySelector('#game-invite-btn');
 const profile = document.querySelector('#profile-btn');
 const chatSocket = new WebSocket(
-    'wss://'
-    + window.location.host
-    + '/ws/v1/chat/'
+//    'wss://'
+//    + window.location.host
+//    + '/ws/v1/chat/'
+	//
+	'ws://localhost:18942/chat'
 );
 
 document.querySelector('#toggle-chat-btn').addEventListener('click', () => {
@@ -48,7 +50,6 @@ invite.onclick = function(e) {
     chatSocket.send(JSON.stringify({
         'message': "you've been invited to game"
     }));
-    messageInputDom.value = '';
 };
 profile.onclick = function(e) {
     /*placeholder for redirection to user profile*/
