@@ -34,7 +34,7 @@ let gl = canvas.getContext("webgl", {alpha: true});
 let currentTheme;
 let newTheme;
 
-// global gameobjects container for ease of use
+// Global gameobjects container for ease of use
 let gameObjects = {};
 
 export { gameObjects };
@@ -121,6 +121,7 @@ function debug()
  */
 export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc, movementProviders)
 {
+	console.log(">>> [GM] startMatch");
 	if (!gl)
 	{
 		console.warn('Your browser does not support webgl, consider using a different browser to access this functionnality');
@@ -160,8 +161,10 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 	let then = Date.now();
 	let deltaTime = 0;
 	function render() {
+		console.log("----------------------------------");
 		let now = Date.now();
 		deltaTime = now - then;
+		// deltaTime = 1000 / 60; //TODO: remove this
 		then = now;
 		if (newTheme != currentTheme)
 		{
@@ -172,10 +175,10 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 			gameObjects.ball.shape.updateColor();
 		}
 		playerMoveFunc(deltaTime, movementProviders);
-		moveBall(deltaTime);
 		movementProviders.forEach(element => {
 			element.pollPlayer();
 		});
+		moveBall(deltaTime);
 		checkGoal(max_score, movementProviders);
 		drawScene();
 		debug();
@@ -384,15 +387,17 @@ function moveBall(deltaTime) {
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 
-	console.log(`[GM] ${movementX}*${movementY} | speedMult: ${speedMult}`);
+	console.log(`[GM] ${movementX}*${movementY}`);
 
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
 	const stepY = movementY / steps;
 
 	for (let i = 0; i < steps; i++) {
+		console.log(`[GM] step #${i + 1}/${steps}: ${stepX}*${stepY}`);
 		ball.move([stepX, stepY, 0]);
 		if (ballCollide(ball)) {
+			console.log(`[GM] step #${i + 1}: CUNT`);
 			break;
 		}
 	}
@@ -401,7 +406,7 @@ function moveBall(deltaTime) {
 /**
  * @param {GameObject} ball
  */
-function ballCollide(ball) {
+export function ballCollide(ball, updateSpeed = true) {
 	let paddle;
 
 	if (ball.speedX < 0) {
@@ -433,7 +438,7 @@ function ballCollide(ball) {
 			ball.speedX = speed * Math.cos(angle) * Math.sign(ball.speedX);
 			ball.speedY = speed * Math.sin(angle);
 
-			if (speedMult < MAX_BALL_SPEED_MULTIPLIER) 
+			if (speedMult < MAX_BALL_SPEED_MULTIPLIER && updateSpeed) 
 				speedMult = Math.min(speedMult + BALL_SPEED_INCREASE, MAX_BALL_SPEED_MULTIPLIER);
 			
 			return (true); // Collision occurred

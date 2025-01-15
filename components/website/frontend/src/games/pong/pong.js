@@ -21,5 +21,5 @@ function pong()
 	start_a_game();
 }
 
-pong();
+// pong();
 htmx.onLoad(pong);

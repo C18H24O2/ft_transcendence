@@ -1,6 +1,19 @@
 // @ts-check
 
-import { BASE_PADDLE_SPEED, MAX_BALL_SPEED_MULTIPLIER, MAX_PADDLE_SPEED_MULTIPLIER, speedMult, height, width, paddleHeight, paddleWidth, ballSize, BASE_BALL_SPEED } from './3dpong.js'
+import { 
+	BASE_PADDLE_SPEED, 
+	MAX_BALL_SPEED_MULTIPLIER, 
+	MAX_PADDLE_SPEED_MULTIPLIER, 
+	speedMult, 
+	height, 
+	width, 
+	paddleHeight, 
+	paddleWidth, 
+	ballSize, 
+	BASE_BALL_SPEED,
+	ballCollide
+} from './3dpong.js'
+
 import { gameObjects } from './3dpong.js';
 import { GameObject } from './pong-classes.js';
 
@@ -127,7 +140,7 @@ function moveBall(deltaTime, ball)
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 
-	console.log(`[AI] ${movementX}*${movementY} | speedMult: ${speedMult}`);
+	console.log(`[AI] ${movementX}*${movementY}`);
 
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
@@ -135,13 +148,16 @@ function moveBall(deltaTime, ball)
 
 	for (let i = 0; i < steps; i++)
 	{
+		console.log(`[AI] step #${i + 1}/${steps}: ${stepX}*${stepY}`);
 		ball.move([stepX, stepY, 0]);
-		if (ballCollide(ball))
+		if (ballCollide(ball, false)) {
+			console.log(`[AI] step #${i + 1}: CUNT`);
 			break;
+		}
 	}
 }
 
-function ballCollide(ball)
+function ballCollideFuck(ball)
 {
 
 	const limit = width - (2 * paddleWidth);
@@ -159,7 +175,7 @@ function ballCollide(ball)
 		ball.speedY = -ball.speedY;
 		return (false)
 	}
-	return false;
+	return (false);
 }
 
 /**
@@ -183,6 +199,7 @@ export class AiMovementProvider extends MovementProvider
 	}
 	updateObjects()
 	{
+		console.log(">>> [AI] updateObjects");
 		this.current_paddle_pos = gameObjects[this.paddle_name].y;
 		this.ball.x = gameObjects.ball.x;
 		this.ball.y = gameObjects.ball.y;
@@ -196,7 +213,7 @@ export class AiMovementProvider extends MovementProvider
 		let deltaTime = now - this.then;
 		this.then = now;
 
-		if (now - this.last_update >= 1000)
+		if (now - this.last_update >= 1000 * 60)
 		{
 			this.last_update = now;
 			this.updateObjects();
