@@ -80,8 +80,8 @@ let matchEnded = false;
 
 // Values for the game difficulty ramp up and reset
 export let speedMult = 1; //Multiplier for speed, increases
-export const BASE_BALL_SPEED = height / 160;
-export const MAX_BALL_SPEED_MULTIPLIER = 8; //how fast the ball can go
+export const BASE_BALL_SPEED = height / 160 * 2;
+export const MAX_BALL_SPEED_MULTIPLIER = 16; //how fast the ball can go
 export const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps up
 export const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
 export const BASE_PADDLE_SPEED = paddleHeight / 15;

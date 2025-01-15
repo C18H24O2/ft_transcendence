@@ -213,7 +213,7 @@ export class AiMovementProvider extends MovementProvider
 		let deltaTime = now - this.then;
 		this.then = now;
 
-		if (now - this.last_update >= 1000 * 60)
+		if (now - this.last_update >= 1000)
 		{
 			this.last_update = now;
 			this.updateObjects();
@@ -262,6 +262,8 @@ export class AiMovementProvider extends MovementProvider
 		this.then = Date.now();
 		this.current_paddle_pos = 0;
 		this.ball.setPos([0, 0, 0])
+		this.ball.speedX = gameObjects.ball.speedX;
+		this.ball.speedY = gameObjects.ball.speedY;
 		this.key_values = [false, false];
 	}
 }
