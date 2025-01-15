@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "websiteservice"
-version = "0.2.0"
+name = "service"
+version = "0.3.0"
 description = "The frontend, providing Server-Rendered (SSR'd) content to nginx"
 authors = ["kiroussa <ft@xtrm.me>"]
 readme = "README.md"

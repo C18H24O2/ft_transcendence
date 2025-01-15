@@ -50,4 +50,6 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 # here i was fiddling around with my poor globstar and crying at 6:47am
 COPY $app_path/ ./
 
-ENTRYPOINT ["/app/.venv/bin/python3"]
+EXPOSE 42069
+
+ENTRYPOINT ["/app/.venv/bin/gunicorn", "--bind", "0.0.0.0:42069"]

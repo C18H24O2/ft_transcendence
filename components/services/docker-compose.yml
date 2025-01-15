@@ -76,12 +76,10 @@ services:
       args:
         app_path: api-service
     env_file: ../../.env
-    command:
-      - manage.py
-      - runserver
-      - "0.0.0.0:6969"
     networks:
       - services
+    command:
+      - "api.wsgi:application"
     expose:
       - "6969"
     restart: unless-stopped
@@ -104,7 +102,7 @@ services:
       - valkey
     ports: #TODO: this is for development only, to remove later
       - "18942:18942"
-    entrypoint: daphne
+    entrypoint: daphne # Override the entrypoint to use daphne since this is ASGI
     command:
       - "-b"
       - "0.0.0.0"

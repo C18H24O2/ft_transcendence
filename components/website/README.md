@@ -11,24 +11,3 @@ You can use the provided [nix](https://nix.dev) shell to get up and running, sim
 nix-shell
 ```
 And you will end up in a shell with every required dependency.
-
-## setup
-
-First, ensure that the [frontend](./frontend) is properly **built** *(see the relevant [README](./frontend/README.md#build) section)*.
-
-Then, you need to install the related dependencies:
-
-```bash
-poetry install
-```
-
-Finally, can run the server with the provided script:
-
-```bash
-# Make the script executable (run once)
-chmod +x run.sh
-
-# Run the script
-./run.sh
-```
-

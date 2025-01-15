@@ -17,7 +17,7 @@ ROOT_URLCONF = __name__
 ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     # "django.contrib.staticfiles",
-    "websiteservice",
+    "service",
 ]
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',

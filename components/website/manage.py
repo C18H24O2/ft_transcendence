@@ -1,4 +1,4 @@
-#!/nix/store/z7xxy35k7620hs6fn6la5fg2lgklv72l-python3-3.12.4/bin/python
+#!/usr/bin/env python3
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
@@ -6,7 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "websiteservice.main")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "service.main")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

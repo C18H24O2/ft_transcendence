@@ -26,6 +26,6 @@ services:
           ignore:
           - frontend/node_modules
         - action: rebuild
-          path: ./websiteservice
+          path: ./service
         - action: rebuild
           path: pyproject.toml

@@ -7,13 +7,7 @@ import os
 
 
 LANGS_DIR = os.path.join(os.path.dirname(__file__), 'lang')
-LANGUAGES = [
-    ('en', 'English'),
-    ('fr', 'Français'),
-    ('es', "Español"),
-    ('x-crmt', "Cramptés"),
-	('x-gpt', "ChatGPT")
-]
+LANGUAGES = []
 
 lang_data = {}
 lang_functions = {}
@@ -42,8 +36,8 @@ def _get_translate_function(lang: str) -> callable:
         if lang not in lang_data:
             with open(filename, 'r') as f:
                 lang_data[lang] = json.load(f)
-
         data = lang_data[lang] or {}
+
         def translate(text: str) -> str:
             keys = text.split('.')
             try:
@@ -64,3 +58,14 @@ def _get_translate_function(lang: str) -> callable:
     except Exception as e:
         print("Error loading language file:", e)
     return lambda text: text
+
+
+if len(LANGUAGES) == 0:
+    for filename in os.listdir(LANGS_DIR):
+        if filename.endswith('.json'):
+            lang = filename[:-5]
+            print("Loading language", lang)
+            fn = get_translate_function(lang)
+            name = fn("__lang_name")
+            print("Discovered language", lang, "with name", name)
+            LANGUAGES.append((lang, name))

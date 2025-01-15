@@ -79,4 +79,4 @@ COPY website/ .
 EXPOSE 42069
 
 # Blaze it.
-ENTRYPOINT ["./.venv/bin/gunicorn", "--bind", "0.0.0.0:42069", "websiteservice.wsgi:application"]
+ENTRYPOINT ["./.venv/bin/gunicorn", "--bind", "0.0.0.0:42069", "service.wsgi:application"]
