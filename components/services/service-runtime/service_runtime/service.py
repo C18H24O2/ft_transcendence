@@ -1,4 +1,5 @@
 from .queue import ServiceQueue
+from .remote_service import ServiceRequest
 import functools
 from typing import Callable
 import json
@@ -35,6 +36,33 @@ def message(func: Callable):
     return decorator
 
 
+class ServiceMethod:
+    def __init__(self, name: str, fn: Callable):
+        self.name = name
+        self.fn = fn
+
+    def can_handle(self, message: ServiceRequest):
+        if message.id != self.name:
+            return False
+
+        # check if the number of arguments matches
+        if len(message.args) != len(self.fn.__code__.co_varnames):
+            return False
+
+        # check if the argument types match
+        for i, arg in enumerate(message.args):
+            print(i, "arg", arg)
+            msg_type = arg.typename
+            fn_type = self.fn.__annotations__.get(self.fn.__code__.co_varnames[i])
+            if msg_type != fn_type:
+                print("no match :(")
+                print(msg_type)
+                print(fn_type)
+                return False
+
+        return True
+
+
 class Service:
     """Base class for all services
     """
@@ -67,10 +95,10 @@ class Service:
             pass
 
         def handle_everything(channel, method, props, body):
-            print(f"Received message: {body}")
-            print(f"> Delivery tag: {method.delivery_tag}")
-            print(f"> Response ID: {props.reply_to}")
-            print(f"> Correlation ID: {props.correlation_id}")
+            # print(f"Received message: {body}")
+            # print(f"> Delivery tag: {method.delivery_tag}")
+            # print(f"> Response ID: {props.reply_to}")
+            # print(f"> Correlation ID: {props.correlation_id}")
             data = json.loads(body)
             print(f"Data: {data}")
             channel.basic_publish(

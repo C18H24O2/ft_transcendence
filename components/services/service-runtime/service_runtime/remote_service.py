@@ -8,15 +8,20 @@ import dataclasses
 
 
 @dataclass
+class Argument:
+    name: str
+    value: object
+    typename: str
+
+
+@dataclass
 class ServiceRequest:
     id: str
-    args: list[dict]
-    # response_id: str
+    args: list[Argument]
 
 
 @dataclass
 class ServiceResponse:
-    # response_id: str
     result: object
     result_type: str
 
@@ -68,12 +73,8 @@ class ServiceRequestHandler:
         if len(args) > 0:
             raise Exception("Remote service methods cannot have positional arguments")
 
-        arguments: list[dict] = []
-        for k, v in kwargs.items():
-            arg = {"name": k, "value": v, "type": type(v).__name__}
-            arguments.append(arg)
+        arguments = [Argument(k, v, type(v).__name__) for k, v in kwargs.items()]
         request = ServiceRequest(id=name, args=arguments)
-        # , response_id=self.response_id)
         dumped = json.dumps(dataclasses.asdict(request)).encode('utf-8')
 
         print(f"[{self.service_type}/{name}] Sending message: {dumped}")
