@@ -84,7 +84,7 @@ export const BASE_BALL_SPEED = height / 160 * 2;
 export const MAX_BALL_SPEED_MULTIPLIER = 16; //how fast the ball can go
 export const BALL_SPEED_INCREASE = MAX_BALL_SPEED_MULTIPLIER / 200; //how fast it ramps up
 export const MAX_PADDLE_SPEED_MULTIPLIER = MAX_BALL_SPEED_MULTIPLIER / 20; // (1 + MAX_PADDLE_SPEED_MULTIPLIER) is the max paddle speed, calculated based on (speedMult / MAX_BALL_SPEED_MULTIPILIER) * MAX_PADDLE_SPEED
-export const BASE_PADDLE_SPEED = paddleHeight / 15;
+export const BASE_PADDLE_SPEED = paddleHeight / 12;
 export const FRAMERATE = 1000 / 60; //60 fps
 
 // @ts-ignore
@@ -121,7 +121,6 @@ function debug()
  */
 export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc, movementProviders)
 {
-	console.log(">>> [GM] startMatch");
 	if (!gl)
 	{
 		console.warn('Your browser does not support webgl, consider using a different browser to access this functionnality');
@@ -161,11 +160,10 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 	let then = Date.now();
 	let deltaTime = 0;
 	function render() {
-		console.log("----------------------------------");
 		let now = Date.now();
 		deltaTime = now - then;
-		// deltaTime = 1000 / 60; //TODO: remove this
 		then = now;
+		
 		if (newTheme != currentTheme)
 		{
 			currentTheme = getTheme();
@@ -181,7 +179,7 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		moveBall(deltaTime);
 		checkGoal(max_score, movementProviders);
 		drawScene();
-		debug();
+		//debug();
 		if (matchEnded)
 			clearInterval(intervalId);
 	}
@@ -207,15 +205,13 @@ function initShapes(programInfo)
 	gameObjects.paddle2 = paddle2;
 	gameObjects.ball = ball;
 	
-	
-
 	//debug
-	let my_paddle = new GameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "red"));
-	let my_ball = new GameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), ballSize, ballSize, ballSize, "red"));
-	gameObjects.my_ball = my_ball;
-	gameObjects.my_paddle = my_paddle;
-	gameObjects.my_ball.setPos([0, 0, 0]);
-	gameObjects.my_paddle.setPos([xTranslate, 0, 0]);
+	// let my_paddle = new GameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), paddleHeight, paddleWidth, paddleDepth, "red"));
+	// let my_ball = new GameObject(ShapeMaker.makeShape(gl, programInfo, mat4.create(), ballSize, ballSize, ballSize, "red"));
+	// gameObjects.my_ball = my_ball;
+	// gameObjects.my_paddle = my_paddle;
+	// gameObjects.my_ball.setPos([0, 0, 0]);
+	// gameObjects.my_paddle.setPos([xTranslate, 0, 0]);
 
 	gameObjects.paddle1.setPos([-xTranslate, 0, 0]);
 	gameObjects.paddle2.setPos([xTranslate, 0, 0]);
@@ -284,13 +280,13 @@ function reset(side = 0, movementProviders)
 	gameObjects.paddle2.setPos([xTranslate, 0, 0]);
 	gameObjects.ball.setPos([0, 0, 0]);
 
-	movementProviders.forEach(element => {
-		element.resetPlayer();
-	});
-
 	gameObjects.ball.speedX = BASE_BALL_SPEED * Math.sign(side);
 	gameObjects.ball.speedY = 0;
 	speedMult = 1;
+	
+	movementProviders.forEach(element => {
+		element.resetPlayer();
+	});
 }
 
 /**
@@ -387,17 +383,13 @@ function moveBall(deltaTime) {
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 
-	console.log(`[GM] ${movementX}*${movementY}`);
-
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
 	const stepY = movementY / steps;
 
 	for (let i = 0; i < steps; i++) {
-		console.log(`[GM] step #${i + 1}/${steps}: ${stepX}*${stepY}`);
 		ball.move([stepX, stepY, 0]);
 		if (ballCollide(ball)) {
-			console.log(`[GM] step #${i + 1}: CUNT`);
 			break;
 		}
 	}
@@ -447,7 +439,7 @@ export function ballCollide(ball, updateSpeed = true) {
 	if (ballYSide >= height) {
 		ball.setPos([ball.x, (height - ballSize) * Math.sign(ball.y), ball.z]);
 		ball.speedY = -ball.speedY;
-		return (false);
+		return (true);
 	}
 
 	return (false); // No collision with paddles

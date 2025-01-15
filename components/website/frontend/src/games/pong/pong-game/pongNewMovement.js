@@ -10,15 +10,10 @@ import {
 	paddleHeight, 
 	paddleWidth, 
 	ballSize, 
-	BASE_BALL_SPEED,
-	ballCollide
 } from './3dpong.js'
 
 import { gameObjects } from './3dpong.js';
 import { GameObject } from './pong-classes.js';
-
-import { ShapeMaker } from './pong-classes.js';
-
 
 export function movePlayers(deltaTime, movementProviders)
 {
@@ -140,24 +135,20 @@ function moveBall(deltaTime, ball)
 	let movementX = speedMult * ball.speedX * (deltaTime / 10);
 	let movementY = speedMult * ball.speedY * (deltaTime / 10);
 
-	console.log(`[AI] ${movementX}*${movementY}`);
-
 	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
 	const stepX = movementX / steps;
 	const stepY = movementY / steps;
 
 	for (let i = 0; i < steps; i++)
 	{
-		console.log(`[AI] step #${i + 1}/${steps}: ${stepX}*${stepY}`);
 		ball.move([stepX, stepY, 0]);
-		if (ballCollide(ball, false)) {
-			console.log(`[AI] step #${i + 1}: CUNT`);
+		if (ballCollideFake(ball)) {
 			break;
 		}
 	}
 }
 
-function ballCollideFuck(ball)
+function ballCollideFake(ball)
 {
 
 	const limit = width - (2 * paddleWidth);
@@ -173,7 +164,7 @@ function ballCollideFuck(ball)
 	{
 		ball.setPos([ball.x, (height - ballSize) * Math.sign(ball.y), ball.z]);
 		ball.speedY = -ball.speedY;
-		return (false)
+		return (true);
 	}
 	return (false);
 }
@@ -199,7 +190,6 @@ export class AiMovementProvider extends MovementProvider
 	}
 	updateObjects()
 	{
-		console.log(">>> [AI] updateObjects");
 		this.current_paddle_pos = gameObjects[this.paddle_name].y;
 		this.ball.x = gameObjects.ball.x;
 		this.ball.y = gameObjects.ball.y;
@@ -252,10 +242,12 @@ export class AiMovementProvider extends MovementProvider
 			this.key_values[1] = false;
 		}
 
-		gameObjects.my_ball.setPos([this.ball.x, this.ball.y, 0]);
-		gameObjects.my_ball.speedX = this.ball.speedX;
-		gameObjects.my_ball.speedY = this.ball.speedY;
-		gameObjects.my_paddle.setPos([gameObjects.my_paddle.x, this.current_paddle_pos, 0]);
+		
+		//debug values
+		// gameObjects.my_ball.setPos([this.ball.x, this.ball.y, 0]);
+		// gameObjects.my_ball.speedX = this.ball.speedX;
+		// gameObjects.my_ball.speedY = this.ball.speedY;
+		// gameObjects.my_paddle.setPos([gameObjects.my_paddle.x, this.current_paddle_pos, 0]);
 	}
 	resetPlayer()
 	{
