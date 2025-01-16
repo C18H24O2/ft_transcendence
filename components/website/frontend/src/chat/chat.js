@@ -3,6 +3,7 @@ import './chat.css';
 const invite = document.querySelector('#game-invite-btn');
 const profile = document.querySelector('#profile-btn');
 const friendList = document.querySelector('#users');
+const message = document.querySelector('#message-input');
 const chatSocket = new WebSocket(
    'wss://'
    + window.location.host
@@ -11,7 +12,6 @@ const chatSocket = new WebSocket(
 	// 'ws://localhost:18942/chat'
 );
 
-let selectedFriend = null; // Current friend being chatted with
 
 document.querySelector('#toggle-chat-btn').addEventListener('click', () => {
     document.querySelector('#chat-container').classList.toggle('hidden');
@@ -31,10 +31,20 @@ function updateFriendList(userList) {
 		li.dataset.userId = user.id;
 
 		li.addEventListener('click', () => {
-                selectedFriend = user.id;
+				message.value = `/mp ${user.username} `;
+				message.focus();
 		});
 		friendList.appendChild(li);
     });
+}
+
+chatSocket.onopen = function(e) {
+	// Start authentication
+	console.log("auth moment");
+	chatSocket.send(JSON.stringify({
+		"type": "chat.authenticate",
+		"token": "le token la ouais" //TODO: get from cookie
+	}));
 }
 
 chatSocket.onmessage = function(e) {
@@ -51,8 +61,8 @@ chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
 };
 
-document.querySelector('#message-input').focus();
-document.querySelector('#message-input').onkeyup = function(e) {
+message.focus();
+message.onkeyup = function(e) {
     if (e.key === 'Enter') {  // enter, return
         document.querySelector('#chat-message-submit').click();
     }
@@ -62,6 +72,7 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#message-input');
     const message = messageInputDom.value;
     chatSocket.send(JSON.stringify({
+		'type': 'chat.message',
         'message': message
     }));
     messageInputDom.value = '';
@@ -69,9 +80,11 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
 
 invite.onclick = function(e) {
     chatSocket.send(JSON.stringify({
-        'message': "you've been invited to game"
+		'type': 'chat.invite', //TODO: passer par les mp enft bro wtf???
+        'message': "/mp <idk> Let's play pong! https://<host>/games/pong/<random room id>"
     }));
 };
 profile.onclick = function(e) {
     /*placeholder for redirection to user profile*/
 };
+
