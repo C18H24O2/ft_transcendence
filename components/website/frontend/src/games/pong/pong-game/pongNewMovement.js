@@ -228,7 +228,7 @@ export class AiMovementProvider extends MovementProvider
 		
 		moveBall(deltaTime, this.ball);
 
-		if (this.ball.y < this.current_paddle_pos - paddleHeight / 10)
+		if (this.ball.y <= this.current_paddle_pos - paddleHeight / 10)
 		{
 			this.key_values[0] = true;
 			this.key_values[1] = false;
