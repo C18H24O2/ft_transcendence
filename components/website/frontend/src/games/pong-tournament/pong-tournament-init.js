@@ -187,5 +187,4 @@ function pong() {
 	}
 }
 
-pong();
 htmx.onLoad(pong);
