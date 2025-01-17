@@ -43,7 +43,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return
     
         message_type = text_data_json["type"]
-        if message_type == "chat.message" || message_type == "chat.invite":
+        if message_type == "chat.message" or message_type == "chat.invite":
             await self._handle_message(text_data_json)
         elif message_type == "chat.authenticate":
             await self._authenticate(text_data_json)

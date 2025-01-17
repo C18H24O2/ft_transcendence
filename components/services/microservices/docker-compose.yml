@@ -17,11 +17,11 @@ services:
     command:
       - "api.wsgi:application"
     expose:
-      - "6969"
+      - "42069"
     restart: unless-stopped
     stop_signal: SIGINT
     healthcheck:
-      test: "wget -qO- http://0.0.0.0:6969/health"
+      test: "wget -qO- http://0.0.0.0:42069/health"
       interval: 5s
       timeout: 5s
       retries: 5
