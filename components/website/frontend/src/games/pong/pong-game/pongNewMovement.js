@@ -193,7 +193,9 @@ export class AiMovementProvider extends MovementProvider
 		this.current_paddle_pos = gameObjects[this.paddle_name].y;
 		this.ball.x = gameObjects.ball.x;
 		this.ball.y = gameObjects.ball.y;
+		// @ts-ignore
 		this.ball.speedX = gameObjects.ball.speedX;
+		// @ts-ignore
 		this.ball.speedY = gameObjects.ball.speedY;
 		this.then = Date.now();
 	}
@@ -254,7 +256,9 @@ export class AiMovementProvider extends MovementProvider
 		this.then = Date.now();
 		this.current_paddle_pos = 0;
 		this.ball.setPos([0, 0, 0])
+		// @ts-ignore
 		this.ball.speedX = gameObjects.ball.speedX;
+		// @ts-ignore
 		this.ball.speedY = gameObjects.ball.speedY;
 		this.key_values = [false, false];
 	}

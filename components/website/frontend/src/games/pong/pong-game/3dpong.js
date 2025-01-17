@@ -401,6 +401,7 @@ function moveBall(deltaTime) {
 export function ballCollide(ball, updateSpeed = true) {
 	let paddle;
 
+	// @ts-ignore
 	if (ball.speedX < 0) {
 		paddle = gameObjects.paddle1;
 	} else {
@@ -418,6 +419,7 @@ export function ballCollide(ball, updateSpeed = true) {
 
 		if (ballBoundingBox.collides(paddleBoundingBox)) {
 			ball.setPos([(limit - ballSize) * Math.sign(ball.x), ball.y, ball.z]);
+			// @ts-ignore
 			ball.speedX = -ball.speedX;
 
 			let relBallY = ball.y - paddle.y;
@@ -425,9 +427,12 @@ export function ballCollide(ball, updateSpeed = true) {
 
 			const maxAngle = Math.PI*5 / 12;
 			const angle = nrmlrelBallY * maxAngle;
+			// @ts-ignore
 			const speed = Math.sqrt(ball.speedX ** 2 + ball.speedY ** 2);
 
+			// @ts-ignore
 			ball.speedX = speed * Math.cos(angle) * Math.sign(ball.speedX);
+			// @ts-ignore
 			ball.speedY = speed * Math.sin(angle);
 
 			if (speedMult < MAX_BALL_SPEED_MULTIPLIER && updateSpeed) 
@@ -438,6 +443,7 @@ export function ballCollide(ball, updateSpeed = true) {
 	}
 	if (ballYSide >= height) {
 		ball.setPos([ball.x, (height - ballSize) * Math.sign(ball.y), ball.z]);
+		// @ts-ignore
 		ball.speedY = -ball.speedY;
 		return (true);
 	}
