@@ -1,6 +1,7 @@
 import {BASE_PADDLE_SPEED, MAX_BALL_SPEED_MULTIPLIER, MAX_PADDLE_SPEED_MULTIPLIER, speedMult, height, paddleHeight, gameObjects } from './pong-game/3dpong.js'
 import { startMatch } from './pong-game/3dpong.js';
 import { PlayerMovementProvider, AiMovementProvider, movePlayers } from "./pong-game/pongNewMovement";
+import butterup from 'butteruptoasts';
 
 function pong() {
 	let playerlist = [];
@@ -106,7 +107,7 @@ function pong() {
 			if (gameObjects.paddle1.score < SCORE_TO_WIN && gameObjects.paddle2.score < SCORE_TO_WIN)
 				return;
 			
-			if (winnerTimeout < 5) {
+			if (winnerTimeout < 7) {
 				if (winnerTimeout == 0) {
 					console.log("we got a winner boys");
 					//TODO: toast
@@ -133,6 +134,15 @@ function pong() {
 						{
 							console.log(next_playerlist[0] + " wins the tournament!");
 							//TODO: toast
+							butterup.options.toastLife = 15000;
+							butterup.toast({
+								title: `${next_playerlist[0]} has won the tournament!`,
+								message: 'This tournament has now ended.',
+								location: 'bottom-right',
+								dismissable: true,
+								icon: false,
+								type: 'success',
+							});
 							clearInterval(intervalid);
 							intervalid = -1;
 							form.style.display = "";
@@ -149,14 +159,44 @@ function pong() {
 
 					renderList();
 					if (winner == 1)
+					{
 						toRemove.push(player2);
+						butterup.toast({
+							title: `${player1} has won this match!`,
+							message: 'Next match will start shortly',
+							location: 'bottom-right',
+							dismissable: true,
+							icon: false,
+							type: 'info',
+						});
+					}
 					else
+					{
 						toRemove.push(player1);
+						butterup.toast({
+							title: `${player2} has won this match!`,
+							message: 'Next match will start shortly',
+							location: 'bottom-right',
+							dismissable: true,
+							icon: false,
+							type: 'info',
+						});
+					}
+					butterup.toast({
+						title: 'Next match will be: ',
+						message: `${playerlist[0]} vs ${playerlist[1]}`,
+						location: 'bottom-right',
+						dismissable: true,
+						icon: false,
+						type: 'warning',
+					});
 				}
 				winnerTimeout++;
+			} else if (winnerTimeout == 7) {
+				winnerTimeout++;
+				gameField.scrollIntoView();
 			} else {
 				winnerTimeout = 0;
-				gameField.scrollIntoView();
 				renderList();
 				player1_provider.destroyMovement();
 				player2_provider.destroyMovement();
@@ -166,6 +206,8 @@ function pong() {
 
 		function startTournament()
 		{
+			butterup.options.maxToasts = 5;
+			butterup.options.toastLife = 8000;
 			if (intervalid != -1) return;
 			playerlist = [...origPlayerlist];
 			if (playerlist.length < 2)
