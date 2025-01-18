@@ -42,9 +42,9 @@
 						preload-images="true"
 						class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"
 					>
-						<i class="inline" data-feather="home"></i> {% translate 'button.home' %}
+						<i class="inline" data-feather="home"></i>{% translate 'button.home' %}
 					</button>
-					<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %} </button>
+					<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i>{% translate 'button.theme' %} </button>
 					<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
 						{% for i in languages %}
 							{% if i.0 == lang %}
@@ -100,11 +100,11 @@
 					<div class="bg-base min-w-40" id=player-list></div>
 				</section>
 				
-				<section id="game" class="min-h-full flex justify-center flex-col space-y-[5vh] items-center">
-					<div class="overflow-scroll flex items-center justify-center bg-base w-[60vh] text-[10vh] text-text font-mono h-[20vh] rounded-xl ">
+				<section id="game" class="min-h-full flex justify-between items-center flex-col space-y-[3vh] p-10">
+					<div class="overflow-scroll flex items-center justify-center bg-base text-[10vh] text-text font-mono h-[20vh] aspect-[5/2] rounded-xl ">
 						<span id="score-player">000</span> - <span id="score-opponent">000</span>
 					</div>
-					<canvas id="gameField" width="1920" height="1920" style="height:70vh; width:70vh; " class="bg-crust text-text rounded-xl p-[1vh]">
+					<canvas id="gameField" width="1920" height="1920" style="height: 60vh; width: 60vh;" class="bg-crust text-text rounded-xl p-[1vh]">
 						{% translate 'error.html5_required' %}
 					</canvas>
 				</section>

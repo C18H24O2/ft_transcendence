@@ -141,6 +141,7 @@ function pong() {
 							renderList();
 							player1_provider.destroyMovement();
 							player2_provider.destroyMovement();
+							scroll(0, 0);
 							return;
 						}
 						playerlist = next_playerlist.splice(0, next_playerlist.length);

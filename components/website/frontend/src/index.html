@@ -34,19 +34,7 @@
 		<header class="container fixed top-0 left-0 right-0 mx-auto px-8 pt-4 pb-5 rounded-b-xl bg-surface0/75 hover:bg-surface0/90 backdrop-blur-3xl min-h-12 z-10">
 			<nav class="flex flex-row justify-between items-center">
 				<div id="nav-customize" class="flex flex-row gap-8">
-					<button
-						hx-get="/games/pong-tournament"
-						hx-target="#content"
-						hx-swap="innerHTML"
-						hx-push-url="/games/pong-tournament"
-						hx-spa-pick="#content"
-						preload="mouseover"
-						preload-images="true"
-						class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"
-					>
-						<i class="inline" data-feather="home"></i> {% translate 'button.home' %}
-					</button>
-					<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %} </button>
+					<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i>{% translate 'button.theme' %} </button>
 					<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
 						{% for i in languages %}
 							{% if i.0 == lang %}
@@ -56,6 +44,9 @@
 							{% endif %}
 						{% endfor %}
 					</select>
+				</div>
+				<div id="nav-games" class="flex flex-row gap-8 justify-self-center">
+					
 				</div>
 				<div id="nav-account" class="flex flex-row gap-8">
 					<button
@@ -96,7 +87,7 @@
 				class="bg-auto bg-center min-h-svh bg-placeholder-pattern flex flex-col justify-center items-center">
 				<div class="backdrop-blur-xl rounded-xl p-24 px-32 bg-base/70 hover:bg-base/80 border-overlay2/15 border-2 flex flex-col gap-12 font-title">
 					<div class="flex flex-col">
-						<h1 class="text-6xl"><span class="font-semibold"> {% translate 'welcome_page.title' %} </span> <span class="font-extrabold">{{ website_title }}.</span></h1>  
+						<h1 class="text-6xl"><span class="font-semibold">{% translate 'welcome_page.title' %}</span> <span class="font-extrabold">{{ website_title }}.</span></h1>  
 						<p class="text-xl italic drop-shadow-xl font-light">{% translate 'welcome_page.desc_1' %}</p>
 						<p class="text-xl italic drop-shadow-xl self-end font-light">{% translate 'welcome_page.desc_2' %}</p>
 					</div>

@@ -19,21 +19,34 @@
 		<script defer type="module" src="/shared.js"></script>
 	</head>
 
-	<body class="p-0 m-0 font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300 bg-placeholder-pattern bg-auto bg-center min-h-svh md:flex flex-col justify-center items-center">
+	<body class="p-0 m-0 font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300 bg-placeholder-pattern bg-auto bg-center min-h-svh md:flex flex-col justify-end items-center">
 		{% load ft_trans_tags %}
-		<header class="px-4 py-8 flex items-center justify-start bg-surface0/65 hover:bg-surface0/90 rounded-xl p-4 fixed top-5 left-5 flex-col space-y-4">
-			<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text"><i class="inline" data-feather="edit-3"></i> {% translate 'button.theme' %}</button>
-			<button onclick="viewSwitch()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text"><i class="inline" data-feather="box"></i> {% translate 'button.view' %}</button>
-			<a class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4" href="/">
-				<button><i class="inline" data-feather="home"></i>{% translate 'button.home' %}</button>
-			</a>
+		<header class="container fixed top-0 left-0 right-0 mx-auto px-8 pt-4 pb-5 rounded-b-xl bg-surface0/75 hover:bg-surface0/90 backdrop-blur-3xl min-h-12 z-10">
+			<div id="nav-customize" class="flex flex-row gap-8">
+				<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i>{% translate 'button.theme' %}</button>
+				<button onclick="viewSwitch()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text"><i class="inline" data-feather="box"></i>{% translate 'button.view' %}</button>
+			</div>
+			<div id="nav-links">	
+				<button
+						hx-get="/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/"
+						hx-spa-pick="#content"
+						preload="mouseover"
+						preload-images="true"
+						class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"
+				>
+					<i class="inline" data-feather="home"></i>{% translate 'button.home' %}
+				</button>
+			</div>
 		</header>
 		<main id="content">
-			<div class="flex justify-center items-center flex-col space-y-[5vh]">
-				<div class="overflow-scroll flex items-center justify-center bg-base w-[60vh] text-[10vh] text-text font-mono h-[20vh] rounded-xl ">
+			<div class="flex justify-between items-center flex-col space-y-[3vh] p-10">
+				<div class="overflow-scroll flex items-center justify-center bg-base text-[10vh] text-text font-mono h-[20vh] aspect-[5/2] rounded-xl ">
 					<span id="score-player">000</span> - <span id="score-opponent">000</span>
 				</div>
-				<canvas id="gameField" width="1920" height="1920" style="height: 70vh; width: 70vh;" class="bg-crust text-text rounded-xl p-[1vh]">
+				<canvas id="gameField" width="1920" height="1920" style="height: 60vh; width: 60vh;" class="bg-crust text-text rounded-xl p-[1vh]">
 					{% translate 'error.html5_required' %}
 				</canvas>
 			</div>
