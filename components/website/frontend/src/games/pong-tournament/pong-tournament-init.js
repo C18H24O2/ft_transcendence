@@ -127,7 +127,6 @@ function pong() {
 					if (playerlist.length == 1)
 						next_playerlist.push(playerlist.shift());
 					listSection.scrollIntoView();
-					resetScore();
 					if (playerlist.length == 0)
 					{
 						if (next_playerlist.length < 2)
@@ -157,6 +156,7 @@ function pong() {
 					}
 
 					renderList();
+					
 					if (winner == 1)
 					{
 						toRemove.push(player2);
@@ -199,11 +199,13 @@ function pong() {
 					type: 'info',
 				});
 				winnerTimeout--;
-				if (winnerTimeout == 1)
+				if (winnerTimeout == 1) {
 					gameField.scrollIntoView();
+				}
 			} else {
 				winnerTimeout = TIMEOUT;
 				renderList();
+				resetScore();
 				player1_provider.destroyMovement();
 				player2_provider.destroyMovement();
 				startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
@@ -218,8 +220,6 @@ function pong() {
 			if (countdown === 0)
 			{
 				countdown = TIMEOUT;
-				butterup.options.maxToasts = 5;
-				butterup.options.toastLife = 8000;
 				clearInterval(countdownid);
 				startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
 				intervalid = setInterval(pollGame, 1000);
@@ -243,8 +243,7 @@ function pong() {
 
 		function startTournament()
 		{
-			butterup.options.maxToasts = 3;
-			butterup.options.toastLife = 1200;
+			butterup.options.toastLife = 8000;
 			if (intervalid != -1) return;
 			playerlist = [...origPlayerlist];
 			if (playerlist.length < 2)

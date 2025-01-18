@@ -17,6 +17,9 @@ clean:
 
 re: down up
 
+fuck-you-docker: up
+	docker system prune -f
+
 dev:
 	pnpm run --prefix components/website/frontend dev
 
