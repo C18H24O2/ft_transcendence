@@ -1,7 +1,10 @@
+import { initGame, resetScore } from '../pong/pong-game/3dpong.js';
 import {BASE_PADDLE_SPEED, MAX_BALL_SPEED_MULTIPLIER, MAX_PADDLE_SPEED_MULTIPLIER, speedMult, height, paddleHeight, gameObjects } from './pong-game/3dpong.js'
 import { startMatch } from './pong-game/3dpong.js';
 import { PlayerMovementProvider, AiMovementProvider, movePlayers } from "./pong-game/pongNewMovement";
 import butterup from 'butteruptoasts';
+
+const TIMEOUT = 7;
 
 function pong() {
 	let playerlist = [];
@@ -106,17 +109,14 @@ function pong() {
 
 			if (gameObjects.paddle1.score < SCORE_TO_WIN && gameObjects.paddle2.score < SCORE_TO_WIN)
 				return;
-			
-			if (winnerTimeout < 7) {
-				if (winnerTimeout == 0) {
-					console.log("we got a winner boys");
-					//TODO: toast
+			if (winnerTimeout > 0) {
+				if (winnerTimeout == TIMEOUT) {
 
 					if (gameObjects.paddle1.score >= SCORE_TO_WIN)
 						winner = 1;
 					else
 						winner = 2;
-			
+
 					let player1 = playerlist.shift();
 					let player2 = playerlist.shift();
 			
@@ -126,14 +126,12 @@ function pong() {
 						next_playerlist.push(player2);
 					if (playerlist.length == 1)
 						next_playerlist.push(playerlist.shift());
-
 					listSection.scrollIntoView();
+					resetScore();
 					if (playerlist.length == 0)
 					{
 						if (next_playerlist.length < 2)
 						{
-							console.log(next_playerlist[0] + " wins the tournament!");
-							//TODO: toast
 							butterup.options.toastLife = 15000;
 							butterup.toast({
 								title: `${next_playerlist[0]} has won the tournament!`,
@@ -147,6 +145,7 @@ function pong() {
 							intervalid = -1;
 							form.style.display = "";
 							playerlist = [...origPlayerlist];
+							next_playerlist = [];
 							toRemove = [];
 							renderList();
 							player1_provider.destroyMovement();
@@ -191,12 +190,19 @@ function pong() {
 						type: 'warning',
 					});
 				}
-				winnerTimeout++;
-			} else if (winnerTimeout == 7) {
-				winnerTimeout++;
-				gameField.scrollIntoView();
+				butterup.toast({
+					title: `Next match will start in ${winnerTimeout}..`,
+					message: `${playerlist[0]} vs ${playerlist[1]}`,
+					location: 'bottom-right',
+					dismissable: true,
+					icon: false,
+					type: 'info',
+				});
+				winnerTimeout--;
+				if (winnerTimeout == 1)
+					gameField.scrollIntoView();
 			} else {
-				winnerTimeout = 0;
+				winnerTimeout = TIMEOUT;
 				renderList();
 				player1_provider.destroyMovement();
 				player2_provider.destroyMovement();
@@ -204,24 +210,59 @@ function pong() {
 			}
 		}
 
+		let countdown = TIMEOUT;
+		let countdownid = -1;
+
+		function tournamentCountdown()
+		{
+			if (countdown === 0)
+			{
+				countdown = TIMEOUT;
+				butterup.options.maxToasts = 5;
+				butterup.options.toastLife = 8000;
+				clearInterval(countdownid);
+				startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
+				intervalid = setInterval(pollGame, 1000);
+				toRemove = [];
+				renderList();
+				form.style.display = "none";
+			}
+			else
+			{
+				butterup.toast({
+					title: `Tournament starting in ${countdown}..`,
+					message: `${playerlist[0]} vs ${playerlist[1]}`,
+					location: 'bottom-right',
+					dismissable: true,
+					icon: false,
+					type: 'info',
+				})
+				countdown--;
+			}
+		}
+
 		function startTournament()
 		{
-			butterup.options.maxToasts = 5;
-			butterup.options.toastLife = 8000;
+			butterup.options.maxToasts = 3;
+			butterup.options.toastLife = 1200;
 			if (intervalid != -1) return;
 			playerlist = [...origPlayerlist];
 			if (playerlist.length < 2)
+			{
+				butterup.toast({
+					title: `Tournament must have at least 2 players`,
+					location: 'bottom-right',
+					dismissable: true,
+					icon: false,
+					type: 'error',
+				});
 				return ("must at least have 2 players");
-				//TODO: toast
-			
-			winnerTimeout = 0;
+			}
+			winnerTimeout = TIMEOUT;
+			countdown = TIMEOUT;
+			initGame();
 			gameField.scrollIntoView();
-			//start the first game, it will then refresh itself automatically
-			startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
-			intervalid = setInterval(pollGame, 1000);
-			toRemove = [];
-			renderList();
-			form.style.display = "none";
+			countdownid = setInterval(tournamentCountdown, 1000);
 			htmx.onLoad(e => {
 				clearInterval(intervalid);
 			});

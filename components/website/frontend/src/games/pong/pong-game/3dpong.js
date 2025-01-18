@@ -6,6 +6,7 @@ import { mat4 } from 'gl-matrix';
 import { ShapeMaker, GameObject } from './pong-classes.js';
 import { getCatppuccinWEBGL } from './colorUtils.js';
 import { MovementProvider } from './pongNewMovement.js';
+import { initBuffers3d } from './webgl-initbuffers.js';
 
 /**
  * @param {string} colorName
@@ -109,30 +110,14 @@ function debug()
 	console.log(`real speed: ${gameObjects.ball.speedX}*${gameObjects.ball.speedY} | ai expected speed: ${gameObjects.my_ball.speedX}*${gameObjects.my_ball.speedY}`)
 }
 
-
-	//Function Setter, value initialisation and shader compilation
-/**
- * 
- * @param {String} player1 
- * @param {String} player2 
- * @param {Number} max_score 
- * @param {Function} playerMoveFunc 
- * @param {[MovementProvider, MovementProvider]} movementProviders 
- */
-export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc, movementProviders)
+export function initGame()
 {
-	if (!gl)
-	{
-		console.warn('Your browser does not support webgl, consider using a different browser to access this functionnality');
-		return;
-	}
-	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(playerMoveFunc) != "function" || playerMoveFunc.length == 0 || typeof(movementProviders) != "object")
-		return;
 	if (initDone === false)
 	{
 		currentTheme = getTheme();
 		newTheme = currentTheme;
 		let changeTheme = document.getElementById('change-theme-button');
+		
 		if (changeTheme)
 		{
 			changeTheme.addEventListener('click', () => {
@@ -154,7 +139,31 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 			mat4.ortho(projectionMatrix, -width, width, -height, height, zNear, zFar);
 		mat4.multiply(projectionViewMatrix, projectionMatrix, viewMatrix);
 		initDone = true;
+		drawScene();
+		return true;
 	}
+	return false;
+}
+
+//Function Setter, value initialisation and shader compilation
+/**
+ * 
+ * @param {String} player1 
+ * @param {String} player2 
+ * @param {Number} max_score 
+ * @param {Function} playerMoveFunc 
+ * @param {[MovementProvider, MovementProvider]} movementProviders 
+ */
+export function startMatch(player1 = "player1", player2 = "player2", max_score = 0, playerMoveFunc, movementProviders)
+{
+	if (!gl)
+	{
+		console.warn('Your browser does not support webgl, consider using a different browser to access this functionnality');
+		return;
+	}
+	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(playerMoveFunc) != "function" || playerMoveFunc.length == 0 || typeof(movementProviders) != "object")
+		return;
+	initGame();
 	resetMatch(1, movementProviders);
 
 	let then = Date.now();
@@ -289,12 +298,7 @@ function reset(side = 0, movementProviders)
 	});
 }
 
-/**
- * 
- * @param {Number} side 
- * @param {[MovementProvider, MovementProvider]} movementProviders
- */
-function resetMatch(side = 0, movementProviders)
+export function resetScore()
 {
 	gameObjects.paddle1.score = 0;
 	gameObjects.paddle2.score = 0;
@@ -303,6 +307,16 @@ function resetMatch(side = 0, movementProviders)
 		scoreP2.textContent = String(gameObjects.paddle2.score).padStart(3, '0');
 	if (scoreP1 != null)
 		scoreP1.textContent = String(gameObjects.paddle1.score).padStart(3, '0');
+}
+
+/**
+ * 
+ * @param {Number} side 
+ * @param {[MovementProvider, MovementProvider]} movementProviders
+ */
+function resetMatch(side = 0, movementProviders)
+{
+	resetScore();
 	reset(side, movementProviders);
 	matchEnded = false;
 }
