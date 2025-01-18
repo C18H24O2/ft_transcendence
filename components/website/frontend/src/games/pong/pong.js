@@ -1,5 +1,6 @@
 import { startMatch } from "./pong-game/3dpong";
 import { PlayerMovementProvider, AiMovementProvider, movePlayers } from "./pong-game/pongNewMovement";
+import '../../shared.js';
 
 function pong()
 {
