@@ -29,66 +29,16 @@
 				</div>
 			</div>
 		</noscript>
-		<header class="container fixed top-0 left-0 right-0 mx-auto px-8 pt-4 pb-5 rounded-b-xl bg-surface0/75 hover:bg-surface0/90 backdrop-blur-3xl min-h-12 z-10">
-			<nav class="flex flex-row justify-between items-center">
-				<div id="links" class="flex flex-row gap-8">
-					<button
-						hx-get="/"
-						hx-target="#content"
-						hx-swap="innerHTML"
-						hx-push-url="/"
-						hx-spa-pick="#content"
-						preload="mouseover"
-						preload-images="true"
-						class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"
-					>
-						<i class="inline" data-feather="home"></i>{% translate 'button.home' %}
-					</button>
-					<button
-						class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
-						hx-get="/register/"
-						hx-target="#content"
-						hx-swap="innerHTML"
-						hx-push-url="/register/"
-						preload="mouseover"
-						preload-images="true"
-						hx-spa-pick="#content"
-					>
-						<span>
-							<i class="inline" data-feather="user-plus"></i>
-							{% translate 'button.register' %}
-						</span>
-					</button>
-					<button
-						class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
-						hx-get="/login/"
-						hx-target="#content"
-						hx-swap="innerHTML"
-						hx-push-url="/login/"
-						preload="mouseover"
-						preload-images="true"
-						hx-spa-pick="#content"
-					>
-						<span>
-							<i class="inline" data-feather="log-in"></i>
-							{% translate 'button.login' %}
-						</span>
-					</button>
+		{% load ft_trans_tags %}
+		<noscript>
+			<div class="flex justify-center items-center w-full h-svh">
+				<div class="w-full max-w-md">
+					<h1 class="text-2xl font-bold">{% translate 'error.javascript_required.title' %}</h1>
+					<p class="text-lg">{% translate 'error.javascript_required.desc' %}</p>
 				</div>
-				<div id="customize" class="flex flex-row gap-8">
-					<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i>{% translate 'button.theme' %} </button>
-					<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
-						{% for i in languages %}
-							{% if i.0 == lang %}
-								<option value='{{ i.0 }}' selected=true>{{i.1}}</option>
-							{% else %}
-								<option value='{{ i.0 }}'>{{i.1}}</option>
-							{% endif %}
-						{% endfor %}
-					</select>
-				</div>
-			</nav>
-		</header>
+			</div>
+		</noscript>
+		{% include "__navbar.html" %}
 		<main id="content">
 			<div class="bg-placeholder-pattern bg-auto bg-center min-h-svh md:flex flex-col justify-center items-center">
 				<div class="bg-mantle/75 hover:bg-mantle/90 transition-colors duration-500 backdrop-blur-md md:flex flex-col items-center px-20 py-10 rounded-xl">

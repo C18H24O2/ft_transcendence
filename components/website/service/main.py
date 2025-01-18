@@ -10,7 +10,7 @@ import os
 import json
 
 
-DEBUG = False
+DEBUG = True
 SECRET_KEY = os.environ.get('DJANGO_SECRET', get_random_secret_key())
 ROOT_URLCONF = __name__
 
