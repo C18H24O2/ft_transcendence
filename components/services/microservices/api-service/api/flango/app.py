@@ -14,6 +14,7 @@ import json
 from typing import Optional
 import time
 import traceback
+import sys
 
 
 def _wrap_handler(app):
@@ -89,10 +90,10 @@ class FlangoHandler:
 
     def handle(self, request):
         params = self.extract_params(request.path)
-        print(f"Handling {self.name} with params {params}")
+        # print(f"Handling {self.name} with params {params}")
         # get handler function params
         handler_params = self.fn.__code__.co_varnames[1:]
-        print(f"Handler params: {handler_params}")
+        # print(f"Handler params: {handler_params}")
         return self.fn(request, *params)
 
 
@@ -114,7 +115,7 @@ class FlangoApp:
         )
 
     def log(self, msg, *args):
-        print("[Flango]", msg, *args)
+        print("[Flango]", msg, *args, file=sys.stderr)
 
     def discover_handlers(self, module_path: str) -> None:
         # Discover all .py files in the path
@@ -143,7 +144,7 @@ class FlangoApp:
         try:
             time_start = time.time()
             resp = self._handle_request(request, *args, **kwargs)
-            print(f"Request took {time.time() - time_start}s")
+            # print(f"Request took {time.time() - time_start}s")
             return resp
         except Exception as e:
             self.log(f"Error while handling request: {traceback.format_exc()}")
@@ -161,10 +162,14 @@ class FlangoApp:
                 resp = self._gen_error("Method not allowed", 405)
                 resp['Allow'] = ', '.join([handler.method for handler in matches_path])
                 return resp
-            return self._ambiguous
+            elif len(match_method) > 1:
+                return self._ambiguous
+            else:
+                target = match_method[0]
+        else:
+            # If there's only one match, check the method
+            target = matches_path[0]
 
-        # If there's only one match, check the method
-        target = matches_path[0]
         if target.matches_method(request):
             # We have a match, let's hand if off to the handler
             # for it to parse and execute the request
@@ -181,6 +186,8 @@ class FlangoApp:
     def handle_response(self, resp, name):
         if resp is None:
             return self._gen_error("Not found", 404)
+        if isinstance(resp, HttpResponse):
+            return resp
         if isinstance(resp, str):
             return HttpResponse(resp, content_type="text/plain", status=200)
         if isinstance(resp, dict):

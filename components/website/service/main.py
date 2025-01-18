@@ -61,7 +61,7 @@ def _find_template(
             # if it's a directory, add /index.html
             if os.path.isdir(abs):
                 abs = os.path.join(abs, 'index.html')
-            print(abs)
+            # print(abs)
             return render(request, abs, context)
     return None
 
@@ -89,7 +89,7 @@ def main(_request):
     title = title.replace('/', '.')
     if title == '':
         title = 'main'
-    print("Title:", title)
+    # print("Title:", title)
 
     if _request.path.endswith('/'):
         _request.path += 'index.html'
