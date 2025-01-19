@@ -37,6 +37,13 @@
 			"desc_2": "popular games and a vast community of players!",
 			"gamemodes": "See our Gamemodes"
 	},
+	"login": {
+		"error": {
+			"invalid_credentials": "Invalid username or password",
+			"server_error": "Server error, please try again later",
+			"empty_fields": "Please fill in all fields"
+		}
+	},
 	"gamemode_cards": {
 		"pong_offline": {
 			"title": "Offline Pong",

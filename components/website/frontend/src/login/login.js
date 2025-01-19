@@ -38,7 +38,7 @@ function tryLogin(event) {
 	let password = form.password.value;
 
 	if (username == "" || password == "") {
-		loginWarn("Please enter a valid username and password");
+		loginWarn("{{@ login.error.empty_fields @}}");
 		return;
 	}
 
