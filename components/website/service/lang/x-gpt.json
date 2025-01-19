@@ -17,6 +17,7 @@
 	  "account": "Your VIP Gaming Headquarters"
 	},
 	"button": {
+	  "select": "Choose your poison!",
 	  "theme": "Change the Vibe!",
 	  "login": "Time to Level Up",
 	  "register": "I'm Ready to Rock!",
@@ -46,6 +47,10 @@
 	  "pong_tournament": {
 		"title": "The Pongocalypse Tournament",
 		"desc": "Only the strongest Pong players will survive! Will you be the chosen one or just another statistic?"
+	  },
+	  "pong_crazy": {
+		"title": "Crazy pong",
+		"desc": "A wacky twist on classic Pong! Experience unpredictable ball movements and chaotic gameplay that keeps you on your toes."
 	  }
 	},
 	"placeholders": {

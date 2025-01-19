@@ -13,7 +13,10 @@
 					preload-images="true"
 					class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"
 				>
-					<i class="inline" data-feather="home"></i>{% translate 'button.home' %}
+					<span>
+						<i class="inline" data-feather="home"></i>
+						{% translate 'button.home' %}
+					</span>
 				</button>
 				<button
 					class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
@@ -45,6 +48,63 @@
 						{% translate 'button.login' %}
 					</span>
 				</button>
+			</div>
+			<div id="games">
+				<div class="group relative">
+					<button class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0 w-full">
+						<span>
+							<i class="inline" data-feather="chevron-down"></i>
+							{% translate 'button.select' %}
+						</span>
+					</button>
+					<div class="invisible group-hover:visible absolute flex flex-col rounded-lg overflow-hidden w-full">
+						<button
+						class="btn bg-surface1/90 hover:bg-surface2 rounded-none px-4 ml-auto w-full"
+						hx-get="/games/pong/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/games/pong/"
+						preload="mouseover"
+						preload-images="true"
+						hx-spa-pick="#content"
+						>
+							<span>
+								<i class="inline" data-feather="home"></i>
+								{% translate 'gamemode_cards.pong_offline.title' %}
+							</span>
+						</button>
+						<button
+						class="btn bg-surface1/90 hover:bg-surface2 rounded-none px-4 ml-auto w-full"
+						hx-get="/games/pong-tournament/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/games/pong-tournament/"
+						preload="mouseover"
+						preload-images="true"
+						hx-spa-pick="#content"
+						>
+							<span>
+								<i class="inline" data-feather="home"></i>
+								{% translate 'gamemode_cards.pong_tournament.title' %}
+							</span>
+						</button>
+						<button
+						class="btn bg-surface1/90 hover:bg-surface2 rounded-none px-4 ml-auto w-full"
+						hx-get="/games/pong-crazy/"
+						hx-target="#content"
+						hx-swap="innerHTML"
+						hx-push-url="/games/pong-crazy/"
+						preload="mouseover"
+						preload-images="true"
+						hx-spa-pick="#content"
+						>
+							<span>
+								<i class="inline" data-feather="home"></i>
+								{% translate 'gamemode_cards.pong_crazy.title' %}
+							</span>
+						</button>
+					</div>
+				</div>
 			</div>
 			<div id="customize" class="flex flex-row gap-8">
 				<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i>{% translate 'button.theme' %} </button>

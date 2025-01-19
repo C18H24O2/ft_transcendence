@@ -20,6 +20,7 @@
 		"account": "(ceux qui savent)"
 	},
 	"button": {
+		"select": "Selectionner un Crampté",
 		"theme": "Changer de Mangue",
 		"login": "Apagnan",
 		"register": "Quoicoubeh",
@@ -49,6 +50,10 @@
 		"pong_tournament": {
 			"title": "Tournoi Crampté",
 			"desc": "Jouez contre vos quoicoubebous et devenez le looksmaxxer!"
+		},
+		"pong_crazy": {
+			"title": "Crampté de bz",
+			"desc": "Un crampté sans son quoicoubeh"
 		}
 	},
 	"placeholders": {

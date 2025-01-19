@@ -20,6 +20,7 @@
 		"account": "Cuentas"
 	},
 	"button": {
+		"select": "Selecctionar modos de juego",
 		"theme": "Cambiar tema",
 		"login": "Iniciar sesión",
 		"register": "Registrar",
@@ -49,6 +50,10 @@
 		"pong_tournament": {
 			"title": "Torneo de Pong",
 			"desc": "¡Lucha contra tus amigos y conviértete en el campeón!"
+		},
+		"pong_crazy": {
+			"title": "Pong loco",
+			"desc": "Una versión con errores del juego que nos pareció divertida"
 		}
 	},
 	"placeholders": {

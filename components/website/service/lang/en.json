@@ -20,6 +20,7 @@
 		"account": "Accounts"
 	},
 	"button": {
+		"select": "Select Gamemode",
 		"theme": "Change Theme",
 		"login": "Login",
 		"register": "Register",
@@ -56,6 +57,10 @@
 		"pong_tournament": {
 			"title": "Pong Tournament",
 			"desc": "Battle against your friends and become the champion!"
+		},
+		"pong_crazy": {
+			"title": "Pong crazy",
+			"desc": "Some bugged version of the game we found funny"
 		}
 	},
 	"placeholders": {

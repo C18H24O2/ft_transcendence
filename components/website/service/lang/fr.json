@@ -20,6 +20,7 @@
 		"account": "Comptes"
 	},
 	"button": {
+		"select": "Selectionner mode de jeu",
 		"theme": "Changer de Theme",
 		"login": "Connexion",
 		"register": "S'inscrire",
@@ -49,6 +50,10 @@
 		"pong_tournament": {
 			"title": "Tournoi Pong",
 			"desc": "Jouez contre vos amis et devenez le champion!"
+		},
+		"pong_crazy": {
+			"title": "Pong étrange",
+			"desc": "Une version incorrecte du jeu qui nous a amusés"
 		}
 	},
 	"placeholders": {
