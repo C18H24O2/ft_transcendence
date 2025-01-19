@@ -1,5 +1,6 @@
 // @ts-check
 
+import { startInterval, stopInterval } from '../../../shared.js';
 import { getTheme } from '../../../theme.js'
 import { initShaders } from './webgl-initshader.js';
 import { mat4 } from 'gl-matrix';
@@ -93,13 +94,17 @@ htmx.onLoad(_ => {
 	initDone = false;
 	matchEnded = false;
 	
-	// @ts-ignore
-	canvas = document.getElementById("gameField");
-	// @ts-ignore
-	gl = canvas.getContext("webgl", {alpha: true});
+	try {
+		// @ts-ignore
+		canvas = document.getElementById("gameField");
+		// @ts-ignore
+		gl = canvas.getContext("webgl", {alpha: true});
 
-	scoreP1 = document.getElementById("score-player");
-	scoreP2 = document.getElementById("score-opponent");
+		scoreP1 = document.getElementById("score-player");
+		scoreP2 = document.getElementById("score-opponent");
+	} catch (e) {
+		// :trolleybus:
+	}
 });
 
 
@@ -116,7 +121,13 @@ export function initGame()
 	{
 		currentTheme = getTheme();
 		newTheme = currentTheme;
-		let changeTheme = document.getElementById('change-theme-button');
+		let changeTheme;
+
+		try {
+			changeTheme = document.getElementById('change-theme-button');
+		} catch (ignored) {
+			return;
+		}
 		
 		if (changeTheme)
 		{
@@ -190,12 +201,12 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		drawScene();
 		//debug();
 		if (matchEnded)
-			clearInterval(intervalId);
+			stopInterval(intervalId);
 	}
 	movementProviders.forEach(element => {
 		element.initMovement();
 	});
-	let intervalId = setInterval(render, FRAMERATE);
+	let intervalId = startInterval(render, FRAMERATE);
 }
 
 	//set the paddles and the balls on the field

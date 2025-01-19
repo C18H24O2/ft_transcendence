@@ -4,6 +4,8 @@ import '../../shared.js';
 
 function pong()
 {
+	console.log('pong specifiquement');
+
 	//player names for later
 	let player1 = "player1";
 	let player2 = "player2";
@@ -66,4 +68,5 @@ function pong()
 	start_a_game();
 }
 
+// pong();
 htmx.onLoad(pong);

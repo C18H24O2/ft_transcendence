@@ -16,6 +16,7 @@ function handleBeforeSwap(event) {
 	if (!requestElement) {
 		return;
 	}
+	console.dir(event);
 	/** @type {String} */
 	const serverResponse = event?.detail?.serverResponse;
 	if (!serverResponse) {
@@ -28,6 +29,9 @@ function handleBeforeSwap(event) {
 		if (attr.name === "hx-spa-pick") {
 			target = attr.value;
 		}
+		// if (attr.name === "hx-spa-current") {
+		// 	return;
+		// }
 		if (attr.name === "hx-swap") {
 			swapType = attr.value;
 		}
@@ -36,25 +40,59 @@ function handleBeforeSwap(event) {
 		console.warn("Found hx-spa-pick attribute with undefined target on:", requestElement)
 		return;
 	}
+
 	const parser = new DOMParser();
 	const htmlResponse = parser.parseFromString(serverResponse, 'text/html');
-	const injectedScripts = htmlResponse.querySelectorAll("script");
 	const elem = htmlResponse.querySelector(target);
 	if (!elem) {
 		console.warn(`hx-spa-pick attribute '${target}' was not found.`);
 		return;
 	}
+
+	// console.log("Request element:", requestElement);
+	// const currentElements = document.querySelectorAll("[hx-spa-current]");
+	// for (const elem of currentElements) {
+	// 	elem.removeAttribute("hx-spa-current");
+	// }
+	// requestElement.setAttribute("hx-spa-current", "true");
+
+	if (swapType === "innerHTML") {
+		event.detail.serverResponse = elem.innerHTML;
+	} else if (swapType === "outerHTML") {
+		event.detail.serverResponse = elem.outerHTML;
+	} else {
+		console.warn("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
+	}
+
+	const head = document.querySelector("head");
+	for (const elem of head.querySelectorAll("[x-ft-added]")) {
+		elem.remove();
+	}
+
+	const injectedScripts = htmlResponse.querySelectorAll("script");
 	let scriptHtml = "";
 	for (const script of injectedScripts) {
 		console.log("Injecting script tag: ", script.src);
-		scriptHtml += script.outerHTML;
+		script.setAttribute("x-ft-added", "true");
+		
+		let newScript = document.createElement("script");
+		for (const attr of script.attributes) {
+			newScript.setAttribute(attr.name, attr.value);
+		}
+		newScript.innerHTML = script.innerHTML;
+		head.appendChild(newScript);
 	}
-	if (swapType === "innerHTML") {
-		event.detail.serverResponse = elem.innerHTML + scriptHtml;
-	} else if (swapType === "outerHTML") {
-		event.detail.serverResponse = elem.outerHTML + scriptHtml;
-	} else {
-		console.warn("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
+	const injectedModulePreloads = htmlResponse.querySelectorAll("link[rel='modulepreload']");
+	for (const link of injectedModulePreloads) {
+		console.log("Injecting module preload link: ", link.href);
+		link.setAttribute("x-ft-added", "true");
+
+		let newLink = document.createElement("link");
+		for (const attr of link.attributes) {
+			newLink.setAttribute(attr.name, attr.value);
+		}
+		newLink.href = link.href;
+		head.appendChild(newLink);
 	}
 }
 

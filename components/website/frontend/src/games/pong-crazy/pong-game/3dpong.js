@@ -1,5 +1,6 @@
 // @ts-check
 
+import { startInterval, stopInterval } from '../../../shared.js';
 import { getTheme } from '../../../theme.js'
 import { initShaders } from './webgl-initshader.js';
 import { mat4 } from 'gl-matrix';
@@ -183,12 +184,12 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		drawScene();
 		debug();
 		if (matchEnded)
-			clearInterval(intervalId);
+			stopInterval(intervalId);
 	}
 	movementProviders.forEach(element => {
 		element.initMovement();
 	});
-	let intervalId = setInterval(render, FRAMERATE);
+	let intervalId = startInterval(render, FRAMERATE);
 }
 
 	//set the paddles and the balls on the field

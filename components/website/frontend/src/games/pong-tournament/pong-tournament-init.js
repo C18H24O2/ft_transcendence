@@ -1,3 +1,4 @@
+import { startInterval, stopInterval } from '../../shared.js';
 import { initGame, resetScore } from '../pong/pong-game/3dpong.js';
 import {BASE_PADDLE_SPEED, MAX_BALL_SPEED_MULTIPLIER, MAX_PADDLE_SPEED_MULTIPLIER, speedMult, height, paddleHeight, gameObjects } from './pong-game/3dpong.js'
 import { startMatch } from './pong-game/3dpong.js';
@@ -140,7 +141,7 @@ function pong() {
 								icon: false,
 								type: 'success',
 							});
-							clearInterval(intervalid);
+							stopInterval(intervalid);
 							intervalid = -1;
 							form.style.display = "";
 							playerlist = [...origPlayerlist];
@@ -220,9 +221,9 @@ function pong() {
 			if (countdown === 0)
 			{
 				countdown = TIMEOUT;
-				clearInterval(countdownid);
+				stopInterval(countdownid);
 				startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
-				intervalid = setInterval(pollGame, 1000);
+				intervalid = startInterval(pollGame, 1000);
 				toRemove = [];
 				renderList();
 				form.style.display = "none";
@@ -264,9 +265,9 @@ function pong() {
 			countdown = TIMEOUT;
 			initGame();
 			gameField.scrollIntoView();
-			countdownid = setInterval(tournamentCountdown, 1000);
+			countdownid = startInterval(tournamentCountdown, 1000);
 			htmx.onLoad(e => {
-				clearInterval(intervalid);
+				stopInterval(intervalid);
 			});
 		}
 		window.startTournament = startTournament;
