@@ -61,7 +61,7 @@ function handleBeforeSwap(event) {
 function preventDoubleHistorySave(event) {
 	const path = event?.detail?.path;
 	const currentPath = window.location.pathname;
-	// console.log(`wanting to change from '${currentPath}' to '${path}'`);
+	console.log(`wanting to change from '${currentPath}' to '${path}'`);
 	return (path !== currentPath);
 }
 
@@ -74,6 +74,7 @@ function preventDoubleHistorySave(event) {
  * @returns {boolean} Whether this event should fire
  */
 function spaHandleEvent(name, event) {
+	console.log("Handling event:", name);
 	if (name === "htmx:beforeSwap") {
 		handleBeforeSwap(event);
 	}

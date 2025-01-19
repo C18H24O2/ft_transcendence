@@ -19,7 +19,7 @@
 		<script defer type="module" src="/shared.js"></script>
 	</head>
 
-	<body class="p-0 m-0 font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300 bg-placeholder-pattern bg-auto bg-center min-h-svh md:flex flex-col justify-center items-center">
+	<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300" hx-ext="spa-tools, preload">
 		{% load ft_trans_tags %}
 		<noscript>
 			<div class="flex justify-center items-center w-full h-svh">
@@ -31,8 +31,8 @@
 		</noscript>
 		{% include "__navbar.html" %}
 		<main id="content">
-			<div class="flex justify-center items-center flex-col space-y-[5vh]">
-				<div class="overflow-scroll flex items-center justify-center bg-base w-[60vh] text-[10vh] text-text font-mono h-[20vh] rounded-xl ">
+			<div class="flex justify-between items-center flex-col space-y-[3vh] p-10 bg-placeholder-pattern bg-auto bg-fixed min-h-svh">
+				<div class="overflow-scroll flex items-center justify-center bg-base text-[10vh] text-text font-mono h-[20vh] aspect-[5/2] rounded-xl ">
 					<span id="score-player">000</span> - <span id="score-opponent">000</span>
 				</div>
 				<canvas id="gameField" width="1920" height="1920" style="height: 70vh; width: 70vh;" class="bg-crust text-text rounded-xl p-[1vh]">
