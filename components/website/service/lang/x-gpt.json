@@ -27,13 +27,51 @@
 	  "chat_send": "Send Your Wisdom",
 	  "chat_invite_game": "Challenge Me, Hero!",
 	  "add_player": "Summon a New Challenger",
-	  "start_tournament": "Let the Tournament Begin!"
+	  "start_tournament": "Let the Tournament Begin!",
+	  "remove": "Remove"
 	},
 	"welcome_page": {
 		"title": "Welcome to our Pong-tropolis,",
 		"desc_1": "Prepare yourself for a world where paddles rule, balls fly, and champions rise!",
 	  "desc_2": "Choose your gamemode, and let the epic saga begin. It's not just a game; it's a lifestyle.",
 	  "gamemodes": "Game Modes: Offline, Online, or Tournament of Eternal Glory"
+	},
+	"login": {
+    "error": {
+        "invalid_credentials": "The credentials you provided are invalid. Please try again.",
+        "server_error": "An unexpected error occurred. Please try again later.",
+        "empty_fields": "Please fill in all required fields before proceeding."
+    	}
+	},
+	"tournament": {
+		"success": {
+			"tournament_won": {
+				"title": "🏆 Tournament Champion!",
+				"desc": "Congratulations on the incredible achievement!"
+			}
+		},
+		"info": {
+			"player_won": {
+				"title": "🎉 Match Winner",
+				"desc": "Great performance!"
+			},
+			"match_countdown": {
+				"title": "⏳ Match Starting in"
+			},
+			"tournament_countdown": {
+				"title": "⏳ Tournament Starting in"
+			}
+		},
+		"warning": {
+			"next_match": {
+				"title": "⚠️ Upcoming Match Alert"
+			}
+		},
+		"error": {
+			"player_missing": {
+				"title": "❌ Player Missing"
+			}
+		}
 	},
 	"gamemode_cards": {
 	  "pong_offline": {

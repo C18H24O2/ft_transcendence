@@ -30,13 +30,51 @@
 		"chat_send": "Crampté",
 		"chat_invite_game": "Cramptinviter",
 		"add_player": "Ajouter un crampteur",
-		"start_tournament": "Crampter le Crampté"
+		"start_tournament": "Crampter le Crampté",
+		"remove": "enlever"
 	},
 	"welcome_page": {
 			"title": "Bienvenue sur",
 			"desc_1": "une plateforme pleine de Cramptés populaires",
 			"desc_2": "et une vaste communauté de crampteurs!",
 			"gamemodes": "Voir nos Cramptés"
+	},
+	"login": {
+		"error": {
+			"invalid_credentials": "Mauvais Cramptés",
+			"server_error": "Le crampté Principal fait roooo mimimi",
+			"empty_fields": "oubliez aucun cramptés svp"
+		}
+	},
+	"tournament": {
+		"success": {
+			"tournament_won": {
+				"title": "a gagné ce Tournoi des cramptés",
+				"desc": "ce tournoi crampté s'est fait avoir"
+			}
+		},
+		"info": {
+			"player_won": {
+				"title": "a gagné ce Crampté",
+				"desc": "Prochain Crampté bientot"
+			},
+			"match_countdown": {
+				"title": "Prochain crampté dans"
+			},
+			"tournament_countdown": {
+				"title": "Tournoi crampté dans"
+			}
+		},
+		"warning": {
+			"next_match": {
+				"title": "Le prochain crampté c'est: "
+			}
+		},
+		"error": {
+			"player_missing": {
+				"title": "Le tournoi crampté dois avoir au moins 2 Crampteurs"
+			}
+		}
 	},
 	"gamemode_cards": {
 		"pong_offline": {

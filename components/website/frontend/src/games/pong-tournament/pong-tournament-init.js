@@ -92,7 +92,7 @@ function pong() {
 					extra += " line-through opacity-50";
 				newInnerHTML += `<div class="flex flex-row justify-between align-middle items-center gap-4 p-1${extra}"> <span>${element}</span>`;
 				if (!gameStarted)
-					newInnerHTML += `<button onclick="removeEntry(this)" data-player-index="${i}" class="rounded-full font-semibold px-3 bg-red line-full">Remove</button>`
+					newInnerHTML += `<button onclick="removeEntry(this)" data-player-index="${i}" class="rounded-full font-semibold px-3 bg-red line-full">{{@ button.remove @}}</button>`
 				newInnerHTML += "</div>"
 				i++;
 			}
@@ -133,8 +133,8 @@ function pong() {
 						{
 							butterup.options.toastLife = 15000;
 							butterup.toast({
-								title: `${next_playerlist[0]} has won the tournament!`,
-								message: 'This tournament has now ended.',
+								title: `${next_playerlist[0]} {{@ tournament.success.tournament_won.title @}}`,
+								message: '{{@ tournament.success.tournament_won.desc @}}',
 								location: 'bottom-right',
 								dismissable: true,
 								icon: false,
@@ -161,8 +161,8 @@ function pong() {
 					{
 						toRemove.push(player2);
 						butterup.toast({
-							title: `${player1} has won this match!`,
-							message: 'Next match will start shortly',
+							title: `${player1} {{@ tournament.info.player_won.title @}}`,
+							message: '{{@ tournament.info.player_won.desc @}}',
 							location: 'bottom-right',
 							dismissable: true,
 							icon: false,
@@ -173,8 +173,8 @@ function pong() {
 					{
 						toRemove.push(player1);
 						butterup.toast({
-							title: `${player2} has won this match!`,
-							message: 'Next match will start shortly',
+							title: `${player2} {{@ tournament.info.player_won.title @}}`,
+							message: '{{@ tournament.info.player_won.desc @}}',
 							location: 'bottom-right',
 							dismissable: true,
 							icon: false,
@@ -182,7 +182,7 @@ function pong() {
 						});
 					}
 					butterup.toast({
-						title: 'Next match will be: ',
+						title: '{{@ tournament.warning.next_match.title @}}',
 						message: `${playerlist[0]} vs ${playerlist[1]}`,
 						location: 'bottom-right',
 						dismissable: true,
@@ -191,7 +191,7 @@ function pong() {
 					});
 				}
 				butterup.toast({
-					title: `Next match will start in ${winnerTimeout}..`,
+					title: `{{@ tournament.info.match_countdown.title @}} ${winnerTimeout}..`,
 					message: `${playerlist[0]} vs ${playerlist[1]}`,
 					location: 'bottom-right',
 					dismissable: true,
@@ -230,7 +230,7 @@ function pong() {
 			else
 			{
 				butterup.toast({
-					title: `Tournament starting in ${countdown}..`,
+					title: `{{@ tournament.info.tournament_countdown.title @}} ${countdown}..`,
 					message: `${playerlist[0]} vs ${playerlist[1]}`,
 					location: 'bottom-right',
 					dismissable: true,
@@ -249,7 +249,7 @@ function pong() {
 			if (playerlist.length < 2)
 			{
 				butterup.toast({
-					title: `Tournament must have at least 2 players`,
+					title: `{{@ tournament.error.player_missing.title @}}`,
 					location: 'bottom-right',
 					dismissable: true,
 					icon: false,

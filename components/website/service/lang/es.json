@@ -30,13 +30,51 @@
 		"chat_send": "Enviar",
 		"chat_invite_game": "Invitar",
 		"add_player": "Agregar un jugador",
-		"start_tournament": "Comenzar el torneo"
+		"start_tournament": "Comenzar el torneo",
+		"remove": "Eliminar"
 	},
 	"welcome_page": {
 		"title": "Bienvenido a",
 		"desc_1": "una plataforma de juegos gratuita y de código abierto con",
 		"desc_2": "juegos populares y una vasta comunidad de jugadores.",
 		"gamemodes": "Ver nuestros modos de juego"
+	},
+	"login": {
+		"error": {
+			"invalid_credentials": "Nombre de usuario o contraseña no válidos",
+			"server_error": "Error del servidor, inténtelo de nuevo más tarde",
+			"empty_fields": "Por favor, rellene todos los campos"
+		}
+	},
+	"tournament": {
+		"success": {
+			"tournament_won": {
+				"title": "ha ganado el torneo",
+				"desc": "Este torneo ya ha finalizado."
+			}
+		},
+		"info": {
+			"player_won": {
+				"title": "ha ganado este partido",
+				"desc": "El próximo partido comenzará en breve."
+			},
+			"match_countdown": {
+				"title": "El próximo partido comenzará en"
+			},
+			"tournament_countdown": {
+				"title": "Torneo que comienza en"
+			}
+		},
+		"warning": {
+			"next_match": {
+				"title": "El próximo partido será:"
+			}
+		},
+		"error": {
+			"player_missing": {
+				"title": "El torneo debe tener al menos 2 jugadores."
+			}
+		}
 	},
 	"gamemode_cards": {
 		"pong_offline": {

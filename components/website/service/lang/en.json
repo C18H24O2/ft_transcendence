@@ -30,7 +30,8 @@
 		"chat_send": "Send",
 		"chat_invite_game": "Invite",
 		"add_player": "Add Player",
-		"start_tournament": "Start the tournament"
+		"start_tournament": "Start the tournament",
+		"remove": "remove"
 	},
 	"welcome_page": {
 			"title": "Welcome to",
@@ -43,6 +44,36 @@
 			"invalid_credentials": "Invalid username or password",
 			"server_error": "Server error, please try again later",
 			"empty_fields": "Please fill in all fields"
+		}
+	},
+	"tournament": {
+		"success": {
+			"tournament_won": {
+				"title": "has won the tournament!",
+				"desc": "This tournament has now ended."
+			}
+		},
+		"info": {
+			"player_won": {
+				"title": "has won this match",
+				"desc": "Next match will start shortly"
+			},
+			"match_countdown": {
+				"title": "Next match will start in"
+			},
+			"tournament_countdown": {
+				"title": "Tournament starting in"
+			}
+		},
+		"warning": {
+			"next_match": {
+				"title": "Next match will be: "
+			}
+		},
+		"error": {
+			"player_missing": {
+				"title": "Tournament must have at least 2 players"
+			}
 		}
 	},
 	"gamemode_cards": {
