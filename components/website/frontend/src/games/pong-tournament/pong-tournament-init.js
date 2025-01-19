@@ -229,14 +229,17 @@ function pong() {
 			}
 			else
 			{
-				butterup.toast({
-					title: `{{@ tournament.info.tournament_countdown.title @}} ${countdown}..`,
-					message: `${playerlist[0]} vs ${playerlist[1]}`,
-					location: 'bottom-right',
-					dismissable: true,
-					icon: false,
-					type: 'info',
-				})
+				if (countdown <= 6 && countdown >= 4) {
+				} else {
+					butterup.toast({
+						title: `{{@ tournament.info.tournament_countdown.title @}} ${countdown}..`,
+						message: `${playerlist[0]} vs ${playerlist[1]}`,
+						location: 'bottom-right',
+						dismissable: true,
+						icon: false,
+						type: 'info',
+					})
+				}
 				countdown--;
 			}
 		}
