@@ -8,9 +8,11 @@ from django.urls import re_path
 from .lang import LANGUAGES, get_user_lang, get_translate_function
 import os
 import json
+import re
+import sys
 
 
-DEBUG = True
+DEBUG = False
 SECRET_KEY = os.environ.get('DJANGO_SECRET', get_random_secret_key())
 ROOT_URLCONF = __name__
 
@@ -71,7 +73,6 @@ def find_template(request: HttpRequest, context: dict) -> HttpResponse:
     if template is None:
         template = _find_template(request, context=context, path='404.html')
         if template is None:
-            import json
             return HttpResponse(
                 json.dumps({'error': 'Not found', 'status': 404}), # mypy: ignore
                 status=404,
@@ -82,6 +83,12 @@ def find_template(request: HttpRequest, context: dict) -> HttpResponse:
 
 def main(_request):
     title = _request.path
+    if title.endswith('.html'):
+        return HttpResponse(
+            json.dumps({'error': 'Not found', 'status': 404}), # mypy: ignore
+            status=404,
+            content_type='text/json'
+        )
     if title.startswith('/'):
         title = title[1:]
     if title.endswith('/'):
@@ -89,7 +96,7 @@ def main(_request):
     title = title.replace('/', '.')
     if title == '':
         title = 'main'
-    # print("Title:", title)
+    # print("Title:", title, file=sys.stderr)
 
     if _request.path.endswith('/'):
         _request.path += 'index.html'
@@ -105,6 +112,20 @@ def main(_request):
     }
 
     return find_template(_request, context)
+
+
+def process_the_shit_out_of_it(req: HttpRequest, contents: str) -> str:
+    pattern = r"\{\{@\s*(.*?)\s*@\}\}"
+
+    user_lang = get_user_lang(req)
+    translate = get_translate_function(user_lang)
+
+    def replace_match(match):
+        captured_group = match.group(1)
+        return translate(captured_group)
+
+    return re.sub(pattern, replace_match, contents)
+
 
 def fetch_resource_dumb(request, idk):
     for search_path in STATICFILES_DIRS:
@@ -139,7 +160,11 @@ def fetch_resource_dumb(request, idk):
                 type = 'font/otf'
             try:
                 with open(abs, 'rb') as f:
-                    return HttpResponse(f.read(), content_type=type)
+                    contents = f.read()
+                    if type.startswith('text/'):
+                        contents = contents.decode('utf-8')
+                        contents = process_the_shit_out_of_it(request, contents)
+                    return HttpResponse(contents, content_type=type)
             except Exception:
                 pass
     return HttpResponse(
