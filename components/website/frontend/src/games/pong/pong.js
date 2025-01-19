@@ -1,16 +1,5 @@
-import { 
-		startMatch,
-		matchEnded,
-		matchInProgress,
-		setEnd,
-		setProgress
-		} from "./pong-game/3dpong";
-
-import {
-		PlayerMovementProvider,
-		AiMovementProvider,
-		movePlayers
-		} from "./pong-game/pongNewMovement";
+import { startMatch } from "./pong-game/3dpong";
+import { PlayerMovementProvider, AiMovementProvider, movePlayers } from "./pong-game/pongNewMovement";
 import '../../shared.js';
 
 function pong()
@@ -24,7 +13,7 @@ function pong()
 	let player2_type = true;
 
 	let SCORE_TO_WIN = 0;
-	let intervalId = -1;
+	
 
 	/**
 	 * 
@@ -56,10 +45,6 @@ function pong()
 
 	function start_a_game()
 	{
-		if (intervalId != -1)
-		{
-			clearInterval(intervalId);
-		}
 		let player1_provider;
 		let player2_provider;
 
@@ -73,9 +58,11 @@ function pong()
 		else
 			player2_provider = new AiMovementProvider("paddle2");
 
-		intervalId = startMatch(player1, player2, SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
+		startMatch(player1, player2, SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
 	}
 	window.start_a_game = start_a_game;
+
+
 	start_a_game();
 }
 

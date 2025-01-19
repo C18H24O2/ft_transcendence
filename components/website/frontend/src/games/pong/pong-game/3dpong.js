@@ -77,12 +77,7 @@ const cameraDistance = (width / Math.tan(fieldOfView / 2)) + paddleDepth;
 // for the view switch between 3d and 2d
 let view = true;
 let initDone = false;
-export let matchEnded = false;
-
-/**
- * @param {boolean} value 
-*/
-export function setEnd(value) { matchEnded = value; }
+let matchEnded = false;
 
 // Values for the game difficulty ramp up and reset
 export let speedMult = 1; //Multiplier for speed, increases
@@ -164,10 +159,10 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 	if (!gl)
 	{
 		console.warn('Your browser does not support webgl, consider using a different browser to access this functionnality');
-		return -1;
+		return;
 	}
 	if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(playerMoveFunc) != "function" || playerMoveFunc.length == 0 || typeof(movementProviders) != "object")
-		return -1;
+		return;
 	initGame();
 	resetMatch(1, movementProviders);
 
@@ -195,15 +190,12 @@ export function startMatch(player1 = "player1", player2 = "player2", max_score =
 		drawScene();
 		//debug();
 		if (matchEnded)
-		{
 			clearInterval(intervalId);
-		}		
 	}
 	movementProviders.forEach(element => {
 		element.initMovement();
 	});
 	let intervalId = setInterval(render, FRAMERATE);
-	return intervalId;
 }
 
 	//set the paddles and the balls on the field
