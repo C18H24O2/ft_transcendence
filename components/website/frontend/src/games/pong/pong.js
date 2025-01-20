@@ -1,5 +1,5 @@
-import { startMatch } from "./pong-game/3dpong";
-import { PlayerMovementProvider, AiMovementProvider, movePlayers } from "./pong-game/pongNewMovement";
+import { PongGame } from "./pong-game/3dpong.js";
+import { PlayerMovementProvider, AiMovementProvider } from "./pong-game/pongNewMovement";
 import '../../shared.js';
 
 function pong()
@@ -13,7 +13,7 @@ function pong()
 	let player2_type = true;
 
 	let SCORE_TO_WIN = 0;
-	
+	let pongInstance = PongGame.create("gameField", "score-player1", "score-player2", "change-theme-button");
 
 	/**
 	 * 
@@ -45,6 +45,11 @@ function pong()
 
 	function start_a_game()
 	{
+		if (pongInstance === null)
+		{
+			console.warn("you pong instance is invalid");
+			return;
+		}
 		let player1_provider;
 		let player2_provider;
 
@@ -58,11 +63,9 @@ function pong()
 		else
 			player2_provider = new AiMovementProvider("paddle2");
 
-		startMatch(player1, player2, SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
+		pongInstance.startMatch(player1, player2, SCORE_TO_WIN, [player1_provider, player2_provider]);
 	}
 	window.start_a_game = start_a_game;
-
-
 	start_a_game();
 }
 

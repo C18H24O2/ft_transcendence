@@ -1,7 +1,5 @@
-import { initGame, resetScore } from '../pong/pong-game/3dpong.js';
-import {BASE_PADDLE_SPEED, MAX_BALL_SPEED_MULTIPLIER, MAX_PADDLE_SPEED_MULTIPLIER, speedMult, height, paddleHeight, gameObjects } from './pong-game/3dpong.js'
-import { startMatch } from './pong-game/3dpong.js';
-import { PlayerMovementProvider, AiMovementProvider, movePlayers } from "./pong-game/pongNewMovement";
+import { PongGame } from "./pong-game/3dpong";
+import { PlayerMovementProvider } from "./pong-game/pongNewMovement";
 import butterup from 'butteruptoasts';
 
 const TIMEOUT = 7;
@@ -15,6 +13,7 @@ function pong() {
 
 	let player1_provider = new PlayerMovementProvider({83: 0, 87: 1}, "paddle1");
 	let player2_provider = new PlayerMovementProvider({40: 0, 38: 1}, "paddle2");
+	let pongInstance = PongGame.create("gameField", "score-player1", "score-player2", "change-theme-button");
 
 	const SCORE_TO_WIN = 5;
 
@@ -107,12 +106,13 @@ function pong() {
 		{
 			let winner;
 
-			if (gameObjects.paddle1.score < SCORE_TO_WIN && gameObjects.paddle2.score < SCORE_TO_WIN)
+			if (pongInstance.gameObjects.paddle1.score < SCORE_TO_WIN && pongInstance.gameObjects.paddle2.score < SCORE_TO_WIN)
 				return;
 			if (winnerTimeout > 0) {
 				if (winnerTimeout == TIMEOUT) {
 
-					if (gameObjects.paddle1.score >= SCORE_TO_WIN)
+					pongInstance.stopMatch();
+					if (pongInstance.gameObjects.paddle1.score >= SCORE_TO_WIN)
 						winner = 1;
 					else
 						winner = 2;
@@ -205,10 +205,10 @@ function pong() {
 			} else {
 				winnerTimeout = TIMEOUT;
 				renderList();
-				resetScore();
+				pongInstance.resetScore();
 				player1_provider.destroyMovement();
 				player2_provider.destroyMovement();
-				startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
+				pongInstance.startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, [player1_provider, player2_provider]);
 			}
 		}
 
@@ -221,7 +221,7 @@ function pong() {
 			{
 				countdown = TIMEOUT;
 				clearInterval(countdownid);
-				startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, movePlayers, [player1_provider, player2_provider]);
+				pongInstance.startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, [player1_provider, player2_provider]);
 				intervalid = setInterval(pollGame, 1000);
 				toRemove = [];
 				renderList();
@@ -248,6 +248,11 @@ function pong() {
 		{
 			butterup.options.toastLife = 8000;
 			if (intervalid != -1) return;
+			if (pongInstance === null)
+			{
+				console.warn('your pong instance is invalid');
+				return;
+			}
 			playerlist = [...origPlayerlist];
 			if (playerlist.length < 2)
 			{
@@ -262,7 +267,6 @@ function pong() {
 			}
 			winnerTimeout = TIMEOUT;
 			countdown = TIMEOUT;
-			initGame();
 			gameField.scrollIntoView();
 			countdownid = setInterval(tournamentCountdown, 1000);
 			htmx.onLoad(e => {

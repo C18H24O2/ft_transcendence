@@ -1,69 +1,17 @@
 // @ts-check
-
-import { 
-	BASE_PADDLE_SPEED, 
-	MAX_BALL_SPEED_MULTIPLIER, 
-	MAX_PADDLE_SPEED_MULTIPLIER, 
-	speedMult, 
-	height, 
-	width, 
-	paddleHeight, 
-	paddleWidth, 
-	ballSize, 
-} from './3dpong.js'
-
-import { gameObjects } from './3dpong.js';
+import { PongGame } from './3dpong.js';
 import { GameObject } from './pong-classes.js';
-
-export function movePlayers(deltaTime, movementProviders)
-{
-	const speed = (BASE_PADDLE_SPEED * (1 + ((speedMult / MAX_BALL_SPEED_MULTIPLIER) * MAX_PADDLE_SPEED_MULTIPLIER)) * (deltaTime / 10));
-	const limit = height - paddleHeight;
-
-	if (movementProviders[0].key_values[0] != movementProviders[0].key_values[1])
-	{
-		if (movementProviders[0].key_values[0] && gameObjects[movementProviders[0].paddle_name].y > -limit)
-		{
-			let paddle = gameObjects[movementProviders[0].paddle_name];
-			paddle.move([0, -speed, 0]);
-			if (paddle.y < -limit)
-				paddle.setPos([paddle.x, -limit, paddle.z]);
-		}
-		if (movementProviders[0].key_values[1] && gameObjects[movementProviders[0].paddle_name].y < limit)
-		{
-			let paddle = gameObjects[movementProviders[0].paddle_name];
-			paddle.move([0, speed, 0]);
-			if (paddle.y > limit)
-				paddle.setPos([paddle.x, limit, paddle.z]);
-		}
-	}
-	if (movementProviders[1].key_values[0] != movementProviders[1].key_values[1])
-	{
-		if (movementProviders[1].key_values[0] && gameObjects[movementProviders[1].paddle_name].y > -limit)
-		{
-			let paddle = gameObjects[movementProviders[1].paddle_name];
-			paddle.move([0, -speed, 0]);
-			if (paddle.y < -limit)
-				paddle.setPos([paddle.x, -limit, paddle.z]);
-		}
-		if (movementProviders[1].key_values[1] && gameObjects[movementProviders[1].paddle_name].y < limit)
-		{
-			let paddle = gameObjects[movementProviders[1].paddle_name];
-			paddle.move([0, speed, 0]);
-			if (paddle.y > limit)
-				paddle.setPos([paddle.x, limit, paddle.z]);
-		}
-	}
-}
 
 /**
  * @prop {String} paddle_name
  * @prop {[boolean, boolean]} key_values
+ * @prop {PongGame} boundPong
  */
 export class MovementProvider
 {
-	constructor(paddle_name = "paddle1")
+	constructor(paddle_name = "paddle1", boundPong)
 	{
+		this.boundPong = boundPong;
 		this.paddle_name = paddle_name;
 		this.key_values = [false, false];
 	}
@@ -90,9 +38,9 @@ export class MovementProvider
  */
 export class PlayerMovementProvider extends MovementProvider
 {
-	constructor(keymap, paddle_name)
+	constructor(keymap, paddle_name, boundPong)
 	{
-		super(paddle_name);
+		super(paddle_name, boundPong);
 		if (typeof(keymap) == 'object')
 		{
 			this.keymap = keymap;
@@ -130,54 +78,15 @@ export class PlayerMovementProvider extends MovementProvider
 	}
 }
 
-function moveBall(deltaTime, ball)
-{
-	let movementX = speedMult * ball.speedX * (deltaTime / 10);
-	let movementY = speedMult * ball.speedY * (deltaTime / 10);
-
-	const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / ballSize);
-	const stepX = movementX / steps;
-	const stepY = movementY / steps;
-
-	for (let i = 0; i < steps; i++)
-	{
-		ball.move([stepX, stepY, 0]);
-		if (ballCollideFake(ball)) {
-			break;
-		}
-	}
-}
-
-function ballCollideFake(ball)
-{
-
-	const limit = width - (2 * paddleWidth);
-	const ballXSide = Math.abs(ball.x) + ballSize;
-	const ballYSide = Math.abs(ball.y) + ballSize;
-
-	if (ballXSide >= limit)
-	{
-		ball.speedX *= -1;
-		return true;
-	}
-	if (ballYSide >= height)
-	{
-		ball.setPos([ball.x, (height - ballSize) * Math.sign(ball.y), ball.z]);
-		ball.speedY = -ball.speedY;
-		return (true);
-	}
-	return (false);
-}
-
 /**
  * @prop {Number} polling_id
  * @prop {Array} current_representation
  */
 export class AiMovementProvider extends MovementProvider
 {
-	constructor(paddle_name)
+	constructor(paddle_name, boundPong)
 	{
-		super(paddle_name);
+		super(paddle_name, boundPong);
 		this.current_paddle_pos = 0;
 		this.ball = new GameObject(null, 0, 0, 0);
 		this.then = Date.now();
@@ -190,9 +99,9 @@ export class AiMovementProvider extends MovementProvider
 	}
 	updateObjects()
 	{
-		this.current_paddle_pos = gameObjects[this.paddle_name].y;
-		this.ball.x = gameObjects.ball.x;
-		this.ball.y = gameObjects.ball.y;
+		this.current_paddle_pos = this.boundPong.gameObjects[this.paddle_name].y;
+		this.ball.x = this.boundPong.gameObjects.ball.x;
+		this.ball.y = this.boundPong.gameObjects.ball.y;
 		// @ts-ignore
 		this.ball.speedX = gameObjects.ball.speedX;
 		// @ts-ignore
@@ -210,8 +119,8 @@ export class AiMovementProvider extends MovementProvider
 			this.last_update = now;
 			this.updateObjects();
 		}
-		const speed = (BASE_PADDLE_SPEED * (1 + ((speedMult / MAX_BALL_SPEED_MULTIPLIER) * MAX_PADDLE_SPEED_MULTIPLIER)) * (deltaTime / 10));
-		const limit = height - paddleHeight;
+		const speed = (this.boundPong.BASE_PADDLE_SPEED * (1 + ((this.boundPong.speedMult / this.boundPong.MAX_BALL_SPEED_MULTIPLIER) * this.boundPong.MAX_PADDLE_SPEED_MULTIPLIER)) * (deltaTime / 10));
+		const limit = this.boundPong.height - this.boundPong.paddleHeight;
 		
 		if (this.key_values[0] == true)
 		{
@@ -226,14 +135,14 @@ export class AiMovementProvider extends MovementProvider
 				this.current_paddle_pos = limit;
 		}
 		
-		moveBall(deltaTime, this.ball);
+		this.moveBall(deltaTime);
 
-		if (this.ball.y <= this.current_paddle_pos - paddleHeight / 10)
+		if (this.ball.y <= this.current_paddle_pos - this.boundPong.paddleHeight / 10)
 		{
 			this.key_values[0] = true;
 			this.key_values[1] = false;
 		}
-		else if (this.ball.y > this.current_paddle_pos + paddleHeight / 10)
+		else if (this.ball.y > this.current_paddle_pos + this.boundPong.paddleHeight / 10)
 		{
 			this.key_values[1] = true;
 			this.key_values[0] = false;
@@ -251,15 +160,59 @@ export class AiMovementProvider extends MovementProvider
 		// gameObjects.my_ball.speedY = this.ball.speedY;
 		// gameObjects.my_paddle.setPos([gameObjects.my_paddle.x, this.current_paddle_pos, 0]);
 	}
+
+	moveBall(deltaTime)
+	{
+		// @ts-ignore
+		let movementX = this.boundPong.speedMult * this.ball.speedX * (deltaTime / 10);
+		// @ts-ignore
+		let movementY = this.boundPong.speedMult * this.ball.speedY * (deltaTime / 10);
+
+		const steps = Math.ceil(Math.max(Math.abs(movementX), Math.abs(movementY)) / this.boundPong.ballSize);
+		const stepX = movementX / steps;
+		const stepY = movementY / steps;
+
+		for (let i = 0; i < steps; i++)
+		{
+			this.ball.move([stepX, stepY, 0]);
+			if (this.ballCollideFake()) {
+				break;
+			}
+		}
+	}
+
+	ballCollideFake()
+	{
+
+		const limit = this.boundPong.width - (2 * this.boundPong.paddleWidth);
+		const ballXSide = Math.abs(this.ball.x) + this.boundPong.ballSize;
+		const ballYSide = Math.abs(this.ball.y) + this.boundPong.ballSize;
+
+		if (ballXSide >= limit)
+		{
+			// @ts-ignore
+			this.ball.speedX *= -1;
+			return true;
+		}
+		if (ballYSide >= this.boundPong.height)
+		{
+			this.ball.setPos([this.ball.x, (this.boundPong.height - this.boundPong.ballSize) * Math.sign(this.ball.y), this.ball.z]);
+			// @ts-ignore
+			this.ball.speedY = -this.ball.speedY;
+			return (true);
+		}
+		return (false);
+	}
+
 	resetPlayer()
 	{
 		this.then = Date.now();
 		this.current_paddle_pos = 0;
 		this.ball.setPos([0, 0, 0])
 		// @ts-ignore
-		this.ball.speedX = gameObjects.ball.speedX;
+		this.ball.speedX = this.boundPong.gameObjects.ball.speedX;
 		// @ts-ignore
-		this.ball.speedY = gameObjects.ball.speedY;
+		this.ball.speedY = this.boundPong.gameObjects.ball.speedY;
 		this.key_values = [false, false];
 	}
 }
