@@ -8,6 +8,9 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 blocked_users = {} 
 ROOM_NAME = "chat_transcendence-internal00000000000000000000" # gros fix la ouais
 connected = {}
+connected_user = [
+    {"id": ROOM_NAME, "username": "General"},
+]
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -28,6 +31,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 connected.pop(self.username)
             else:
                 connected[self.username] = num_conns - 1
+        connected_user.remove({"id": self.channel_name, "username": self.username})
             
         try:
             # Leave room group
@@ -42,6 +46,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self._error("Invalid JSON message, missing 'type' datafield")
             return
     
+        await self._send_user_list()
         message_type = text_data_json["type"]
         if message_type == "chat.message" or message_type == "chat.invite":
             await self._handle_message(text_data_json)
@@ -55,6 +60,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self._error("Already authenticated, what?")
             return
         global connected
+        global connected_user
 
         #TODO: do auth
         #AuthService.is_valid(data.token)
@@ -68,6 +74,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if self.username in connected:
             n = connected[self.username]
         connected[self.username] = n + 1
+        connected_user.append({"id": self.channel_name, "username": self.username})
 
         print("auth user :D", data)
         print("auth user :D", data, file=sys.stderr)
@@ -133,11 +140,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({"message": message}))
 
     async def _send_user_list(self):
-        user_list = [
-            {"id": "user1", "username": "Alice"},
-            {"id": "user2", "username": "Bob"},
-        ]  #TODO change to actual connected user
+        global connected_user
         await self.send(text_data=json.dumps({
             "type": "user_list",
-            "user_list": user_list
+            "user_list": connected_user
         }))
+        #await self.channel_layer.group_send(
+        #    ROOM_NAME, {"type": "chat.message", "user_list": connected_user}
+        #)

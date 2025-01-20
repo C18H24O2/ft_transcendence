@@ -31,8 +31,10 @@ function updateFriendList(userList) {
 		li.dataset.userId = user.id;
 
 		li.addEventListener('click', () => {
+			if (li.dataset.userId != "chat_transcendence-internal00000000000000000000") {
 				message.value = `/mp ${user.username} `;
 				message.focus();
+			}
 		});
 		friendList.appendChild(li);
     });
