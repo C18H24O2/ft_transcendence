@@ -15,11 +15,9 @@ connected_user = [
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.authenticated = False
-
         await self.accept()
-        #await self.send_user_list()
-        #add self to database(username+ channel_name)
 
+###         disconnection protocol          ###
     async def disconnect(self, close_code):
         if self.authenticated:
             global connected
@@ -31,7 +29,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 connected.pop(self.username)
             else:
                 connected[self.username] = num_conns - 1
-        connected_user.remove({"id": self.channel_name, "username": self.username})
+            connected_user.remove({"id": self.channel_name, "username": self.username})
+            del blocked_users[self.username]
             
         try:
             # Leave room group
@@ -39,6 +38,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             print("what?", e)
 
+###         received message          ###
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         if "type" not in text_data_json:
@@ -55,6 +55,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         else:
             await self._error(f"Invalid message type '{message_type}'")
 
+###         authentification protocol          ###
     async def _authenticate(self, data):
         if self.authenticated:
             await self._error("Already authenticated, what?")
@@ -75,6 +76,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             n = connected[self.username]
         connected[self.username] = n + 1
         connected_user.append({"id": self.channel_name, "username": self.username})
+        blocked_users[self.username] = []
 
         print("auth user :D", data)
         print("auth user :D", data, file=sys.stderr)
@@ -83,6 +85,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.username, self.channel_name)
         await self._send_user_list()
 
+###         handling message and command          ###
     async def _handle_message(self, text_data):
         if not self.authenticated:
             await self._error("Unauthenticated action")
@@ -95,12 +98,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if message.startswith("/"):
             # Send private message
             command = message[1:]
-            try:
-                cmd, target, extra = command.split(" ", 2)
-                #await self._send_message(f"{cmd} to {target} with '{extra}'")
-                await self._handle_command(cmd, target, extra)
-            except Exception as e:
-                await self._error("Not enought arguments", disconnect=False)
+            parts = command.split(" ", 2)
+            cmd = parts[0]
+            target = parts[1] if len(parts) > 1 else ""
+            extra = parts[2] if len(parts) > 2 else ""
+            await self._handle_command(cmd, target, extra)
         else:
             # Send message to room group
             await self._send_message(self.username + ': ' + message + "\n")
@@ -109,7 +111,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if cmd == 'mp' or cmd == 'msg':
             await self._send_message_to(target, extras)
         elif cmd == 'block' or cmd == 'ignore':
-            pass
+            await self._block_user(target)
+        elif cmd == 'unblock':
+            await self._unblock_user(target)
         else:
             await self._error(f"Unknown command '{cmd}'", disconnect=False)
 
@@ -119,12 +123,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def _send_message_to(self, target, message):
-        await self.channel_layer.group_add(target, self.channel_name)
-        message = 'Msg from ' + self.username + ': ' + message
-        await self.channel_layer.group_send(
-            target, {"type": "chat.message", "message": message}
-        )
-        await self.channel_layer.group_discard(target, self.channel_name)
+        global connected_user
+        if not any(user["username"] == target for user in connected_user):
+            await self.send(text_data=json.dumps({"message": "User don't existe or is not connected"}))
+        elif self.username in blocked_users[target]:
+            await self.send(text_data=json.dumps({"message": f"You're blocked by '{target}'"}))
+        else:
+            await self.channel_layer.group_add(target, self.channel_name)
+            message = 'Msg from ' + self.username + ': ' + message
+            await self.channel_layer.group_send(
+                target, {"type": "chat.message", "message": message}
+            )
+            await self.channel_layer.group_discard(target, self.channel_name)
 
     async def _error(self, error_message, disconnect=True):
         await self.send(text_data=json.dumps({"message": error_message}))
@@ -139,6 +149,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Send message to WebSocket
         await self.send(text_data=json.dumps({"message": message}))
 
+    async def _block_user(self, blocked):
+        global blocked_users
+        global connected_user
+        if not any(user["username"] == blocked for user in connected_user):
+            await self.send(text_data=json.dumps({"message": "User don't existe or is not connected"}))
+
+        if blocked not in blocked_users[self.username]:
+            blocked_users[self.username].append(blocked)
+
+    async def _unblock_user(self, blocked):
+        global blocked_users
+        global connected_user
+        if not any(user["username"] == blocked for user in connected_user):
+            await self.send(text_data=json.dumps({"message": "User don't existe or is not connected"}))
+
+        if blocked in blocked_users[self.username]:
+            blocked_users[self.username].remove(blocked)
+
+###         utility          ###
     async def _send_user_list(self):
         global connected_user
         await self.send(text_data=json.dumps({
@@ -146,5 +175,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "user_list": connected_user
         }))
         #await self.channel_layer.group_send(
-        #    ROOM_NAME, {"type": "chat.message", "user_list": connected_user}
+        #    ROOM_NAME, {"type": "user_list", "user_list": connected_user}
         #)
