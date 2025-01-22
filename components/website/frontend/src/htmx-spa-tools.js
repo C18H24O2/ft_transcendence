@@ -33,7 +33,7 @@ function handleBeforeSwap(event) {
 		}
 	}
 	if (target === undefined) {
-		console.warn("Found hx-spa-pick attribute with undefined target on:", requestElement)
+		console.log("Found hx-spa-pick attribute with undefined target on:", requestElement)
 		return;
 	}
 	const parser = new DOMParser();
@@ -41,28 +41,56 @@ function handleBeforeSwap(event) {
 	const injectedScripts = htmlResponse.querySelectorAll("script");
 	const elem = htmlResponse.querySelector(target);
 	if (!elem) {
-		console.warn(`hx-spa-pick attribute '${target}' was not found.`);
+		console.log(`hx-spa-pick attribute {target}' was not found.`);
 		return;
 	}
-	let scriptHtml = "";
+	const scripts = [];
 	for (const script of injectedScripts) {
-		console.log("Injecting script tag: ", script.src);
-		scriptHtml += script.outerHTML;
+		// console.log("Injecting script tag: ", script.src);
+		let newNode = document.createElement("script");
+		for (const attr of script.attributes) {
+			newNode.setAttribute(attr.name, attr.value);
+		}
+		newNode.setAttribute("x-ft-injected", "true");
+		newNode.textContent = script.textContent;
+		scripts.push(newNode);
 	}
 	if (swapType === "innerHTML") {
-		event.detail.serverResponse = elem.innerHTML + scriptHtml;
+		event.detail.serverResponse = elem.innerHTML;
 	} else if (swapType === "outerHTML") {
-		event.detail.serverResponse = elem.outerHTML + scriptHtml;
+		event.detail.serverResponse = elem.outerHTML;
 	} else {
-		console.warn("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
+		console.log("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
+	}
+	for (const toRemove of document.querySelectorAll("[x-ft-injected]")) {
+		toRemove.remove();
+	}
+	for (const tag of scripts) {
+		document.head.appendChild(tag);
 	}
 }
 
 function preventDoubleHistorySave(event) {
 	const path = event?.detail?.path;
 	const currentPath = window.location.pathname;
-	console.log(`wanting to change from '${currentPath}' to '${path}'`);
+	// console.log(`wanting to change from '${currentPath}' to '${path}'`);
 	return (path !== currentPath);
+}
+
+function cancelDoubleReq(event) {
+	const pathTarget = event?.detail?.path;
+	// console.log("pathTarget:", pathTarget);
+	// console.log("Event:", event);
+	if (pathTarget) {
+		const currentPath = window.location.pathname;
+		// console.log(`wanting to change from '${currentPath}' to '${pathTarget}'`);
+		if (pathTarget === currentPath) {
+			// console.log("canceling");
+			event.preventDefault();
+			return false;
+		}
+	}
+	return true;
 }
 
 /**
@@ -74,7 +102,10 @@ function preventDoubleHistorySave(event) {
  * @returns {boolean} Whether this event should fire
  */
 function spaHandleEvent(name, event) {
-	console.log("Handling event:", name);
+	// console.log(name, event);
+	if (name === "htmx:confirm") {
+		return cancelDoubleReq(event);
+	}
 	if (name === "htmx:beforeSwap") {
 		handleBeforeSwap(event);
 	}

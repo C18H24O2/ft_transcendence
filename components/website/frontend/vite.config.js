@@ -36,7 +36,7 @@ export default defineConfig(async ({ _, __ }) => {
       ViteMinifyPlugin({}),
     ],
     root: root,
-    base: '',
+    base: '/',
     publicDir: 'static',
     build: {
       assetsDir: 'static',
