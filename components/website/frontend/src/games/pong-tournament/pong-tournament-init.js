@@ -263,15 +263,12 @@ function pong() {
 					icon: false,
 					type: 'error',
 				});
-				return ("must at least have 2 players");
+				return;
 			}
 			winnerTimeout = TIMEOUT;
 			countdown = TIMEOUT;
 			gameField.scrollIntoView();
 			countdownid = setInterval(tournamentCountdown, 1000);
-			htmx.onLoad(e => {
-				clearInterval(intervalid);
-			});
 		}
 		window.startTournament = startTournament;
 	}

@@ -47,7 +47,7 @@ function pong()
 	{
 		if (pongInstance === null)
 		{
-			console.warn("you pong instance is invalid");
+			console.warn("your pong instance is invalid");
 			return;
 		}
 		let player1_provider;
