@@ -4,6 +4,7 @@ import json
 import uuid
 
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.layers import get_channel_layer
 
 blocked_users = {}
 ROOM_NAME = "chat_transcendence-internal00000000000000000000"
@@ -172,11 +173,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
 ###         utility          ###
     async def _send_user_list(self):
         global connected_user
-        await self.send(text_data=json.dumps({
-            "type": "user_list",
-            "user_list": connected_user
-        }))
+        #await self.send(text_data=json.dumps({
+        #    "type": "user_list",
+        #    "user_list": connected_user
+        #}))
+        channel_layer = get_channel_layer()
+        for user in connected_user:
+            name = user["id"]
+            await channel_layer.send(name, {
+                "type": "user_list",
+                "user_list": connected_user
+            })
         # await self.channel_layer.group_send(
         #     ROOM_NAME,
         #     {"type": "user_list", "user_list": connected_user}
         # )
+    async def user_list(self, event):
+        user_list = event["user_list"]
+        # Send the user list to the WebSocket
+        await self.send(text_data=json.dumps({
+            "type": "user_list",
+            "user_list": user_list,
+        }))

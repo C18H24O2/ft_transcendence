@@ -41,15 +41,6 @@ body {
     cursor: pointer;
 }
 
-#profile-btn {
-    width: 100%;
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    height: 30px;
-    box-sizing: border-box;
-}
-
 /* Friend list styling */
 #friend-list {
     width: 120px;
@@ -94,16 +85,6 @@ body {
 
 #friend-list ul li:hover {
     background: #d1d1d1;
-}
-
-/* Unread message dot */
-#friend-list ul li .unread-dot {
-    width: 8px;
-    height: 8px;
-    background: red;
-    border-radius: 50%;
-    margin-left: 5px;
-    display: none; /* Initially hidden */
 }
 
 #invite-btn {

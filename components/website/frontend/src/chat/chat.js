@@ -89,7 +89,3 @@ invite.onclick = function(e) {
         'message': "/mp <idk> Let's play pong! https://<host>/games/pong/<random room id>"
     }));
 };
-profile.onclick = function(e) {
-    /*placeholder for redirection to user profile*/
-};
-
