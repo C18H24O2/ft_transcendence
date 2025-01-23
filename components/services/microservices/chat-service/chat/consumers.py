@@ -5,12 +5,13 @@ import uuid
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-blocked_users = {} 
-ROOM_NAME = "chat_transcendence-internal00000000000000000000" # gros fix la ouais
+blocked_users = {}
+ROOM_NAME = "chat_transcendence-internal00000000000000000000"
 connected = {}
 connected_user = [
     {"id": ROOM_NAME, "username": "General"},
 ]
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -31,7 +32,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 connected[self.username] = num_conns - 1
             connected_user.remove({"id": self.channel_name, "username": self.username})
             del blocked_users[self.username]
-            
+
         try:
             # Leave room group
             await self.channel_layer.group_discard(ROOM_NAME, self.channel_name)
@@ -45,7 +46,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             #            await self._error(str(text_data_json), disconnect=False)
             await self._error("Invalid JSON message, missing 'type' datafield")
             return
-    
+
         await self._send_user_list()
         message_type = text_data_json["type"]
         if message_type == "chat.message" or message_type == "chat.invite":
@@ -66,7 +67,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         #TODO: do auth
         #AuthService.is_valid(data.token)
         #user = UserService.get_user(data.token)
-
 
         self.authenticated = True
         self.username = str(uuid.uuid4()) #"USER OUAISSSS" #TODO: get actual username from userservice
@@ -118,6 +118,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self._error(f"Unknown command '{cmd}'", disconnect=False)
 
     async def _send_message(self, message):
+        print("send message", message, file=sys.stderr)
         await self.channel_layer.group_send(
             ROOM_NAME, {"type": "chat.message", "message": message}
         )
@@ -129,6 +130,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         elif self.username in blocked_users[target]:
             await self.send(text_data=json.dumps({"message": f"You're blocked by '{target}'"}))
         else:
+            assert self.channel_layer is not None
             await self.channel_layer.group_add(target, self.channel_name)
             message = 'Msg from ' + self.username + ': ' + message
             await self.channel_layer.group_send(
@@ -174,6 +176,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "type": "user_list",
             "user_list": connected_user
         }))
-        #await self.channel_layer.group_send(
-        #    ROOM_NAME, {"type": "user_list", "user_list": connected_user}
-        #)
+        # await self.channel_layer.group_send(
+        #     ROOM_NAME,
+        #     {"type": "user_list", "user_list": connected_user}
+        # )

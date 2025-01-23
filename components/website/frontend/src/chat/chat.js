@@ -54,9 +54,12 @@ chatSocket.onmessage = function(e) {
 	if (data.type === 'user_list') {
         updateFriendList(data.user_list);
     }
-    const log = document.querySelector('#chat-log');
-    log.value += (data.message + '\n');
-    log.scrollTop = log.scrollHeight;
+	// console.log(data);
+	if (data["message"] != undefined) {
+		const log = document.querySelector('#chat-log');
+		log.value += (data.message + '\n');
+		log.scrollTop = log.scrollHeight;
+	}
 };
 
 chatSocket.onclose = function(e) {
