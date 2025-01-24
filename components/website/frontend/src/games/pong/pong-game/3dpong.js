@@ -26,21 +26,24 @@ export class PongGame {
 	 * @param {HTMLElement | null} scoreP2
 	 * @param {HTMLElement | null} themeButton
 	 */
-	constructor(gl, scoreP1, scoreP2, programInfo, themeButton) {
+	constructor(gl, scoreP1, scoreP2, programInfo, themeButton, viewButton) {
 		this.gl = gl;
 		this.scoreP1 = scoreP1;
 		this.scoreP2 = scoreP2;
 		this.currentTheme = getTheme();
 		this.newTheme = this.currentTheme;
+		this.view = true;
 
 		if (themeButton)
 		{
 			themeButton.addEventListener('click', this.changeTheme.bind(this));
 		}
+		if (viewButton)
+		{
+			viewButton.addEventListener('click', this.viewSwitch.bind(this));
+		}
 
 		this.gameObjects = {};
-		
-		this.view = true;
 		
 		gl.canvas.height = 1920;
 		gl.canvas.width = 1920;
@@ -90,7 +93,7 @@ export class PongGame {
 		this.render = this.render.bind(this);
 	}
 
-	static create(fieldId, score1, score2, themeButton)
+	static create(fieldId, score1, score2, themeButton, viewButton)
 	{
 		const canvas = document.getElementById(fieldId);
 		if (!(canvas instanceof HTMLCanvasElement)) {
@@ -105,16 +108,18 @@ export class PongGame {
 		let scoreP1 = document.getElementById(score1);
 		let scoreP2 = document.getElementById(score2);
 		let changeTheme = document.getElementById(themeButton);
+		let viewSwitch = document.getElementById(viewButton);
 		const programInfo = initShaders(gl);
 		if (!programInfo)
 			return null;
-		return new PongGame(gl, scoreP1, scoreP2, programInfo, changeTheme);
+		return new PongGame(gl, scoreP1, scoreP2, programInfo, changeTheme, viewSwitch);
 	}
 
 	cleanup()
 	{
 		this.stopMatch();
 		removeEventListener('click', this.changeTheme);
+		removeEventListener('click', this.viewSwitch);
 	}
 
 	/**
@@ -130,7 +135,6 @@ export class PongGame {
 			return;
 		if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(movementProviders) != "object")
 			return;
-		this.resetMatch(1, movementProviders);
 
 		this.then = Date.now();
 		this.deltaTime = 0;
@@ -146,6 +150,8 @@ export class PongGame {
 		if (this.renderInterval != -1)
 		{
 			clearInterval(this.renderInterval);
+			this.clearScene();
+			this.resetMatch(1);
 			this.renderInterval = -1;
 			return true;
 		}
@@ -225,21 +231,17 @@ export class PongGame {
 		this.drawScene();
 	}
 
-	/**
-	 * 
-	 * @param {WebGLRenderingContext} gl_to_clear 
-	 */
-	clearScene(gl_to_clear)
+	clearScene()
 	{
-		gl_to_clear.clearDepth(1.0);
-		gl_to_clear.enable(gl_to_clear.DEPTH_TEST);
-		gl_to_clear.depthFunc(gl_to_clear.LEQUAL);
-		gl_to_clear.clear(gl_to_clear.COLOR_BUFFER_BIT | gl_to_clear.DEPTH_BUFFER_BIT);
+		this.gl.clearDepth(1.0);
+		this.gl.enable(this.gl.DEPTH_TEST);
+		this.gl.depthFunc(this.gl.LEQUAL);
+		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 	}
 
 	drawScene()
 	{	
-		this.clearScene(this.gl);
+		this.clearScene();
 		for (const element in this.gameObjects)
 		{
 			this.gameObjects[element].draw(this.projectionViewMatrix, this.viewMatrix);
@@ -249,9 +251,9 @@ export class PongGame {
 	/**
 	 * 
 	 * @param {Number} side 
-	 * @param {[MovementProvider, MovementProvider]} movementProviders
+	 * @param {[MovementProvider, MovementProvider] | null} movementProviders
 	 */
-	reset(side = 0, movementProviders)
+	reset(side = 0, movementProviders = null)
 	{
 		const xTranslate = this.width - this.paddleWidth;
 
@@ -263,6 +265,9 @@ export class PongGame {
 		this.gameObjects.ball.speedY = 0;
 		this.speedMult = 1;
 		
+		if (!movementProviders)
+			return;
+
 		movementProviders.forEach(element => {
 			element.resetPlayer();
 		});
@@ -282,13 +287,12 @@ export class PongGame {
 	/**
 	 * 
 	 * @param {Number} side 
-	 * @param {[MovementProvider, MovementProvider]} movementProviders
+	 * @param {[MovementProvider, MovementProvider] | null} movementProviders
 	 */
-	resetMatch(side = 0, movementProviders)
+	resetMatch(side = 0, movementProviders = null)
 	{
 		this.resetScore();
 		this.reset(side, movementProviders);
-		this.stopMatch();
 	}
 
 	/**

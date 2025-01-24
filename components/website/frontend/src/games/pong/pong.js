@@ -1,72 +1,89 @@
 import { PongGame } from "./pong-game/3dpong.js";
 import { PlayerMovementProvider, AiMovementProvider } from "./pong-game/pongNewMovement";
 import '../../shared.js';
+import { setupPage } from "../../shared.js";
 
-function pong()
+let pongInstance;
+
+let player1 = "player1";
+let player2 = "player2";
+
+let SCORE_TO_WIN = 0;
+
+let player1_type = true;
+let player2_type = true;
+
+
+
+function start_game()
 {
-	//player names for later
-	let player1 = "player1";
-	let player2 = "player2";
-
-	//true is player, false is ai
-	let player1_type = true;
-	let player2_type = true;
-
-	let SCORE_TO_WIN = 0;
-	let pongInstance = PongGame.create("gameField", "score-player1", "score-player2", "change-theme-button");
-
-	/**
-	 * 
-	 * @param {String} name 
-	 * @param {Number} index 
-	 */
-	function update_player_name(name, index)
+	if (pongInstance === null)
 	{
-		if (index === 1)
-			player1 = name;
-		else
-			player2 = name;
+		console.warn("your pong instance is invalid");
+		return;
 	}
-	window.update_player_name = update_player_name;
+	let player1_provider;
+	let player2_provider;
 
-	/**
-	 * 
-	 * @param {Number} index 
-	 * @param {boolean} value 
-	 */
-	function update_player_type(index, value)
-	{
-		if (index === 1)
-			player1_type = value;
-		else
-			player2_type = value;
-	}
-	window.update_player_type = update_player_type;
+	let game_section = document.getElementById('game');
+	if (game_section)
+		game_section.scrollIntoView();
 
-	function start_a_game()
-	{
-		if (pongInstance === null)
-		{
-			console.warn("your pong instance is invalid");
-			return;
-		}
-		let player1_provider;
-		let player2_provider;
+	if (player1_type)
+		player1_provider = new PlayerMovementProvider({83: 0, 87: 1}, "paddle1");
+	else
+		player1_provider = new AiMovementProvider("paddle1");
 
-		if (player1_type)
-			player1_provider = new PlayerMovementProvider({83: 0, 87: 1}, "paddle1");
-		else
-			player1_provider = new AiMovementProvider("paddle1");
-
-		if (player2_type)
-			player2_provider = new PlayerMovementProvider({40: 0, 38: 1}, "paddle2");
-		else
-			player2_provider = new AiMovementProvider("paddle2");
-
-		pongInstance.startMatch(player1, player2, SCORE_TO_WIN, [player1_provider, player2_provider]);
-	}
-	window.start_a_game = start_a_game;
-	start_a_game();
+	if (player2_type)
+		player2_provider = new PlayerMovementProvider({40: 0, 38: 1}, "paddle2");
+	else
+		player2_provider = new AiMovementProvider("paddle2");
+	pongInstance.startMatch(player1, player2, SCORE_TO_WIN, [player1_provider, player2_provider])
 }
 
-htmx.onLoad(pong);
+function stop_game()
+{
+	if (pongInstance === null)
+	{
+		console.warn("your pong instance is invalid");
+		return;
+	}
+	let parameter_section = document.getElementById('parameters')
+	if (parameter_section)
+		parameter_section.scrollIntoView();
+	pongInstance.stopMatch();
+}
+
+function player_switch()
+{
+	if (this.id === "player1-switch")
+		player1_type = !player1_type;
+	if (this.id === "player2-switch")
+		player2_type = !player2_type;
+}
+
+function ctor()
+{
+	pongInstance = PongGame.create("gameField", "score-player1", "score-player2", "change-theme-button", "view-button");
+	let start_game_button = document.getElementById('start-game-button');
+	let stop_game_button = document.getElementById('stop-game-button');
+	let player1_switch = document.getElementbyId('player1-switch');
+	let player2_switch = document.getElementbyId('player2-switch');
+	if (start_game_button)
+		start_game_button.addEventListener('click', start_game);
+	if (stop_game_button)
+		stop_game_button.addEventListener('click', stop_game);
+	if (player1_switch)
+		player1_switch.addEventListener('click', player_switch);
+	if (player2_switch)
+		player2_switch.addEventListener('click', player_switch);
+}
+
+function dtor()
+{
+	pongInstance.cleanup();
+	removeEventListener('click', start_game);
+	removeEventListener('click', stop_game);
+}
+
+setupPage(ctor, dtor);

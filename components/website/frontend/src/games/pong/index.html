@@ -31,13 +31,28 @@
 		</noscript>
 		{% include "__navbar.html" %}
 		<main id="content">
-			<div class="flex justify-between items-center flex-col space-y-[3vh] p-10 bg-placeholder-pattern bg-auto bg-fixed min-h-svh">
-				<div class="overflow-scroll flex items-center justify-center bg-base text-[10vh] text-text font-mono h-[20vh] aspect-[5/2] rounded-xl ">
-					<span id="score-player1">000</span> - <span id="score-player2">000</span>
-				</div>
-				<canvas id="gameField" width="1920" height="1920" style="height: 60vh; width: 60vh;" class="bg-crust text-text rounded-xl p-[1vh]">
-					{% translate 'error.html5_required' %}
-				</canvas>
+			<div class="flex justify-center items-center flex-col space-y-[5vh] bg-placeholder-pattern bg-auto bg-fixed min-h-svh">
+				<section id="parameters" class="min-h-svh">
+					<div id="player1-switch">{% translate 'button.isAI' %}</div>
+					<div id="player2-switch">{% translate 'button.isAI' %}</div>
+					<button id="start-game-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text">{% translate 'button.start_match' %}</button>
+					<form id="player1-name"></form>
+					<form id="player2-name"></form>
+				</section>
+				<section id="game" class="min-h-full flex justify-between items-center flex-col space-y-[3vh] p-10">
+					<div id="buttons">
+						<button id="view-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text"><i class="inline" data-feather="box"></i>{% translate 'button.view' %}</button>
+						<button id="stop-game-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text">{% translate 'button.stop_match' %}<button>
+					</div>
+					<div class="flex justify-between items-center flex-col p-10 justify-self-center space-y-[3vh]">
+						<div class="overflow-scroll flex items-center justify-center bg-base text-[10vh] text-text font-mono h-[20vh] aspect-[5/2] rounded-xl ">
+							<span id="score-player1">000</span> - <span id="score-player2">000</span>
+						</div>
+						<canvas id="gameField" style="height: 60vh; width: 60vh;" class="bg-crust text-text rounded-xl p-[1vh]">
+							{% translate 'error.html5_required' %}
+						</canvas>
+					</div>
+				</section>
 			</div>
 			<script defer type="module" src="./pong.js"></script>
 		</main>		
