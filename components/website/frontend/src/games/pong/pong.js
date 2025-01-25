@@ -86,6 +86,7 @@ function ctor()
 function dtor()
 {
 	pongInstance.cleanup();
+	console.log("cleanup called!");
 	removeEventListener('click', start_game);
 	removeEventListener('click', stop_game);
 	removeEventListener('click', player_switch);
