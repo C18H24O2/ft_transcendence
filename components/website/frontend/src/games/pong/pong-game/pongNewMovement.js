@@ -103,9 +103,9 @@ export class AiMovementProvider extends MovementProvider
 		this.ball.x = this.boundPong.gameObjects.ball.x;
 		this.ball.y = this.boundPong.gameObjects.ball.y;
 		// @ts-ignore
-		this.ball.speedX = gameObjects.ball.speedX;
+		this.ball.speedX = this.boundPong.gameObjects.ball.speedX;
 		// @ts-ignore
-		this.ball.speedY = gameObjects.ball.speedY;
+		this.ball.speedY = this.boundPong.gameObjects.ball.speedY;
 		this.then = Date.now();
 	}
 	pollPlayer()
@@ -137,12 +137,18 @@ export class AiMovementProvider extends MovementProvider
 		
 		this.moveBall(deltaTime);
 
-		if (this.ball.y <= this.current_paddle_pos - this.boundPong.paddleHeight / 10)
+		let target_position = this.ball.y;
+		if (target_position === this.current_paddle_pos )
+		{
+			target_position += (this.boundPong.paddleHeight / 10);
+		}
+
+		if (target_position < this.current_paddle_pos - this.boundPong.paddleHeight / 10)
 		{
 			this.key_values[0] = true;
 			this.key_values[1] = false;
 		}
-		else if (this.ball.y > this.current_paddle_pos + this.boundPong.paddleHeight / 10)
+		else if (target_position >= this.current_paddle_pos + this.boundPong.paddleHeight / 10)
 		{
 			this.key_values[1] = true;
 			this.key_values[0] = false;
