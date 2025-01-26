@@ -102,7 +102,7 @@ function cancelDoubleReq(event) {
  * @returns {boolean} Whether this event should fire
  */
 function spaHandleEvent(name, event) {
-	// console.log(name, event);
+	console.log(name);
 	if (name === "htmx:confirm") {
 		return cancelDoubleReq(event);
 	}
