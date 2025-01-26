@@ -89,12 +89,12 @@ export class AiMovementProvider extends MovementProvider
 		super(paddle_name, boundPong);
 		this.current_paddle_pos = 0;
 		this.ball = new GameObject(null, 0, 0, 0);
-		this.then = Date.now();
-		this.last_update = Date.now();
+		this.then = performance.now();
+		this.last_update = performance.now();
 	}
 	initMovement()
 	{
-		this.last_update = Date.now();
+		this.last_update = performance.now();
 		this.updateObjects();
 	}
 	updateObjects()
@@ -106,11 +106,11 @@ export class AiMovementProvider extends MovementProvider
 		this.ball.speedX = this.boundPong.gameObjects.ball.speedX;
 		// @ts-ignore
 		this.ball.speedY = this.boundPong.gameObjects.ball.speedY;
-		this.then = Date.now();
+		this.then = performance.now();
 	}
 	pollPlayer()
 	{
-		let now = Date.now();
+		let now = performance.now();
 		let deltaTime = now - this.then;
 		this.then = now;
 
@@ -212,7 +212,7 @@ export class AiMovementProvider extends MovementProvider
 
 	resetPlayer()
 	{
-		this.then = Date.now();
+		this.then = performance.now();
 		this.current_paddle_pos = 0;
 		this.ball.setPos([0, 0, 0])
 		// @ts-ignore

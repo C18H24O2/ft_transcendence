@@ -79,7 +79,7 @@ export class PongGame {
 		this.programInfo = programInfo;
 		this.initShapes();
 
-		this.then = Date.now();
+		this.then = performance.now();
 		this.deltaTime = 0;
 		this.renderInterval = -1;
 
@@ -136,7 +136,7 @@ export class PongGame {
 		if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(movementProviders) != "object")
 			return;
 
-		this.then = Date.now();
+		this.then = performance.now();
 		this.deltaTime = 0;
 
 		movementProviders.forEach(element => {
@@ -210,7 +210,7 @@ export class PongGame {
 	}
 	
 	render(movementProviders, max_score) {
-		let now = Date.now();
+		let now = performance.now();
 		this.deltaTime = now - this.then;
 		this.then = now;
 		
