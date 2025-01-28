@@ -22,6 +22,8 @@ document.querySelector('#close-chat-btn').addEventListener('click', () => {
     document.querySelector('#chat-container').classList.add('hidden');
 });
 
+let selectedUsers = "";
+
 function updateFriendList(userList) {
     friendList.innerHTML = ''; // Clear existing friends
 
@@ -30,10 +32,15 @@ function updateFriendList(userList) {
 		li.textContent = user.username;
 		li.dataset.userId = user.id;
 
+		
 		li.addEventListener('click', () => {
 			if (li.dataset.userId != "chat_transcendence-internal00000000000000000000") {
 				message.value = `/mp ${user.username} `;
 				message.focus();
+				selectedUsers = user.username;
+			}
+			else{
+				selectedUsers = "";
 			}
 		});
 		friendList.appendChild(li);
@@ -84,8 +91,6 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
 };
 
 invite.onclick = function(e) {
-    chatSocket.send(JSON.stringify({
-		'type': 'chat.invite', //TODO: passer par les mp enft bro wtf???
-        'message': "/mp <idk> Let's play pong! https://<host>/games/pong/<random room id>"
-    }));
+	message.value = `/invite ${selectedUsers}`;
+	message.focus();
 };
