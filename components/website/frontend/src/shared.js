@@ -56,10 +56,12 @@ function runDestructors() {
  * patching the fact that htmx for some reason decided that reloading history from local cache should be default behavior
  * so here we are
 */
-function restoreBehavior(event)
+function restoreBehavior()
 {
-	if (event.detail.path === lastLoadPath)
-		return ;
+	let path = window.location.pathname;
+
+	if (path === lastLoadPath)
+		return;
 	const pageDataDestroy = pageDataCache[lastLoadPath];
 	if (pageDataDestroy !== undefined)
 	{
@@ -68,11 +70,11 @@ function restoreBehavior(event)
 		const [ctor, dtor] = pageDataDestroy;
 		dtor();
 	}
-	const pageData = pageDataCache[event.detail.path];
+	const pageData = pageDataCache[path];
 	if (pageData !== undefined)
 	{
-		console.log("[Pager] Running constructor for ", event.detail.path);
-		lastLoadPath = event.detail.path;
+		console.log("[Pager] Running constructor for ", path);
+		lastLoadPath = path;
 		const [ctor, dtor] = pageData;
 		ctor();
 	}
