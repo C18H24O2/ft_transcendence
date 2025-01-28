@@ -1,6 +1,7 @@
 import { PongGame } from "./pong-game/3dpong";
 import { PlayerMovementProvider } from "./pong-game/pongNewMovement";
 import butterup from 'butteruptoasts';
+import { chatSocket } from "../../chat/chat"//TODO trying websocket to send tournament info to chat
 
 const TIMEOUT = 7;
 
@@ -188,7 +189,16 @@ function pong() {
 						dismissable: true,
 						icon: false,
 						type: 'warning',
-					});
+					});/*
+					chatSocket.send(JSON.stringify({
+						'type': 'chat.message',
+						'message': "/mp" + ${playerlist[0]} + "your match will start soon."
+					}));
+					chatSocket.send(JSON.stringify({
+						'type': 'chat.message',
+						'message': "/mp" + ${playerlist[1]} + "your match will start soon."
+					}));*/
+					//TODO something like this should warn player if username match
 				}
 				butterup.toast({
 					title: `{{@ tournament.info.match_countdown.title @}} ${winnerTimeout}..`,

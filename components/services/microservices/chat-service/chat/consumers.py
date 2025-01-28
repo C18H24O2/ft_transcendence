@@ -186,13 +186,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         elif self.username in blocked_users[target]:
             await self.send(text_data=json.dumps({"message": f"You're blocked by '{target}'\n"}))
         else: #TODO change the send message for a link ?
-            assert self.channel_layer is not None
-            await self.channel_layer.group_add(target, self.channel_name)
-            message = self.username + ' invited you to a pong game.'
-            await self.channel_layer.group_send(
-                target, {"type": "chat.message", "message": message}
-            )
-            await self.channel_layer.group_discard(target, self.channel_name)
+            name = await self.get_id_by_username(target)
+            if name == None:
+                await _error("User id not found", disconnect=False)
+                return
+            channel_layer = get_channel_layer()
+            await channel_layer.send(name, {
+                "type": "invite",
+                "target": name,
+                "sender": self.username
+            })
 
 ###         utility          ###
     async def _error(self, error_message, disconnect=True):
@@ -225,6 +228,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({"message": message + "\n"}))
+
+    async def invite(self, event):
+        target = event["target"]
+        sender = event["sender"]
+        await self.send(text_data=json.dumps({
+            "type": "invite",
+            "target": target,
+            "sender": sender,
+        }))
 
     async def user_list(self, event):
         user_list = event["user_list"]

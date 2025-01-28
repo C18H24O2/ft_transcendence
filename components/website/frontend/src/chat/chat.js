@@ -1,4 +1,5 @@
 import './chat.css';
+import butterup from 'butteruptoasts';
 
 const invite = document.querySelector('#game-invite-btn');
 const profile = document.querySelector('#profile-btn');
@@ -8,8 +9,6 @@ const chatSocket = new WebSocket(
    'wss://'
    + window.location.host
    + '/ws/v1/chat/'
-
-	// 'ws://localhost:18942/chat'
 );
 
 
@@ -33,6 +32,16 @@ function updateFriendList(userList) {
 		li.dataset.userId = user.id;
 
 		
+		li.addEventListener('dbclick', () => {
+			butterup.toast({
+				title: 'Profile',
+				message: li.textContent,
+				location: 'top-left',
+				icon: true,
+				dismissable: true,
+				type: 'info',
+        	});
+		});
 		li.addEventListener('click', () => {
 			if (li.dataset.userId != "chat_transcendence-internal00000000000000000000") {
 				message.value = `/mp ${user.username} `;
@@ -60,6 +69,17 @@ chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
 	if (data.type === 'user_list') {
         updateFriendList(data.user_list);
+    }
+	if (data.type === 'invite') {
+		butterup.toast({
+			title: 'Invite',
+			message: "you've benn ivited to a pong game",
+			customHTML: '<a href="https://localhost:8043/register/">GAME</a>',
+			location: 'top-left',
+			icon: true,
+			dismissable: true,
+			type: 'info',
+		});
     }
 	// console.log(data);
 	if (data["message"] != undefined) {
