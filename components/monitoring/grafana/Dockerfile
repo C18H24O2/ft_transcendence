@@ -1,4 +1,4 @@
-FROM grafana/grafana:11.4.0-ubuntu
+FROM grafana/grafana:11.5.0-ubuntu
 ARG PROM_ADMIN_PASSWD
 
 COPY grafana.ini /etc/grafana/grafana.ini
