@@ -1,6 +1,14 @@
 import butterup from 'butteruptoasts';
 butterup.options.toastLife = 3000;
 
+error_messages = {
+	"empty_fields": "{{@ login.error.empty_fields @}}",
+	"invalid_username": "{{@ login.error.invalid_username @}}",
+	"invalid_password": "{{@ login.error.invalid_password @}}",
+	"invalid_token": "{{@ login.error.invalid_token @}}",
+	"expired_token": "{{@ login.error.expired_token @}}",
+};
+
 function loginWarn(message) {
 	try {
 		butterup.toast({
