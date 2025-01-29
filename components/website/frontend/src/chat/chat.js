@@ -8,55 +8,61 @@ const invite = document.querySelector('#game-invite-btn');
 const profile = document.querySelector('#profile-btn');
 const friendList = document.querySelector('#users');
 const message = document.querySelector('#message-input');
+const message_submit = document.querySelector('#chat-message-submit');
 const chatSocket = new WebSocket(
    'wss://'
    + window.location.host
    + '/ws/v1/chat/'
 );
 
-
-button_on.addEventListener('click', () => {
-    chat.classList.toggle('hidden');
-});
+if (button_on){
+	button_on.addEventListener('click', () => {
+		chat.classList.toggle('hidden');
+	})
+};
 
 // Close the chat when the close button is clicked
-button_off.addEventListener('click', () => {
-    chat.classList.add('hidden');
-});
+if (button_on){
+	button_off.addEventListener('click', () => {
+		chat.classList.add('hidden');
+	})
+};
 
 let selectedUsers = "";
 
 function updateFriendList(userList) {
-    friendList.innerHTML = ''; // Clear existing friends
+	if (friendList) {
+		friendList.innerHTML = ''; // Clear existing friends
 
-    userList.forEach((user) => {
-		const li = document.createElement('li');
-		li.textContent = user.username;
-		li.dataset.userId = user.id;
+		userList.forEach((user) => {
+			const li = document.createElement('li');
+			li.textContent = user.username;
+			li.dataset.userId = user.id;
 
-		
-		li.addEventListener('dbclick', () => {
-			butterup.toast({
-				title: 'Profile',
-				message: li.textContent,
-				location: 'top-left',
-				icon: true,
-				dismissable: true,
-				type: 'info',
-        	});
-		});
-		li.addEventListener('click', () => {
-			if (li.dataset.userId != "chat_transcendence-internal00000000000000000000") {
-				message.value = `/mp ${user.username} `;
-				message.focus();
-				selectedUsers = user.username;
-			}
-			else{
-				selectedUsers = "";
-			}
-		});
-		friendList.appendChild(li);
-    });
+			
+			li.addEventListener('dbclick', () => {
+				butterup.toast({
+					title: 'Profile',
+					message: li.textContent,
+					location: 'top-left',
+					icon: true,
+					dismissable: true,
+					type: 'info',
+				});
+			});
+			li.addEventListener('click', () => {
+				if (li.dataset.userId != "chat_transcendence-internal00000000000000000000") {
+					message.value = `/mp ${user.username} `;
+					message.focus();
+					selectedUsers = user.username;
+				}
+				else{
+					selectedUsers = "";
+				}
+			});
+			friendList.appendChild(li);
+		})
+	}
 }
 
 chatSocket.onopen = function(e) {
@@ -96,24 +102,32 @@ chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
 };
 
-message.focus();
-message.onkeyup = function(e) {
-    if (e.key === 'Enter') {  // enter, return
-        document.querySelector('#chat-message-submit').click();
-    }
-};
-
-document.querySelector('#chat-message-submit').onclick = function(e) {
-    const messageInputDom = document.querySelector('#message-input');
-    const message = messageInputDom.value;
-    chatSocket.send(JSON.stringify({
-		'type': 'chat.message',
-        'message': message
-    }));
-    messageInputDom.value = '';
-};
-
-invite.onclick = function(e) {
-	message.value = `/invite ${selectedUsers}`;
+if (message) {
 	message.focus();
+	message.onkeyup = function(e) {
+		if (e.key === 'Enter') {  // enter, return
+			document.querySelector('#chat-message-submit').click();
+		}
+	}
+};
+
+if (message_submit) {
+	message_submit.onclick = function(e) {
+		const messageInputDom = document.querySelector('#message-input');
+		if (messageInputDom) {
+			const message = messageInputDom.value;
+			chatSocket.send(JSON.stringify({
+				'type': 'chat.message',
+				'message': message
+			}));
+		messageInputDom.value = '';
+		}
+	}
+};
+
+if (invite) {
+	invite.onclick = function(e) {
+		message.value = `/invite ${selectedUsers}`;
+		message.focus();
+	}
 };
