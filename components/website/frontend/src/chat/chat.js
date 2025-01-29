@@ -1,6 +1,9 @@
 import './chat.css';
 import butterup from 'butteruptoasts';
 
+const chat = document.querySelector('#chat-container');
+const button_on = document.querySelector('#toggle-chat-btn');
+const button_off = document.querySelector('#close-chat-btn');
 const invite = document.querySelector('#game-invite-btn');
 const profile = document.querySelector('#profile-btn');
 const friendList = document.querySelector('#users');
@@ -12,13 +15,13 @@ const chatSocket = new WebSocket(
 );
 
 
-document.querySelector('#toggle-chat-btn').addEventListener('click', () => {
-    document.querySelector('#chat-container').classList.toggle('hidden');
+button_on.addEventListener('click', () => {
+    chat.classList.toggle('hidden');
 });
 
 // Close the chat when the close button is clicked
-document.querySelector('#close-chat-btn').addEventListener('click', () => {
-    document.querySelector('#chat-container').classList.add('hidden');
+button_off.addEventListener('click', () => {
+    chat.classList.add('hidden');
 });
 
 let selectedUsers = "";
@@ -73,8 +76,8 @@ chatSocket.onmessage = function(e) {
 	if (data.type === 'invite') {
 		butterup.toast({
 			title: 'Invite',
-			message: "you've benn ivited to a pong game",
-			customHTML: '<a href="https://localhost:8043/register/">GAME</a>',
+			message: data.sender + " invited you to a pong game",
+			customHTML: '<a href="https://localhost:8043/games/pong/">GAME</a>',
 			location: 'top-left',
 			icon: true,
 			dismissable: true,
