@@ -10,7 +10,8 @@ JWT_EXP_DELTA = timedelta(seconds=JWT_EXP_DELTA_SECONDS)
 
 def generate_jwt(user: User) -> str:
     return jwt.encode({
-        'uid': user.id, # yes id exists, shut up mypy
+        'uid': user.id,
+        'username': user.username,
         'exp': datetime.now(timezone.utc) + JWT_EXP_DELTA,
     }, JWT_SECRET, JWT_ALGORITHM)
 
@@ -28,13 +29,3 @@ def validate_jwt(token: str) -> tuple[bool, User | None]:
     except Exception as e:
         print("Error validating token", e)
     return False, None
-
-
-def authenticate(username: str, password: str) -> str:
-    if username == "admin" and password == "password":
-        return "success"
-    return "failure"
-
-
-def register(username: str, email: str, password: str) -> str:
-    return "fuck you"

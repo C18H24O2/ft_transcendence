@@ -29,9 +29,15 @@ def login(request: HttpRequest) -> dict:
     try:
         json = request.body.decode("utf-8")
         data = json.loads(json)
-        if "username" not in data or "password" not in data:
-            return {"error": "Missing username or password"}
-        return AuthService.login(data["username"], data["password"])
+        required_fields = ["username", "password", "totp_code"]
+        if not all(field in data for field in required_fields):
+            missing_fields = [field for field in required_fields if field not in data]
+            return {"error": "Missing required field(s)", "missing_fields": missing_fields}
+        return AuthService.login(
+            data["username"],
+            data["password"],
+            data["totp_code"]
+        )
     except Exception:
         return {"error": "Invalid request body"}
 
@@ -41,8 +47,15 @@ def register(request: HttpRequest) -> dict:
     try:
         json = request.body.decode("utf-8")
         data = json.loads(json)
-        if "username" not in data or "password" not in data:
-            return {"error": "Missing username or password"}
-        return AuthService.register(data["username"], data["password"])
+        required_fields = ["username", "password", "totp_secret", "totp_code"]
+        if not all(field in data for field in required_fields):
+            missing_fields = [field for field in required_fields if field not in data]
+            return {"error": "Missing required field(s)", "missing_fields": missing_fields}
+        return AuthService.register(
+            data["username"],
+            data["password"],
+            data["totp_secret"],
+            data["totp_code"]
+        )
     except Exception:
         return {"error": "Invalid request body"}
