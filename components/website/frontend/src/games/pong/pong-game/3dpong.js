@@ -151,7 +151,6 @@ export class PongGame {
 		{
 			clearInterval(this.renderInterval);
 			this.clearScene();
-			this.resetMatch(1);
 			this.renderInterval = -1;
 			return true;
 		}

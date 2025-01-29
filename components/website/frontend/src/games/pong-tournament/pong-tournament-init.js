@@ -1,7 +1,7 @@
 import { PongGame } from "./pong-game/3dpong";
 import { PlayerMovementProvider } from "./pong-game/pongNewMovement";
 import butterup from 'butteruptoasts';
-import { chatSocket } from "../../chat/chat"//TODO trying websocket to send tournament info to chat
+//import { chatSocket } from "../../chat/chat"//TODO trying websocket to send tournament info to chat
 
 const TIMEOUT = 7;
 
@@ -51,6 +51,7 @@ function pong() {
 		}
 
 		form.onsubmit = e => {
+			// console.log("running playerlist update");
 			if (intervalid != -1) return;
 			e.preventDefault();
 			let form = e.target;
@@ -101,12 +102,12 @@ function pong() {
 
 		window.removeEntry = removeEntry;
 
-		let winnerTimeout = 0;
+		let winnerTimeout;
 
 		function pollGame()
 		{
 			let winner;
-
+			// console.log(pongInstance.gameObjects.paddle1.score);
 			if (pongInstance.gameObjects.paddle1.score < SCORE_TO_WIN && pongInstance.gameObjects.paddle2.score < SCORE_TO_WIN)
 				return;
 			if (winnerTimeout > 0) {
@@ -215,7 +216,7 @@ function pong() {
 			} else {
 				winnerTimeout = TIMEOUT;
 				renderList();
-				pongInstance.resetScore();
+				pongInstance.resetMatch(1);
 				player1_provider.destroyMovement();
 				player2_provider.destroyMovement();
 				pongInstance.startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, [player1_provider, player2_provider]);
