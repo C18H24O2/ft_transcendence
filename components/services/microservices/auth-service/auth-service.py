@@ -23,7 +23,7 @@ def register(username: str, password: str, totp_secret: str, totp_code: str) -> 
 	# TODO: validate username, password, token&code (size, format, etc)
 	pattern = r"^[a-zA-Z0-9_-]{3,32}$"
 
-	if not bool(re.fullmatch(pattern, username)):
+	if re.fullmatch(pattern, username) is not None:
 		return  #Username is invalid TODO: valid error code
 
     # TODO: check if user exists
