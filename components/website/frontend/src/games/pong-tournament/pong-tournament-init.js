@@ -200,6 +200,7 @@ function matchEnd()
 			tournamentStarted = false;
 			renderList();
 			document.removeEventListener('pong-game-end', matchEnd);
+			document.removeEventListener('keydown', preventScroll);
 			scroll(0, 0);
 			return;
 		}
@@ -252,6 +253,14 @@ function matchEnd()
 	countdown(TIMEOUT, startGame, matchCountdownToast);
 }
 
+function preventScroll(event)
+{
+	if (["ArrowUp", "ArrowDown"].indexOf(event.code) > -1)
+	{
+		event.preventDefault();
+	}
+}
+
 function startTournament()
 {
 	butterup.options.toastLife = 8000;
@@ -273,6 +282,7 @@ function startTournament()
 		});
 		return;
 	}
+	document.addEventListener('keydown', preventScroll);
 	document.addEventListener('pong-game-end', matchEnd);
 	countdown(TIMEOUT, startGame, tournamentCountdownToast);
 	tournamentStarted = true;
@@ -308,6 +318,7 @@ function ctor()
 function dtor()
 {
 	document.removeEventListener('pong-game-end', matchEnd);
+	document.removeEventListener('keydown', preventScroll);
 	player1_provider = null;
 	player2_provider = null;
 	gameField = null;

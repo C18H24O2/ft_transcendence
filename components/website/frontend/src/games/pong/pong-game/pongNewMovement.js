@@ -73,6 +73,7 @@ export class PlayerMovementProvider extends MovementProvider
 	}
 	destroyMovement()
 	{
+		this.key_values = [false, false];
 		document.removeEventListener('keydown', this.keyDown);
 		document.removeEventListener('keyup', this.keyUp);
 	}
@@ -219,6 +220,11 @@ export class AiMovementProvider extends MovementProvider
 		this.ball.speedX = this.boundPong.gameObjects.ball.speedX;
 		// @ts-ignore
 		this.ball.speedY = this.boundPong.gameObjects.ball.speedY;
+		this.key_values = [false, false];
+	}
+
+	destroyMovement()
+	{
 		this.key_values = [false, false];
 	}
 }
