@@ -159,7 +159,7 @@ function countdown(seconds, callback, toastFunc, ...callbackArgs)
 	intervals.add(interval);
 }
 
-function MatchEnd()
+function matchEnd()
 {
 	let winner;
 	if (pongInstance.gameObjects.paddle1.score >= SCORE_TO_WIN)
@@ -199,7 +199,7 @@ function MatchEnd()
 			toRemove = [];
 			tournamentStarted = false;
 			renderList();
-			removeEventListener('pong-game-end', MatchEnd);
+			document.removeEventListener('pong-game-end', matchEnd);
 			scroll(0, 0);
 			return;
 		}
@@ -273,7 +273,7 @@ function startTournament()
 		});
 		return;
 	}
-	document.addEventListener('pong-game-end', MatchEnd);
+	document.addEventListener('pong-game-end', matchEnd);
 	countdown(TIMEOUT, startGame, tournamentCountdownToast);
 	tournamentStarted = true;
 }
@@ -307,6 +307,7 @@ function ctor()
 
 function dtor()
 {
+	document.removeEventListener('pong-game-end', matchEnd);
 	player1_provider = null;
 	player2_provider = null;
 	gameField = null;
@@ -314,7 +315,7 @@ function dtor()
 	form = null;
 	
 	pongInstance.cleanup();
-	pongInstance = null;``
+	pongInstance = null;
 	removeEventListener('submit', submitPlayer);
 	window.removeEntry = null;
 	window.startTournament = null;
