@@ -100,6 +100,8 @@ function submitPlayer(event)
 
 function startMatchWrapper()
 {
+	if (!pongInstance)
+		return;
 	pongInstance.startMatch(playerlist[0], playerlist[1], SCORE_TO_WIN, [player1_provider, player2_provider]);
 	renderList();
 }
@@ -299,6 +301,8 @@ function ctor()
 		form.addEventListener('submit', submitPlayer);
 	window.removeEntry = removeEntry;
 	window.startTournament =startTournament;
+	form.style.display = "";
+	renderList();
 }
 
 function dtor()
