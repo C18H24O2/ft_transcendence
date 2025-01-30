@@ -33,6 +33,7 @@ export class PongGame {
 		this.currentTheme = getTheme();
 		this.newTheme = this.currentTheme;
 		this.view = true;
+		this.gameStarted = false;
 
 		if (themeButton)
 		{
@@ -133,9 +134,10 @@ export class PongGame {
 	{
 		if (this.renderInterval != -1)
 			return;
-		if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number" || typeof(movementProviders) != "object")
+		if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number")
 			return;
 
+		this.gameStarted = true;
 		this.then = performance.now();
 		this.deltaTime = 0;
 
@@ -152,6 +154,8 @@ export class PongGame {
 			clearInterval(this.renderInterval);
 			this.clearScene();
 			this.renderInterval = -1;
+			this.gameStarted = false;
+			document.dispatchEvent(new CustomEvent("pong-game-end"));
 			return true;
 		}
 		return false;
