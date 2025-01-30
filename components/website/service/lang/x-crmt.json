@@ -44,6 +44,9 @@
 			"invalid_credentials": "Mauvais Cramptés",
 			"server_error": "Le crampté Principal fait roooo mimimi",
 			"empty_fields": "oubliez aucun cramptés svp"
+		},
+		"qrcode": {
+			"title": "Ajoutez ce crampté a votre cramptauthentificateur"
 		}
 	},
 	"tournament": {

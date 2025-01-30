@@ -44,6 +44,9 @@
 			"invalid_credentials": "Mot de passe ou nom d'utilisateur invalide.",
 			"server_error": "Erreur de serveur, veuillez réessayer plus tard.",
 			"empty_fields": "Veuillez remplir tous les champs requis."
+		},
+		"qrcode": {
+			"title": "Ajoutez ce code QR à votre application d'authentification"
 		}
 	},
 	"tournament": {

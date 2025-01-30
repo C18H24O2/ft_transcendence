@@ -41,7 +41,10 @@
         "invalid_credentials": "The credentials you provided are invalid. Please try again.",
         "server_error": "An unexpected error occurred. Please try again later.",
         "empty_fields": "Please fill in all required fields before proceeding."
-    	}
+    	},
+		"qrcode": {
+			"title": "QR code for setting up Two-Factor Authentication (TOTP) in an authenticator app."
+		}
 	},
 	"tournament": {
 		"success": {

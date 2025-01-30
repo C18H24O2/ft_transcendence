@@ -44,6 +44,9 @@
 			"invalid_credentials": "Invalid username or password",
 			"server_error": "Server error, please try again later",
 			"empty_fields": "Please fill in all fields"
+		},
+		"qrcode": {
+			"title": "Add this qr code to you authenticator app"
 		}
 	},
 	"tournament": {

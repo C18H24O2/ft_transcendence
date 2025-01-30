@@ -44,6 +44,9 @@
 			"invalid_credentials": "Nombre de usuario o contraseña no válidos",
 			"server_error": "Error del servidor, inténtelo de nuevo más tarde",
 			"empty_fields": "Por favor, rellene todos los campos"
+		},
+		"qrcode": {
+			"title": "Agregue este código qr a su aplicación de autenticación"
 		}
 	},
 	"tournament": {
