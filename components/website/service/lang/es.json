@@ -26,9 +26,10 @@
 		"register": "Registrar",
 		"view": "Cambiar vista",
 		"home": "Inicio",
-		"chat": "mostrar Chat",
+		"chat_on": "Mostrar Chat",
+		"chat_off": "Ocultar Chat",
 		"chat_send": "Enviar",
-		"chat_invite_game": "Invitar",
+		"chat_invite": "Invitar",
 		"add_player": "Agregar un jugador",
 		"start_tournament": "Comenzar el torneo",
 		"remove": "Eliminar"

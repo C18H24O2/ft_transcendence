@@ -1,0 +1,29 @@
+<div class="container fixed top-0 left-0 right-0 mx-auto px-8 pt-4 pb-5 rounded-b-xl bg-surface0/75 hover:bg-surface0/90 backdrop-blur-3xl min-h-12 z-10">
+    <!-- Button to toggle chat visibility -->
+    <button id="toggle-chat-btn">Toggle Chat</button>
+
+    <!-- Chat container -->
+    <div id="chat-container" class="hidden">
+        <!-- Button to close chat -->
+        <button id="close-chat-btn">Hide Chat</button>
+        <div id="friend-list">
+            <h3>Friends</h3>
+            <ul id="users">
+                <!-- Friend list populated dynamically -->
+            </ul>
+		<div id=¨invite-btn¨>
+		    <button id="game-invite-btn">Invite</button>
+		</div>
+        </div>
+        <div id="chat-box">
+            <h3>Chat</h3>
+            <ul id="messages"></ul>
+            <textarea id="chat-log" readonly></textarea><br>
+            <div id="message-box">
+                <input type="text" id="message-input" placeholder="Type a message..." />
+                <input id="chat-message-submit" type="button" value="Send">
+       <!--         <button id="send-btn">Send</button>-->
+            </div>
+        </div>
+    </div>
+</div>

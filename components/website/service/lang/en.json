@@ -26,9 +26,10 @@
 		"register": "Register",
 		"view": "Change view",
 		"home": "Home",
-		"chat": "Show Chat",
+		"chat_on": "Show Chat",
+		"chat_off": "Hide Chat",
 		"chat_send": "Send",
-		"chat_invite_game": "Invite",
+		"chat_invite": "Invite",
 		"add_player": "Add Player",
 		"start_tournament": "Start the tournament",
 		"remove": "Remove"

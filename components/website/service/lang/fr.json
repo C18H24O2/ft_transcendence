@@ -26,9 +26,10 @@
 		"register": "S'inscrire",
 		"view": "Changer de vue",
 		"home": "Accueil",
-		"chat": "afficher la discussion",
+		"chat_on": "Afficher la discussion",
+		"chat_off": "Cacher la discussion",
 		"chat_send": "Envoyer",
-		"chat_invite_game": "Inviter",
+		"chat_invite": "Inviter",
 		"add_player": "Ajouter un joueur",
 		"start_tournament": "Débuter le tournoi",
 		"remove": "Retirer"

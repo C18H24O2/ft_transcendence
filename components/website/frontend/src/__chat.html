@@ -1,0 +1,29 @@
+{% load ft_trans_tags %}
+<div class="container fixed top-0 right-0 bg-surface0/75 z-10">
+    <!-- Button to toggle chat visibility -->
+    <button id="toggle-chat-btn">{% translate 'button.chat_on' %}</button>
+
+    <!-- Chat container -->
+    <div id="chat-container" class="hidden bg-surface1/75 rounded-lg">
+        <!-- Button to close chat -->
+        <button id="close-chat-btn">{% translate 'button.chat_off' %}</button>
+        <div id="friend-list">
+            <h3>{% translate 'placeholders.friends' %}</h3>
+            <ul id="users">
+                <!-- Friend list populated dynamically -->
+            </ul>
+		<div id=¨invite-btn¨>
+		    <button id="game-invite-btn">{% translate 'button.chat_invite' %}</button>
+		</div>
+        </div>
+        <div id="chat-box">
+            <h3>Chat</h3>
+            <ul id="messages"></ul>
+            <textarea id="chat-log" readonly></textarea><br>
+            <div id="message-box">
+                <input type="text" id="message-input" placeholder="{% translate 'placeholders.message_send' %}" />
+                <input id="chat-message-submit" type="button" value="{% translate 'button.chat_send' %}">
+            </div>
+        </div>
+    </div>
+</div>
