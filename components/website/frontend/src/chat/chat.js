@@ -9,6 +9,7 @@ const profile = document.querySelector('#profile-btn');
 const friendList = document.querySelector('#users');
 const message = document.querySelector('#message-input');
 const message_submit = document.querySelector('#chat-message-submit');
+
 const chatSocket = new WebSocket(
    'wss://'
    + window.location.host
@@ -67,7 +68,7 @@ function updateFriendList(userList) {
 
 chatSocket.onopen = function(e) {
 	// Start authentication
-	console.log("auth moment");
+	// console.log("auth moment");
 	chatSocket.send(JSON.stringify({
 		"type": "chat.authenticate",
 		"token": "le token la ouais" //TODO: get from cookie
@@ -92,11 +93,20 @@ chatSocket.onmessage = function(e) {
     }
 	// console.log(data);
 	if (data["message"] != undefined) {
-		const log = document.querySelector('#chat-log');
-		log.value += (data.message + '\n');
-		log.scrollTop = log.scrollHeight;
+		addChatMessage(data.message);
 	}
 };
+
+export function addChatMessage(message) {
+	try {
+		const log = document.querySelector('#chat-log');
+		if (log !== undefined && log !== null) {
+			log.value += (message + '\n');
+			log.scrollTop = log.scrollHeight;
+		}
+	} catch (e) {
+	}
+}
 
 chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');

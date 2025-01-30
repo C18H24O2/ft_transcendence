@@ -38,8 +38,8 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [x] (Major) Implementing remote authentication (OAuth2) + JWT `kiroussa`
 
 - **Gameplay and User Experience**
-  - [x] (Major) Remote players `lvincent` `gpouzet`
-  - [ ] (Major) Multiplayer (> 2 players)
+  - [ ] (Major) Remote players `lvincent` `gpouzet`
+  - [ ] (Major) :question: Multiplayer (> 2 players)
   - [ ] (Major) Add another Game (w/ User History & Matchmaking)
   - [ ] (Minor) Game customization options 
   - [x] (Major) Live chat `gpouzet`
@@ -69,7 +69,7 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
   - [x] (Minor) ✅ Server-Side Rendering (SSR) integration `kiroussa`
 
 - **Server-Side Pong**
-  - [x] (Major) Replace basic pong with server-side pong and implementing an API `kiroussa` `lvincent`
+  - [ ] (Major) Replace basic pong with server-side pong and implementing an API `kiroussa` `lvincent`
   - [ ] (Major) Enabling pong gameplay via CLI against web users with API integration
 
 <!-- MODULES_END -->
