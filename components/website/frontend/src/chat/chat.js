@@ -1,4 +1,3 @@
-import './chat.css';
 import butterup from 'butteruptoasts';
 
 const chat = document.querySelector('#chat-container');

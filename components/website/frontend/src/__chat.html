@@ -4,10 +4,10 @@
     <button id="toggle-chat-btn">{% translate 'button.chat_on' %}</button>
 
     <!-- Chat container -->
-    <div id="chat-container" class="hidden bg-surface1/75 rounded-lg">
+    <div id="chat-container" class="hidden bg-surface1/75 rounded-lg text-text flex flex-row overflow-hidden shadow-lg fixed">
         <!-- Button to close chat -->
         <button id="close-chat-btn">{% translate 'button.chat_off' %}</button>
-        <div id="friend-list">
+        <div id="friend-list" class="bg-mantle">
             <h3>{% translate 'placeholders.friends' %}</h3>
             <ul id="users">
                 <!-- Friend list populated dynamically -->
@@ -16,13 +16,13 @@
 		    <button id="game-invite-btn">{% translate 'button.chat_invite' %}</button>
 		</div>
         </div>
-        <div id="chat-box">
+        <div id="chat-box" class="bg-base">
             <h3>Chat</h3>
             <ul id="messages"></ul>
-            <textarea id="chat-log" readonly></textarea><br>
+            <textarea id="chat-log" class="bg-base" readonly></textarea><br>
             <div id="message-box">
-                <input type="text" id="message-input" placeholder="{% translate 'placeholders.message_send' %}" />
-                <input id="chat-message-submit" type="button" value="{% translate 'button.chat_send' %}">
+                <input type="text" id="message-input" class="bg-surface0" placeholder="{% translate 'placeholders.message_send' %}" />
+                <input id="chat-message-submit" type="button" class="bg-surface0" value="{% translate 'button.chat_send' %}">
             </div>
         </div>
     </div>
