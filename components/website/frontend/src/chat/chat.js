@@ -36,6 +36,7 @@ function updateFriendList(userList) {
 
 		userList.forEach((user) => {
 			const li = document.createElement('li');
+			li.classList.add('btn', 'border-1', 'border-solid', 'border-overlay2', 'bg-overlay1/50', 'hover:bg-overlay1/75');
 			li.textContent = user.username;
 			li.dataset.userId = user.id;
 
@@ -83,18 +84,22 @@ chatSocket.onmessage = function(e) {
 		butterup.toast({
 			title: 'Invite',
 			message: data.sender + " invited you to a pong game",
-			customHTML: '<a href="https://localhost:8043/games/pong/">GAME</a>',
+			customHTML: '<button class="btn" id="join-game-btn" hx-get="/games/pong/" hx-target="#content" hx-swap="innerHTML" hx-push-url="/games/pong/" preload="mouseover">Join Game</button>',
 			location: 'top-left',
 			icon: true,
 			dismissable: true,
 			type: 'info',
 		});
+	setTimeout(() => {
+		htmx.process(document.getElementById("join-game-btn"));
+	}, 10);
     }
 	// console.log(data);
 	if (data["message"] != undefined) {
 		addChatMessage(data.message);
 	}
 };
+
 
 export function addChatMessage(message) {
 	try {

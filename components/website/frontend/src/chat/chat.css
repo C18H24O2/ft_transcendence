@@ -5,7 +5,6 @@
 }
 */
 #toggle-chat-btn {
-    position: absolute;
     top: 20px;
     right: 20px;
     padding: 10px;
@@ -13,16 +12,10 @@
 }
 
 #chat-container {
-    position: fixed;
-    right: 0;
-    bottom: 0;
     width: 35%;
     min-width: 520px;
     height: 100vh;
-    background: #f1f1f1;
-    border: 1px solid #ccc;
     display: flex;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     flex-direction: row;
     overflow: hidden; /* Prevents overflow */
 }
@@ -44,9 +37,7 @@
 /* Friend list styling */
 #friend-list {
     width: 120px;
-    background: #e0e0e0;
     padding: 10px;
-    border-right: 1px solid #ccc;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -69,29 +60,20 @@
 #friend-list ul li {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Space between name and dot */
+    justify-content: space-between;
     padding: 5px 10px;
     margin-bottom: 5px;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
     cursor: pointer;
     text-align: left;
-    white-space: normal; /* Allow text wrapping */
-    word-break: break-all; /* Break long words into multiple lines */
-    overflow: hidden; /* Prevent overflow */
-    max-width: 100%; /* Prevent it from stretching */
-}
-
-#friend-list ul li:hover {
-    background: #d1d1d1;
+    white-space: normal;
+    word-break: break-all;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 #invite-btn {
     width: 120px;
-    background: #e0e0e0;
     padding: 10px;
-    border-right: 1px solid #ccc;
     display: flex;
     flex-direction: column;
     height: 30px;

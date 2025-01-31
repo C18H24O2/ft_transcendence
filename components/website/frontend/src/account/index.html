@@ -15,6 +15,7 @@
 		<!-- Common stuff -->
 		<link rel="icon" href="/assets/img/logo.webp" type="image/icon"/>
 		<link rel="stylesheet" href="/shared.css">
+		<link rel="stylesheet" href="chat/chat.css">
 		<title>{{ title }} &mdash; {{ website_title }}</title>
 		<script defer type="module" src="/shared.js"></script>
 	</head>
@@ -30,6 +31,7 @@
 			</div>
 		</noscript>
 		{% include "__navbar.html" %}
+		{% include "__chat.html" %}
 		<main id="content">
 			<div class="bg-mantle/85 hover:bg-mantle/90 [&_*]:transition-colors [&_*]:duration-300 backdrop-blur-md w-[70vw] h-[90vh] rounded-xl p-5">
 				<div class="w-10 aspect-square rounded-full bg-green absolute top-8 right-8"></div>

@@ -1,28 +1,47 @@
 {% load ft_trans_tags %}
-<div class="container fixed top-0 right-0 bg-surface0/75 z-10">
+<div class="container fixed top-0 right-0 z-10 bg-surface0/75">
     <!-- Button to toggle chat visibility -->
-    <button id="toggle-chat-btn">{% translate 'button.chat_on' %}</button>
+    <button
+		id="toggle-chat-btn"
+		class="btn absolute bg-surface1/75 hover:bg-surface2 ml-auto top-0 right-0"
+	>{% translate 'button.chat_on' %}</button>
 
     <!-- Chat container -->
-    <div id="chat-container" class="hidden bg-surface1/75 rounded-lg text-text flex flex-row overflow-hidden shadow-lg fixed">
+    <div id="chat-container"
+		class="hidden bg-base/75 rounded-lg text-text flex flex-row overflow-hidden shadow-lg fixed insert-y-0 right-0">
         <!-- Button to close chat -->
-        <button id="close-chat-btn">{% translate 'button.chat_off' %}</button>
-        <div id="friend-list" class="bg-mantle">
+        <button
+			id="close-chat-btn"
+			class="btn bg-surface1/75 hover:bg-surface2 ml-auto top-0 right-0"
+		>{% translate 'button.chat_off' %}</button>
+        <div id="friend-list" class="bg-overlay0/80 border-r-1 border-solid border-overlay2">
             <h3>{% translate 'placeholders.friends' %}</h3>
             <ul id="users">
                 <!-- Friend list populated dynamically -->
             </ul>
 		<div id=¨invite-btn¨>
-		    <button id="game-invite-btn">{% translate 'button.chat_invite' %}</button>
+		    <button id="game-invite-btn"
+				class="btn bg-overlay1/75 hover:bg-overlay2"
+			>{% translate 'button.chat_invite' %}</button>
 		</div>
         </div>
-        <div id="chat-box" class="bg-base">
+        <div id="chat-box" class="bg-base/80">
             <h3>Chat</h3>
             <ul id="messages"></ul>
-            <textarea id="chat-log" class="bg-base" readonly></textarea><br>
+            <textarea id="chat-log" class="bg-base/0 select-none focus:outline-none pointer-events-none" readonly></textarea><br>
             <div id="message-box">
-                <input type="text" id="message-input" class="bg-surface0" placeholder="{% translate 'placeholders.message_send' %}" />
-                <input id="chat-message-submit" type="button" class="bg-surface0" value="{% translate 'button.chat_send' %}">
+                <input
+					type="text" 
+					id="message-input"
+					class="bg-surface0 focus:outline-none"
+					placeholder="{% translate 'placeholders.message_send' %}"
+				>
+                <input
+					id="chat-message-submit"
+					type="button"
+					class="btn bg-surface1/75 hover:bg-surface2"
+					value="{% translate 'button.chat_send' %}"
+				>
             </div>
         </div>
     </div>
