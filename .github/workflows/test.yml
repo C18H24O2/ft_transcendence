@@ -1,6 +1,11 @@
 name: Run tests
 
 on:
+  pull_request:
+    branches-ignore:
+      - docs
+    paths-ignore:
+      - '**.md'
   push:
     branches-ignore:
       - docs

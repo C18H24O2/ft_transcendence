@@ -1,6 +1,16 @@
 name: Build with Docker Compose
 
 on:
+  pull_request:
+    branches-ignore:
+      - docs
+    # only run when a Docker-related file changes
+    paths:
+      - '**.Dockerfile'
+      - '**Dockerfile'
+      - '.github/workflows/build-docker.yml'
+      - '.env.example'
+      - '**docker-compose.yml'
   push:
     branches-ignore:
       - docs
