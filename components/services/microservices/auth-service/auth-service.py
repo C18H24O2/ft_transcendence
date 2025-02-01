@@ -5,6 +5,7 @@ from argon2 import PasswordHasher, exceptions as argon_exceptions
 import peewee
 import re
 from datetime import datetime, timezone
+#import pyotp
 
 hasher = PasswordHasher(time_cost=10)
 
@@ -35,7 +36,10 @@ def register(username: str, password: str, totp_secret: str, totp_code: str) -> 
 	except peewee.PeeweeException as e:
 		return {"error": "Server Error: " + str(e)}
 
-	# TODO: totp verification
+	# TODO: install pyotp into the project
+	#totp = pyotp.TOTP(totp_secret)
+	#if not totp.verify(totp_code)
+	#	return {"error": "invalid totp code"}
 
 	try:
 		pwhash = hasher.hash(username + password)
@@ -68,7 +72,10 @@ def login(username: str, password: str, totp_code: str) -> dict:
 	except argon_exceptions: 
 		return {"error": "password verification error"}
 
-	# TODO: check totp code
+	# TODO: install pyotp into the project
+	#totp = pyotp.TOTP(user.totpSecret)
+	#if not totp.verify(totp_code)
+	#	return {"error": "invalid totp code"}
 
 	token = generate_jwt(user);
 	return {"token": token}
