@@ -6,4 +6,3 @@ include:
   - ./components/nginx/docker-compose.yml
   - ./components/website/docker-compose.yml
   - ./components/monitoring/docker-compose.yml
-  # - ./components/vault/docker-compose.yml
