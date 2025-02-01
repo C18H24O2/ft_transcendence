@@ -447,38 +447,24 @@ export class PongGame {
 		const speed = (this.BASE_PADDLE_SPEED * (1 + ((this.speedMult / this.MAX_BALL_SPEED_MULTIPLIER) * this.MAX_PADDLE_SPEED_MULTIPLIER)) * (this.deltaTime / 10));
 		const limit = this.height - this.paddleHeight;
 
-		if (movementProviders[0].key_values[0] != movementProviders[0].key_values[1])
+		
+		for (let provider of movementProviders)
 		{
-			if (movementProviders[0].key_values[0] && this.gameObjects[movementProviders[0].paddle_name].y > -limit)
+			if (provider.key_values[0] != provider.key_values[1])
 			{
-				let paddle = this.gameObjects[movementProviders[0].paddle_name];
-				paddle.move([0, -speed, 0]);
-				if (paddle.y < -limit)
-					paddle.setPos([paddle.x, -limit, paddle.z]);
-			}
-			if (movementProviders[0].key_values[1] && this.gameObjects[movementProviders[0].paddle_name].y < limit)
-			{
-				let paddle = this.gameObjects[movementProviders[0].paddle_name];
-				paddle.move([0, speed, 0]);
-				if (paddle.y > limit)
-					paddle.setPos([paddle.x, limit, paddle.z]);
-			}
-		}
-		if (movementProviders[1].key_values[0] != movementProviders[1].key_values[1])
-		{
-			if (movementProviders[1].key_values[0] && this.gameObjects[movementProviders[1].paddle_name].y > -limit)
-			{
-				let paddle = this.gameObjects[movementProviders[1].paddle_name];
-				paddle.move([0, -speed, 0]);
-				if (paddle.y < -limit)
-					paddle.setPos([paddle.x, -limit, paddle.z]);
-			}
-			if (movementProviders[1].key_values[1] && this.gameObjects[movementProviders[1].paddle_name].y < limit)
-			{
-				let paddle = this.gameObjects[movementProviders[1].paddle_name];
-				paddle.move([0, speed, 0]);
-				if (paddle.y > limit)
-					paddle.setPos([paddle.x, limit, paddle.z]);
+				let paddle = this.gameObjects[provider.paddle_name];
+				if (provider.key_values[0] && this.gameObjects[provider.paddle_name].y > -limit)
+				{
+					paddle.move([0, -speed, 0]);
+					if (paddle.y < -limit)
+						paddle.setPos([paddle.x, -limit, paddle.z]);
+				}
+				if (provider.key_values[1] && this.gameObjects[provider.paddle_name].y < limit)
+				{
+					paddle.move([0, speed, 0]);
+					if (paddle.y > limit)
+						paddle.setPos([paddle.x, limit, paddle.z]);
+				}
 			}
 		}
 	}

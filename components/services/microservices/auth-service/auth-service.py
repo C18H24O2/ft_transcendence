@@ -54,7 +54,6 @@ def register(username: str, password: str, totp_secret: str, totp_code: str) -> 
 
 @message
 def login(username: str, password: str, totp_code: str) -> dict:
-	# TODO: validate username, password, token&code (size, format, etc)
 	try:
 		user = User.get(User.username == username)
 	except User.DoesNotExist:
