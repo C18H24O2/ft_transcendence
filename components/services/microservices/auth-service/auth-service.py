@@ -67,7 +67,7 @@ def login(username: str, password: str, totp_code: str) -> dict:
 	except argon_exceptions.VerifyMismatchError:
 		return {"error": "Invalid password or username"}
 	except argon_exceptions: 
-		return: {"error": "password verification error"}
+		return {"error": "password verification error"}
 
 	# TODO: check totp code
 
