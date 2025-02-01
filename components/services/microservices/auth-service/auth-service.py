@@ -1,54 +1,78 @@
 from service_runtime.service import message
 from service_runtime.models import User
-from controller import validate_jwt
-from argon2 import PasswordHasher
+from controller import validate_jwt, generate_jwt
+from argon2 import PasswordHasher, exceptions as argon_exceptions
 import peewee
 import re
+from datetime import datetime, timezone
 
 hasher = PasswordHasher(time_cost=10)
 
 
 @message
 def is_valid_token(token: str) -> bool:
-    return validate_jwt(token)[0]
+	return validate_jwt(token)[0]
 
 
 @message
 def get_user(token: str) -> User:
-    return validate_jwt(token)[1]
+	return validate_jwt(token)[1]
 
 
 @message
 def register(username: str, password: str, totp_secret: str, totp_code: str) -> dict:
-	# TODO: validate username, password, token&code (size, format, etc)
 	pattern = r"^[a-zA-Z0-9_-]{3,32}$"
 
-	if re.fullmatch(pattern, username) is not None:
-		return  #Username is invalid TODO: valid error code
+	if not re.fullmatch(pattern, username):
+		return  {"error": "invalid Username"}
 
-    # TODO: check if user exists
-	if User.select().where(User.username == username).exists():
-		return #User already exists TODO: valid error code
-      
-    # TODO: hash password w/ argon2
-	pwhash = hasher.hash(username + password)
-	# TODO: create user in database
+	if len(password) < 8:
+		return {"error": "Password is too short"}
 
-	# TODO: generate JWT with user
-	return {"token": "fuck you"}
+	try:
+		if User.select().where(User.username == username).exists():
+			return {"error": "User already exists"}
+	except peewee.PeeweeException as e:
+		return {"error": "Server Error: " + str(e)}
+
+	# TODO: totp verification
+
+	try:
+		pwhash = hasher.hash(username + password)
+		user = User.create(
+			username=username,
+			passwordHash=pwhash,
+			totpSecret=totp_secret,
+			registeredAt=datetime.now(timezone.utc),
+			accountType=0 #that would be username + password account type
+		)
+		token = generate_jwt(user)
+		return {"token": token}
+	except peewee.PeeweeException as e:
+		return {"error": "Server Error: " + str(e)}
 
 
 @message
 def login(username: str, password: str, totp_code: str) -> dict:
-    # TODO: validate username, password, token&code (size, format, etc)
+	# TODO: validate username, password, token&code (size, format, etc)
+	try:
+		user = User.get(User.username == username)
+	except User.DoesNotExist:
+		return {"error" : "Invalid password or username"}
+	except peewee.PeeweeException as e:
+		return {"error": "Server Error: " + str(e)}
 
-    # TODO: get user from database (with username)
-    # TODO: check password (username + passwrod since salted) 
+	try:
+		hasher.verify(user.passwordHash, username + password)
+	except argon_exceptions.VerifyMismatchError:
+		return {"error": "Invalid password or username"}
+	except argon_exceptions: 
+		return: {"error": "password verification error"}
 
-    # TODO: check totp code
+	# TODO: check totp code
 
-    # TODO: generate JWT with user
-    return {"token": "fuck you"}
+	token = generate_jwt(user);
+	return {"token": token}
 
 
 service_name = "auth-service"
