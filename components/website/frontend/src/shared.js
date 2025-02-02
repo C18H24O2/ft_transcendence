@@ -67,7 +67,7 @@ function restoreBehavior()
 	const pageDataDestroy = pageDataCache[lastLoadPath];
 	if (pageDataDestroy !== undefined)
 	{
-		console.log("[Pager] Running destructor for", lastLoadPath);
+		// console.log("[Pager] Running destructor for", lastLoadPath);
 		lastLoadPath = undefined;
 		const [ctor, dtor] = pageDataDestroy;
 		dtor();
@@ -75,7 +75,7 @@ function restoreBehavior()
 	const pageData = pageDataCache[path];
 	if (pageData !== undefined)
 	{
-		console.log("[Pager] Running constructor for ", path);
+		// console.log("[Pager] Running constructor for ", path);
 		lastLoadPath = path;
 		const [ctor, dtor] = pageData;
 		ctor();

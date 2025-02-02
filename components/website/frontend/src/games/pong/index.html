@@ -15,7 +15,6 @@
 		<!-- Common stuff -->
 		<link rel="icon" href="/assets/img/logo.webp" type="image/icon"/>
 		<link rel="stylesheet" href="/shared.css">
-		<link rel="stylesheet" href="chat/chat.css">
 		<title>{{ title }} &mdash; {{ website_title }}</title>
 		<script defer type="module" src="/shared.js"></script>
 		<script defer type="module" src="/chat/chat.js"></script>
@@ -35,11 +34,13 @@
 		{% include "__chat.html" %}
 		<main id="content">
 			<div class="flex justify-center items-center flex-col space-y-[5vh] bg-placeholder-pattern bg-auto bg-fixed min-h-svh">
-				<section id="parameters" class="min-h-svh flex flex-row justify-between items-center">
-					<form id="player1-name"></form>
-					<div id="player1-switch">{% translate 'button.isAI' %}</div>
-					<form id="player2-name"></form>
-					<div id="player2-switch">{% translate 'button.isAI' %}</div>
+				<section id="parameters" class="min-h-svh flex flex-col items-center">
+					<div id="player-parameters" class="flex flex-row justify-between">
+						<form id="player1-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text"></form>
+						<div id="player1-switch">{% translate 'button.isAI' %}</div>
+						<form id="player2-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text"></form>
+						<div id="player2-switch">{% translate 'button.isAI' %}</div>
+					</div>
 					<button id="start-game-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text">{% translate 'button.start_match' %}</button>
 				</section>
 				<section id="game" class="min-h-full flex justify-between items-center flex-col space-y-[3vh] p-10">
