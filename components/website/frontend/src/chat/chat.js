@@ -9,7 +9,7 @@ const friendList = document.querySelector('#users');
 const message = document.querySelector('#message-input');
 const message_submit = document.querySelector('#chat-message-submit');
 
-const chatSocket = new WebSocket(
+export const chatSocket = new WebSocket(
    'wss://'
    + window.location.host
    + '/ws/v1/chat/'
@@ -84,7 +84,7 @@ chatSocket.onmessage = function(e) {
 		butterup.toast({
 			title: 'Invite',
 			message: data.sender + " invited you to a pong game",
-			customHTML: '<button class="btn" id="join-game-btn" hx-get="/games/pong/" hx-target="#content" hx-swap="innerHTML" hx-push-url="/games/pong/" preload="mouseover">Join Game</button>',
+			customHTML: '<button class="btn" id="join-game-btn" hx-get="/games/pong/" hx-target="#content" hx-swap="innerHTML" hx-push-url="/games/pong/" preload="mouseover" hx-trigger="click once">Join Game</button>',
 			location: 'top-left',
 			icon: true,
 			dismissable: true,
@@ -113,7 +113,7 @@ export function addChatMessage(message) {
 }
 
 chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly');
+    console.error('Chat socket closed unexpectedly:', e.code, e.reason);
 };
 
 if (message) {
