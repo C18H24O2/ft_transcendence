@@ -45,8 +45,9 @@ COPY website/frontend/ ./
 # Remove the node_modules folder, just in case it hasn't been ignored.
 # Get pnpm from corepack, install the dependencies, build and package everything
 RUN rm -rf node_modules \
+	&& npm install -g corepack@0.31.0 \
 	&& corepack enable \
-	&& corepack use pnpm@latest \
+	&& corepack use pnpm@9.15.5 \
 	&& pnpm install \
 	&& pnpm run build \
 	&& cp -r static/* dist/

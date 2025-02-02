@@ -1,5 +1,5 @@
 import { createThemes } from "tw-colors";
-import buildCatppuccinThemes from "./lib/tailwind/buildCatppuccinThemes.js";
+import { buildCatppuccinThemes } from "./lib/tailwind/buildCatppuccinThemes.js";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

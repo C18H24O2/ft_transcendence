@@ -1,6 +1,6 @@
 import { flavorEntries } from "@catppuccin/palette";
 
-module.exports = function buildCatppuccinThemes(prefix) {
+export function buildCatppuccinThemes(prefix) {
     /**
      * @param {Entries<Readonly<import("@catppuccin/palette").Colors<import("@catppuccin/palette").ColorFormat>>>} colors  
      * @returns {Record<string, Record<string, string>>}
