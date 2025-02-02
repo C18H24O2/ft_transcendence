@@ -15,18 +15,14 @@ export const chatSocket = new WebSocket(
    + '/ws/v1/chat/'
 );
 
-if (button_on){
-	button_on.addEventListener('click', () => {
-		chat.classList.toggle('hidden');
-	})
-};
+button_on?.addEventListener('click', () => {
+	chat.classList.toggle('hidden');
+});
 
 // Close the chat when the close button is clicked
-if (button_on){
-	button_off.addEventListener('click', () => {
-		chat.classList.add('hidden');
-	})
-};
+button_off?.addEventListener('click', () => {
+	chat.classList.add('hidden');
+});
 
 let selectedUsers = "";
 
@@ -113,7 +109,7 @@ export function addChatMessage(message) {
 }
 
 chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly:', e.code, e.reason);
+    console.warn('Chat socket closed unexpectedly:', e.code, e.reason);
 };
 
 if (message) {

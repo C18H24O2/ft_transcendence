@@ -1,9 +1,12 @@
 from .queue import ServiceQueue
 from .remote_service import ServiceRequest, ServiceResponse
+from .models import all_models
+from .database import provide_database
 import dataclasses
 import functools
 import json
 import pika
+import sys
 from typing import Callable
 
 
@@ -38,13 +41,32 @@ def message(func: Callable):
     return decorator
 
 
+def lookup_type(name: str) -> object:
+    return getattr(__builtins__, name, None)
+
+
+def log(message: str):
+    print(message, file=sys.stderr)
+
+
 class ServiceMethod:
     def __init__(self, name: str, fn: Callable):
         self.name = name
         self.fn = fn
 
     def handle(self, message: ServiceRequest) -> ServiceResponse:
-        result = self.fn(*message.args)
+        arguments = []
+        for arg in message.args:
+            arg = dict(arg)
+            t = lookup_type(arg["typename"])
+            val = arg["value"]
+            if t is None:
+                res = val
+            else:
+                res = t(val)
+            arguments.append(res)
+
+        result = self.fn(*arguments)
         res_type = type(result)
         return ServiceResponse(result, res_type.__name__)
 
@@ -56,7 +78,7 @@ class ServiceMethod:
         # print("Good name")
 
         # check if the number of arguments matches
-        if len(message.args) != len(self.fn.__code__.co_varnames):
+        if len(message.args) != self.fn.__code__.co_argcount:
             # print("Bad number of args")
             # print(len(message.args))
             # print(len(self.fn.__code__.co_varnames))
@@ -70,13 +92,13 @@ class ServiceMethod:
 
         # check if the argument types match
         for i, arg in enumerate(message.args):
-            print(i, "arg", arg)
+            # print(i, "arg", arg)
             msg_type = arg['typename'] # this is required as APPARENTLY it's wrapped as a dict, not as an Argument object. WTF?
             fn_type = self.fn.__annotations__.get(self.fn.__code__.co_varnames[i])
             if fn_type == None or msg_type != fn_type.__name__:
-                print("no match :(")
-                print(msg_type)
-                print(fn_type)
+                # print("no match :(")
+                # print(msg_type)
+                # print(fn_type)
                 return False
 
         # print("Good args")
@@ -109,6 +131,13 @@ class Service:
             raise Exception(f"Service {service_module} does not have a service_name")
         service_name = globals["service_name"]
         print(f"Running service {service_name}")
+
+        database = provide_database()
+        try:
+            database.create_tables(all_models)
+        except Exception as e:
+            print("Error while creating tables", e, file=sys.stderr)
+            return
 
         # get functions from the module
         functions = dict([(f, v) for f, v in service_module.__dict__.items() if not f.startswith("__") and hasattr(v, "__SERVICE_METHOD")])

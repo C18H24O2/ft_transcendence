@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta, timezone
 import jwt
 from service_runtime.models import User
+import os
 
-JWT_SECRET = 'secret'
+JWT_SECRET = os.environ["AUTH_JWT_SECRET"] or "secretKeyLalalalalalallalalaaaaaaaaaaaaaaaaa"  # ça se sent?
 JWT_ALGORITHM = 'HS256'
 JWT_EXP_DELTA_SECONDS = 3600 * 24 * 30  # 30 days
 JWT_EXP_DELTA = timedelta(seconds=JWT_EXP_DELTA_SECONDS)

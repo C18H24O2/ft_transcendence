@@ -50,3 +50,23 @@ services:
     depends_on:
       valkey:
         condition: service_healthy
+
+  auth-service:
+    build:
+      context: ..
+      dockerfile: service.Dockerfile
+      args:
+        app_path: microservices/auth-service
+    env_file: ../../../.env
+    networks:
+      - rabbitmq
+      - postgres
+    entrypoint: "service-launch"
+    command: "auth-service.py"
+    expose:
+      - "42069"
+    restart: unless-stopped
+    stop_signal: SIGINT
+    depends_on:
+      rabbitmq:
+        condition: service_healthy

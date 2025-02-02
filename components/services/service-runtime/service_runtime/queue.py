@@ -34,6 +34,7 @@ def pika_internal_connection(init: bool = True) -> pika.BlockingConnection | Non
         connection = pika.BlockingConnection(pika.ConnectionParameters(
             host=rabbitmq_host,
             port=rabbitmq_port,
+            heartbeat=3600*4, # tkt chef
             credentials=pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
         ))
     return connection

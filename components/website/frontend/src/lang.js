@@ -19,7 +19,7 @@ window.change_lang = change_lang;
  * @param {string | undefined} value
  * @param {number | undefined} [days]
  */
-function setCookie(name, value, days) {
+export function setCookie(name, value, days) {
 	var expires = "";
 	if (days) {
 		var date = new Date();
@@ -35,7 +35,7 @@ function setCookie(name, value, days) {
  * @param {string} name
  * @returns {string | null} 
  */
-function getCookie(name) {
+export function getCookie(name) {
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');
 	for(var i=0;i < ca.length;i++) {

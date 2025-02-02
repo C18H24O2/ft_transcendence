@@ -2,7 +2,6 @@
 import os
 import peewee
 
-
 env = os.environ.copy()
 postgres_host = env.get("POSTGRES_HOST", "0.0.0.0")
 postgres_port = env.get("POSTGRES_PORT", "5432")

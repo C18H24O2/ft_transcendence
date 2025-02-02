@@ -1,12 +1,16 @@
 import butterup from 'butteruptoasts';
+import { setupPage } from "../shared.js";
 butterup.options.toastLife = 3000;
+import { setCookie } from '../lang.js';
 
-error_messages = {
+let error_messages = {
 	"empty_fields": "{{@ login.error.empty_fields @}}",
 	"invalid_username": "{{@ login.error.invalid_username @}}",
+	"known_user": "{{@ login.error.known_user @}}",
 	"invalid_password": "{{@ login.error.invalid_password @}}",
-	"invalid_token": "{{@ login.error.invalid_token @}}",
-	"expired_token": "{{@ login.error.expired_token @}}",
+	"invalid_totp": "{{@ login.error.invalid_totp @}}",
+	"server_error": "{{@ login.error.server_error @}}",
+	"unknown_error": "{{@ login.error.unknown_error @}}"
 };
 
 function loginWarn(message) {
@@ -27,6 +31,11 @@ function loginWarn(message) {
 
 function loginFailed(message) {
 	try {
+		if (!(message in error_messages)) {
+			message = "unknown_error"
+		}
+		message = error_messages[message];
+
 		butterup.toast({
 			title: 'Error',
 			message: message,
@@ -41,11 +50,13 @@ function loginFailed(message) {
 
 function tryLogin(event) {
 	event.preventDefault();
+
 	let form = event.target;
 	let username = form.username.value;
 	let password = form.password.value;
+	let totpCode = form.totpCode.value;
 
-	if (username == "" || password == "") {
+	if (username === "" || password === "" || totpCode === "") {
 		loginWarn("{{@ login.error.empty_fields @}}");
 		return;
 	}
@@ -58,12 +69,20 @@ function tryLogin(event) {
 		body: JSON.stringify({
 			username: username,
 			password: password,
+			totp_code: totpCode,
 		}),
-	}).then((response) => {
-		if (response.status == 200) {
+	})
+	.then((response) => response.json())
+	.then((data) => {
+		console.log(data);
+		if ("error" in data) {
+			loginFailed(data.error);
+		} else if ("token" in data) {
+			// YIPPIEEEEEEEEEEEEEEEEEEEEEEEE
+			setCookie("x-ft-tkn", data.token, 30);
 			window.location.href = "/";
 		} else {
-			loginFailed("Invalid username or password");
+			loginFailed("unknown_error");
 		}
 	})
 	.catch((error) => {
@@ -74,10 +93,11 @@ function tryLogin(event) {
 function handleLoad() {
 	try {
 		const form = document.getElementById("login-form");
-		form.onsubmit = tryLogin;
+		if (form) {
+			form.onsubmit = tryLogin;
+		}
 	} catch (e) {
 	}
 }
 
-handleLoad();
-htmx.onLoad(handleLoad);
+setupPage(handleLoad, () => {});
