@@ -32,7 +32,12 @@
 		"chat_invite": "Cramptinviter",
 		"add_player": "Ajouter un crampteur",
 		"start_tournament": "Crampter le Crampté",
-		"remove": "enlever"
+		"remove": "enlever",
+		"player_name":"Nom du Crampteur",
+		"isAI": "Le joueur est il un Crampté Artificiel",
+		"score_to_win": "Cramptés pour gagner",
+		"start_match": "Commencer le Crampté",
+		"stop_match": "Arreter le Crampté"
 	},
 	"welcome_page": {
 			"title": "Bienvenue sur",

@@ -32,7 +32,12 @@
 		"chat_invite": "Inviter",
 		"add_player": "Ajouter un joueur",
 		"start_tournament": "Débuter le tournoi",
-		"remove": "Retirer"
+		"remove": "Retirer",
+		"player_name":"Nom du joueur",
+		"isAI": "Le joueur est il une IA?",
+		"score_to_win": "Points pour gagner",
+		"start_match": "Commencer la partie",
+		"stop_match": "Arreter la partie"
 	},
 	"welcome_page": {
 			"title": "Bienvenue sur",

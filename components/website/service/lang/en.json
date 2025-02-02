@@ -32,7 +32,12 @@
 		"chat_invite": "Invite",
 		"add_player": "Add Player",
 		"start_tournament": "Start the tournament",
-		"remove": "Remove"
+		"remove": "Remove",
+		"player_name":"Player name",
+		"isAI": "Is player an AI?",
+		"score_to_win": "Score to win",
+		"start_match": "Start Game",
+		"stop_match": "Stop Game"
 	},
 	"welcome_page": {
 			"title": "Welcome to",

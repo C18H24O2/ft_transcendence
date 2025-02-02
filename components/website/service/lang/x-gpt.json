@@ -29,7 +29,12 @@
 	  "chat_invite": "Challenge Me, Hero!",
 	  "add_player": "Summon a New Challenger",
 	  "start_tournament": "Let the Tournament Begin!",
-	  "remove": "Remove"
+	  "remove": "Remove",
+	  "player_name": "Enter your name...",
+	  "isAI": "Select if AI opponent",
+	  "score_to_win": "Set winning score...",
+	  "start_match": "Start Match",
+	  "stop_match": "Stop Match"
 	},
 	"welcome_page": {
 		"title": "Welcome to our Pong-tropolis,",
