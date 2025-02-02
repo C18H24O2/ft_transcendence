@@ -34,21 +34,34 @@
 		{% include "__chat.html" %}
 		<main id="content">
 			<div class="flex justify-center items-center flex-col space-y-[5vh] bg-placeholder-pattern bg-auto bg-fixed min-h-svh">
-				<section id="parameters" class="min-h-svh flex flex-col items-center">
+				<section id="parameters" class="min-h-svh min-w-[50%] flex flex-col justify-center space-y-5">
 					<div id="player-parameters" class="flex flex-row justify-between">
-						<form id="player1-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text"></form>
-						<div id="player1-switch">{% translate 'button.isAI' %}</div>
-						<form id="player2-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text"></form>
-						<div id="player2-switch">{% translate 'button.isAI' %}</div>
+						<div id="player1" class="flex flex-col justify-evenly">
+							<input type="text" id="player1-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text" placeholder="{% translate button.player_name %}">
+							<label class="inline-flex items-center justify-center cursor-pointer space-x-4 space-y-2">
+								<input type="checkbox" id="player1-switch" value="" class="sr-only peer">
+								<div class="relative w-11 h-6 bg-base rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-surface2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sapphire"></div>
+								<span class="text-text">{% translate 'button.isAI' %}</span>
+							</label>
+						</div>
+						<div id="player1" class="flex flex-col">
+							<input type="text" id="player2-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text" placeholder="{% translate button.player_name %}">
+							<label class="inline-flex items-center justify-center cursor-pointer space-x-4 space-y-2">
+								<input type="checkbox" id="player2-switch" value="" class="sr-only peer">
+								<div class="relative w-11 h-6 bg-base rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-surface2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sapphire"></div>
+								<span class="text-text">{% translate 'button.isAI' %}</span>
+							</label>
+						</div>
 					</div>
-					<button id="start-game-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text">{% translate 'button.start_match' %}</button>
+					<input type="number" min="0" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text w-fit self-center" placeholder="{% translate 'button.score_to_win' %}">
+					<button id="start-game-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text w-fit self-center">{% translate 'button.start_match' %}</button>
 				</section>
-				<section id="game" class="min-h-full flex justify-between items-center flex-col space-y-[3vh] p-10">
+				<section id="game" class="min-h-full flex justify-evenly items-center flex-col">
 					<div id="buttons">
 						<button id="view-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text"><i class="inline" data-feather="box"></i>{% translate 'button.view' %}</button>
 						<button id="stop-game-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text">{% translate 'button.stop_match' %}<button>
 					</div>
-					<div class="flex justify-between items-center flex-col p-10 justify-self-center space-y-[3vh]">
+					<div class="flex justify-between items-center flex-col justify-self-center space-y-[3vh]">
 						<div class="overflow-scroll flex items-center justify-center bg-base text-[10vh] text-text font-mono h-[20vh] aspect-[5/2] rounded-xl ">
 							<span id="score-player1">000</span> - <span id="score-player2">000</span>
 						</div>
