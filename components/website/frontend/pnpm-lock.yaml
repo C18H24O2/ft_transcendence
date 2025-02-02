@@ -22,7 +22,7 @@ importers:
         version: 3.4.3
       htmx-ext-preload:
         specifier: ^2.0.1
-        version: 2.0.1
+        version: 2.1.0
       htmx.org:
         specifier: ^2.0.3
         version: 2.0.3
@@ -700,8 +700,8 @@ packages:
     engines: {node: ^14.13.1 || >=16.0.0}
     hasBin: true
 
-  htmx-ext-preload@2.0.1:
-    resolution: {integrity: sha512-5hOxekCRppzm2h9tP5LJwcmF3MDpS04PMguCnpVfVvOr1N6mt0if5nqi9gtaASOxPiv6JkGOhdFZIq5UthAMsg==}
+  htmx-ext-preload@2.1.0:
+    resolution: {integrity: sha512-or/BOusAgeIXHRdw+DvP4aPh+/tkafu6RjDLB+5x0r11HCdV2krhPTp81xS9Gj6+LHSAAwy0v6Jn4VRPH3FnDg==}
 
   htmx.org@2.0.3:
     resolution: {integrity: sha512-AeoJUAjkCVVajbfKX+3sVQBTCt8Ct4lif1T+z/tptTXo8+8yyq3QIMQQe/IT+R8ssfrO1I0DeX4CAronzCL6oA==}
@@ -1731,7 +1731,7 @@ snapshots:
       relateurl: 0.2.7
       terser: 5.36.0
 
-  htmx-ext-preload@2.0.1: {}
+  htmx-ext-preload@2.1.0: {}
 
   htmx.org@2.0.3: {}
 
