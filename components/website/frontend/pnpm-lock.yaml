@@ -25,7 +25,7 @@ importers:
         version: 2.0.1
       htmx.org:
         specifier: ^2.0.3
-        version: 2.0.3
+        version: 2.0.4
       qrcode:
         specifier: ^1.5.4
         version: 1.5.4
@@ -706,8 +706,8 @@ packages:
   htmx-ext-preload@2.0.1:
     resolution: {integrity: sha512-5hOxekCRppzm2h9tP5LJwcmF3MDpS04PMguCnpVfVvOr1N6mt0if5nqi9gtaASOxPiv6JkGOhdFZIq5UthAMsg==}
 
-  htmx.org@2.0.3:
-    resolution: {integrity: sha512-AeoJUAjkCVVajbfKX+3sVQBTCt8Ct4lif1T+z/tptTXo8+8yyq3QIMQQe/IT+R8ssfrO1I0DeX4CAronzCL6oA==}
+  htmx.org@2.0.4:
+    resolution: {integrity: sha512-HLxMCdfXDOJirs3vBZl/ZLoY+c7PfM4Ahr2Ad4YXh6d22T5ltbTXFFkpx9Tgb2vvmWFMbIc3LqN2ToNkZJvyYQ==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -1765,7 +1765,7 @@ snapshots:
 
   htmx-ext-preload@2.0.1: {}
 
-  htmx.org@2.0.3: {}
+  htmx.org@2.0.4: {}
 
   ignore@5.3.2: {}
 
