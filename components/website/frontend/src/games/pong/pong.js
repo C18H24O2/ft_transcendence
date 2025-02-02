@@ -5,8 +5,6 @@ import { setupPage } from "../../shared.js";
 
 let pongInstance;
 
-let SCORE_TO_WIN = 0;
-
 let player1_type = true;
 let player2_type = true;
 
@@ -22,6 +20,16 @@ function start_game()
 	let player1_provider;
 	let player2_provider;
 
+	let player1 = document.getElementById("player1-name")?.value ?? "player1";
+	let player2 = document.getElementById("player2-name")?.value ?? "player2";
+	let score_to_win = document.getElementById("score-selector")?.value ?? 0;
+	score_to_win = parseInt(score_to_win, 10);
+
+	if (score_to_win === NaN)
+		return;
+	if (score_to_win < 0)
+		score_to_win = 0;
+
 	let game_section = document.getElementById('game');
 	if (game_section)
 		game_section.scrollIntoView();
@@ -35,9 +43,7 @@ function start_game()
 		player2_provider = new PlayerMovementProvider({40: 0, 38: 1}, "paddle2", pongInstance);
 	else
 		player2_provider = new AiMovementProvider("paddle2", pongInstance);
-	let player1 = document.getElementById("player1-name")?.value ?? "player1";
-	let player2 = document.getElementById("player2-name")?.value ?? "player2";
-	pongInstance.startMatch(player1, player2, SCORE_TO_WIN, [player1_provider, player2_provider]);
+	pongInstance.startMatch(player1, player2, score_to_win, [player1_provider, player2_provider]);
 }
 
 function stop_game()
@@ -52,6 +58,15 @@ function stop_game()
 		parameter_section.scrollIntoView();
 	pongInstance.stopMatch();
 	pongInstance.resetMatch(1);
+}
+
+function reset_scroll()
+{
+	let parameter_section = document.getElementById('parameters')
+	if (parameter_section)
+		parameter_section.scrollIntoView();
+	if (pongInstance !== null)
+		pongInstance.resetMatch(1);
 }
 
 function player_switch()
@@ -81,6 +96,7 @@ function ctor()
 	}
 	if (player2_switch)
 		player2_switch.addEventListener('click', player_switch);
+	document.addEventListener("pong-game-end", reset_scroll);
 }
 
 function dtor()
@@ -90,6 +106,7 @@ function dtor()
 	removeEventListener('click', start_game);
 	removeEventListener('click', stop_game);
 	removeEventListener('click', player_switch);
+	document.removeEventListener('pong-game-end', reset_scroll);
 }
 
 setupPage(ctor, dtor);
