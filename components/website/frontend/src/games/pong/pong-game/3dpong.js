@@ -137,6 +137,13 @@ export class PongGame {
 		if (typeof(player1) !== "string" || typeof(player2) !== "string" || typeof(max_score) != "number")
 			return;
 
+		let player1_name = document.getElementById("name-player1");
+		let player2_name = document.getElementById("name-player2");
+
+		if (player1_name)
+			player1_name.textContent = player1;
+		if (player2_name)
+			player2_name.textContent = player2;
 		this.gameStarted = true;
 		this.then = performance.now();
 		this.deltaTime = 0;

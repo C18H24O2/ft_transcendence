@@ -37,7 +37,7 @@
 				<section id="parameters" class="min-h-svh min-w-[50%] flex flex-col justify-center space-y-5">
 					<div id="player-parameters" class="flex flex-row justify-between">
 						<div id="player1" class="flex flex-col justify-evenly">
-							<input type="text" id="player1-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text" placeholder="{% translate button.player_name %}">
+							<input type="text" id="player1-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text" placeholder="{% translate 'button.player_name' %}" value="player1">
 							<label class="inline-flex items-center justify-center cursor-pointer space-x-4 space-y-2">
 								<input type="checkbox" id="player1-switch" value="" class="sr-only peer">
 								<div class="relative w-11 h-6 bg-base rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-surface2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sapphire"></div>
@@ -45,7 +45,7 @@
 							</label>
 						</div>
 						<div id="player1" class="flex flex-col">
-							<input type="text" id="player2-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text" placeholder="{% translate button.player_name %}">
+							<input type="text" id="player2-name" class="btn bg-surface1/75 focus:bg-surface2 active:bg-mantle rounded-lg text-text" placeholder="{% translate 'button.player_name' %}" value="player2">
 							<label class="inline-flex items-center justify-center cursor-pointer space-x-4 space-y-2">
 								<input type="checkbox" id="player2-switch" value="" class="sr-only peer">
 								<div class="relative w-11 h-6 bg-base rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-surface2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sapphire"></div>
@@ -53,7 +53,7 @@
 							</label>
 						</div>
 					</div>
-					<input type="number" min="0" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text w-fit self-center" placeholder="{% translate 'button.score_to_win' %}">
+					<input type="number" min="0" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text w-fit self-center" placeholder="{% translate 'button.score_to_win' %}" value="0">
 					<button id="start-game-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text w-fit self-center">{% translate 'button.start_match' %}</button>
 				</section>
 				<section id="game" class="min-h-full flex justify-evenly items-center flex-col">
@@ -62,8 +62,13 @@
 						<button id="stop-game-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text">{% translate 'button.stop_match' %}<button>
 					</div>
 					<div class="flex justify-between items-center flex-col justify-self-center space-y-[3vh]">
-						<div class="overflow-scroll flex items-center justify-center bg-base text-[10vh] text-text font-mono h-[20vh] aspect-[5/2] rounded-xl ">
-							<span id="score-player1">000</span> - <span id="score-player2">000</span>
+						<div class="overflow-scroll flex flex-col items-center justify-center bg-base text-text font-mono h-[20vh] aspect-[5/2] rounded-xl">
+							<div class="flex items-center justify-center text-[10vh] font-bold">
+								<span id="score-player1">000</span> - <span id="score-player2">000</span>
+							</div>
+							<div class="flex items-center justify-center text-[3vh] text-subtext1">
+								<span id="name-player1">Player 1</span>   -   <span id="name-player2">Player 2</span>
+							</div>
 						</div>
 						<canvas id="gameField" style="height: 60vh; width: 60vh;" class="bg-crust text-text rounded-xl p-[1vh]">
 							{% translate 'error.html5_required' %}

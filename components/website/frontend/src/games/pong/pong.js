@@ -5,9 +5,6 @@ import { setupPage } from "../../shared.js";
 
 let pongInstance;
 
-let player1 = "player1";
-let player2 = "player2";
-
 let SCORE_TO_WIN = 0;
 
 let player1_type = true;
@@ -38,6 +35,8 @@ function start_game()
 		player2_provider = new PlayerMovementProvider({40: 0, 38: 1}, "paddle2", pongInstance);
 	else
 		player2_provider = new AiMovementProvider("paddle2", pongInstance);
+	let player1 = document.getElementById("player1-name")?.value ?? "player1";
+	let player2 = document.getElementById("player2-name")?.value ?? "player2";
 	pongInstance.startMatch(player1, player2, SCORE_TO_WIN, [player1_provider, player2_provider]);
 }
 
@@ -52,11 +51,12 @@ function stop_game()
 	if (parameter_section)
 		parameter_section.scrollIntoView();
 	pongInstance.stopMatch();
+	pongInstance.resetMatch(1);
 }
 
 function player_switch()
 {
-	console.log('click!');
+	// console.log('click!');
 	if (this.id === "player1-switch")
 		player1_type = !player1_type;
 	if (this.id === "player2-switch")

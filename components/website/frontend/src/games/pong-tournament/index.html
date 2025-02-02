@@ -44,8 +44,13 @@
 				</section>
 				
 				<section id="game" class="min-h-full flex justify-between items-center flex-col space-y-[3vh] p-10">
-					<div class="overflow-scroll flex items-center justify-center bg-base text-[10vh] text-text font-mono h-[20vh] aspect-[5/2] rounded-xl ">
-						<span id="score-player1">000</span> - <span id="score-player2">000</span>
+					<div class="overflow-scroll flex flex-col items-center justify-center bg-base text-text font-mono h-[20vh] aspect-[5/2] rounded-xl">
+						<div class="flex items-center justify-center text-[10vh] font-bold">
+							<span id="score-player1">000</span>-<span id="score-player2">000</span>
+						</div>
+						<div class="flex items-center justify-center text-[3vh] text-subtext1">
+							<span id="name-player1">Player 1</span>-<span id="name-player2">Player 2</span>
+						</div>
 					</div>
 					<canvas id="gameField" width="1920" height="1920" style="height: 60vh; width: 60vh;" class="bg-crust text-text rounded-xl p-[1vh]">
 						{% translate 'error.html5_required' %}
