@@ -18,6 +18,7 @@
 		<link rel="stylesheet" href="chat/chat.css">
 		<title>{{ title }} &mdash; {{ website_title }}</title>
 		<script defer type="module" src="/shared.js"></script>
+		<script defer type="module" src="/chat/chat.js"></script>
 	</head>
 
 	<body class="p-0 m-0 w-full bg-base font-sans text-text contextual [&_*]:transition-colors [&_*]:duration-300" hx-ext="spa-tools, preload">
@@ -34,12 +35,12 @@
 		{% include "__chat.html" %}
 		<main id="content">
 			<div class="flex justify-center items-center flex-col space-y-[5vh] bg-placeholder-pattern bg-auto bg-fixed min-h-svh">
-				<section id="parameters" class="min-h-svh">
+				<section id="parameters" class="min-h-svh flex flex-row justify-between items-center">
+					<form id="player1-name"></form>
 					<div id="player1-switch">{% translate 'button.isAI' %}</div>
+					<form id="player2-name"></form>
 					<div id="player2-switch">{% translate 'button.isAI' %}</div>
 					<button id="start-game-button" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle rounded-lg text-text">{% translate 'button.start_match' %}</button>
-					<form id="player1-name"></form>
-					<form id="player2-name"></form>
 				</section>
 				<section id="game" class="min-h-full flex justify-between items-center flex-col space-y-[3vh] p-10">
 					<div id="buttons">
