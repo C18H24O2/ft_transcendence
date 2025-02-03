@@ -67,14 +67,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         global connected
         global connected_user
 
+
+        print(data, file=sys.stderr)
         #TODO: do auth
-#        if (AuthService.is_valid_token(token=data.token)):
-#            pass
-#			 user = AuthService.get_user(token=data.token)
-#			self.username = user.username
-#		else:
-#		 self.username = "anonymous" + str(int(uuid.uuid4().int % 900000) + 100000)
-        #user = UserService.get_user(data.token)
+        if (AuthService.is_valid_token(token=data['token'])):
+            user = AuthService.get_user(token=data['token'])
+            self.username = user.username
+        else:
+            self.username = "anonymous" + str(int(uuid.uuid4().int % 900000) + 100000)
+        user = AuthService.get_user(token=data['token'])
 
         self.authenticated = True
         self.username = "anonymous" + str(int(uuid.uuid4().int % 900000) + 100000) #"USER OUAISSSS" #TODO: get actual username from userservice
