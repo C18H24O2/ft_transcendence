@@ -1,4 +1,5 @@
 import butterup from 'butteruptoasts';
+import { getCookie } from '../lang.js';
 
 const chat = document.querySelector('#chat-container');
 const button_on = document.querySelector('#toggle-chat-btn');
@@ -36,17 +37,6 @@ function updateFriendList(userList) {
 			li.textContent = user.username;
 			li.dataset.userId = user.id;
 
-			
-			li.addEventListener('dbclick', () => {
-				butterup.toast({
-					title: 'Profile',
-					message: li.textContent,
-					location: 'top-left',
-					icon: true,
-					dismissable: true,
-					type: 'info',
-				});
-			});
 			li.addEventListener('click', () => {
 				if (li.dataset.userId != "chat_transcendence-internal00000000000000000000") {
 					message.value = `/mp ${user.username} `;
@@ -65,9 +55,10 @@ function updateFriendList(userList) {
 chatSocket.onopen = function(e) {
 	// Start authentication
 	// console.log("auth moment");
+	let token = getCookie("x-ft-tkn");
 	chatSocket.send(JSON.stringify({
 		"type": "chat.authenticate",
-		"token": "le token la ouais" //TODO: get from cookie
+		"token": token
 	}));
 }
 

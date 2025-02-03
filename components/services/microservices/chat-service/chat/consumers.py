@@ -5,6 +5,9 @@ import uuid
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
+from service_runtime.remote_service import remote_service
+
+AuthService = remote_service("auth-service")
 
 blocked_users = {}
 ROOM_NAME = "chat_transcendence-internal00000000000000000000"
@@ -65,11 +68,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         global connected_user
 
         #TODO: do auth
-        #AuthService.is_valid(data.token)
+#        if (AuthService.is_valid_token(token=data.token)):
+#            pass
+#			 user = AuthService.get_user(token=data.token)
+#			self.username = user.username
+#		else:
+#		 self.username = "anonymous" + str(int(uuid.uuid4().int % 900000) + 100000)
         #user = UserService.get_user(data.token)
 
         self.authenticated = True
-        self.username = str(uuid.uuid4()) #"USER OUAISSSS" #TODO: get actual username from userservice
+        self.username = "anonymous" + str(int(uuid.uuid4().int % 900000) + 100000) #"USER OUAISSSS" #TODO: get actual username from userservice
 
         n = 0
         if self.username in connected:
