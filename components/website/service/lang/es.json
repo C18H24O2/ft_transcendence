@@ -49,12 +49,30 @@
 	},
 	"login": {
 		"error": {
-			"invalid_credentials": "Nombre de usuario o contraseña no válidos",
-			"server_error": "Error del servidor, inténtelo de nuevo más tarde",
-			"empty_fields": "Por favor, rellene todos los campos"
+			"empty_fields": "Por favor, complete todos los campos",
+			"invalid_username": "Nombre de usuario inválido",
+			"known_user": "El usuario ya está registrado",
+			"invalid_password": "Contraseña inválida",
+			"invalid_totp": "Código TOTP inválido",
+			"server_error": "Error del servidor, por favor intente nuevamente más tarde",
+			"unknown_error": "Error desconocido, lo sentimos",
+			"ft_api_error": "42 devolvió un error, por favor intente nuevamente más tarde",
+			"invalid_account_type": "No puedes usar este método de inicio de sesión con este tipo de cuenta"
 		},
 		"qrcode": {
 			"title": "Agregue este código qr a su aplicación de autenticación"
+		}
+	},
+	"register": {
+		"error": {
+			"empty_fields": "Por favor, complete todos los campos",
+			"invalid_username": "Nombre de usuario inválido",
+			"known_user": "El usuario ya está registrado",
+			"reserved_username": "Los nombres de usuario que terminan en 42 están reservados para la autenticación de 42, por favor, usa otro.",
+			"invalid_password": "Contraseña inválida",
+			"invalid_totp": "Código TOTP inválido",
+			"server_error": "Error del servidor, por favor intente nuevamente más tarde",
+			"unknown_error": "Error desconocido, lo sentimos"
 		}
 	},
 	"tournament": {
@@ -85,7 +103,8 @@
 			"player_missing": {
 				"title": "El torneo debe tener al menos 2 jugadores."
 			}
-		}
+		},
+		"announcer": "Mensaje del Sistema"
 	},
 	"gamemode_cards": {
 		"pong_offline": {

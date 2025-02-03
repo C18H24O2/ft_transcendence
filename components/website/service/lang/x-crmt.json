@@ -49,12 +49,30 @@
 	},
 	"login": {
 		"error": {
-			"invalid_credentials": "Mauvais Cramptés",
-			"server_error": "Le crampté Principal fait roooo mimimi",
-			"empty_fields": "oubliez aucun cramptés svp"
+			"empty_fields": "Replissez les cramptés svp",
+			"invalid_username": "Crampté Invalide",
+			"known_user": "Crampté existant",
+			"invalid_password": "Crampté de passe invalide",
+			"invalid_totp": "Crapté TOTP invalide",
+			"server_error": "Erreur de Crampté veuillez crampter plus tard",
+			"unknown_error": "Crampté inconnu, dsl",
+			"ft_api_error": "42 s'est crampt chié dessus",
+			"invalid_account_type": "Ce Crampté peux pas crampter comme ca"
 		},
 		"qrcode": {
 			"title": "Ajoutez ce crampté a votre cramptauthentificateur"
+		}
+	},
+	"register": {
+		"error": {
+			"empty_fields": "Replissez les cramptés svp",
+			"invalid_username": "Crampté Invalide",
+			"known_user": "Crampté existant",
+			"reserved_username": "Les cramptés en 42 c'est pour les crampteurs de 42, cramptberge",
+			"invalid_password": "Crampté de passe invalide",
+			"invalid_totp": "Crapté TOTP invalide",
+			"server_error": "Erreur de Crampté veuillez crampter plus tard",
+			"unknown_error": "Crampté inconnu, dsl"
 		}
 	},
 	"tournament": {
@@ -85,7 +103,8 @@
 			"player_missing": {
 				"title": "Le tournoi crampté dois avoir au moins 2 Crampteurs"
 			}
-		}
+		},
+		"announcer": "Crampté de nous"
 	},
 	"gamemode_cards": {
 		"pong_offline": {

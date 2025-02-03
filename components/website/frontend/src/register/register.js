@@ -11,6 +11,7 @@ let error_messages = {
 	"empty_fields": "{{@ register.error.empty_fields @}}",
 	"invalid_username": "{{@ register.error.invalid_username @}}",
 	"known_user": "{{@ register.error.known_user @}}",
+	"reserved_username": "{{@ register.error.reserved_username @}}",
 	"invalid_password": "{{@ register.error.invalid_password @}}",
 	"invalid_totp": "{{@ register.error.invalid_totp @}}",
 	"server_error": "{{@ register.error.server_error @}}",

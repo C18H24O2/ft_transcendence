@@ -7,12 +7,12 @@ import { setCookie } from '../lang.js';
 let error_messages = {
 	"empty_fields": "{{@ login.error.empty_fields @}}",
 	"invalid_username": "{{@ login.error.invalid_username @}}",
-	"known_user": "{{@ login.error.known_user @}}",
 	"invalid_password": "{{@ login.error.invalid_password @}}",
 	"invalid_totp": "{{@ login.error.invalid_totp @}}",
 	"server_error": "{{@ login.error.server_error @}}",
 	"unknown_error": "{{@ login.error.unknown_error @}}",
-	"ft_api_error": "{{@ login.error.42_error @}}"
+	"ft_api_error": "{{@ login.error.42_error @}}",
+	"invalid_account_type": "{{@ login.error.invalid_account_type @}}"
 };
 
 function warn(message) {

@@ -241,7 +241,7 @@ function matchEnd()
 		icon: false,
 		type: 'warning',
 	});
-	addChatMessage(`Next game ${playerlist[0]} vs ${playerlist[1]}\n`);
+	addChatMessage(`{{@ tournament.announcer @}}: ${playerlist[0]} vs ${playerlist[1]}\n`);
 	countdown(TIMEOUT, startGame, matchCountdownToast);
 }
 
@@ -276,6 +276,7 @@ function startTournament()
 	}
 	document.addEventListener('keydown', preventScroll);
 	document.addEventListener('pong-game-end', matchEnd);
+	addChatMessage(`{{@ tournament.announcer @}}: ${playerlist[0]} vs ${playerlist[1]}\n`);
 	countdown(TIMEOUT, startGame, tournamentCountdownToast);
 	tournamentStarted = true;
 }

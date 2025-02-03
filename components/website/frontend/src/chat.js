@@ -21,112 +21,116 @@ export function addChatMessage(message) {
 	}
 }
 
-let token = getCookie("x-ft-tkn");
-if (!(token === null || token === undefined || token === "")) {
-	const chatSocket = new WebSocket(
-	   'wss://'
-	   + window.location.host
-	   + '/ws/v1/chat/'
-	);
+button_on?.addEventListener('click', () => {
+	chat.classList.toggle('hidden');
+});
 
-	button_on?.addEventListener('click', () => {
-		chat.classList.toggle('hidden');
-	});
+// Close the chat when the close button is clicked
+button_off?.addEventListener('click', () => {
+	chat.classList.add('hidden');
+});
 
-	// Close the chat when the close button is clicked
-	button_off?.addEventListener('click', () => {
-		chat.classList.add('hidden');
-	});
+setTimeout(chatThing, 2000); //tkt
 
-	let selectedUsers = "";
+function chatThing()
+{
+	let token = getCookie("x-ft-tkn");
+	if (!(token === null || token === undefined || token === "")) {
+		const chatSocket = new WebSocket(
+		'wss://'
+		+ window.location.host
+		+ '/ws/v1/chat/'
+		);
+		let selectedUsers = "";
 
-	function updateFriendList(userList) {
-		if (friendList) {
-			friendList.innerHTML = ''; // Clear existing friends
+		function updateFriendList(userList) {
+			if (friendList) {
+				friendList.innerHTML = ''; // Clear existing friends
 
-			userList.forEach((user) => {
-				const li = document.createElement('li');
-				li.classList.add('btn', 'border-1', 'border-solid', 'border-overlay2', 'bg-overlay1/50', 'hover:bg-overlay1/75');
-				li.textContent = user.username;
-				li.dataset.userId = user.id;
+				userList.forEach((user) => {
+					const li = document.createElement('li');
+					li.classList.add('btn', 'border-1', 'border-solid', 'border-overlay2', 'bg-overlay1/50', 'hover:bg-overlay1/75');
+					li.textContent = user.username;
+					li.dataset.userId = user.id;
 
-				li.addEventListener('click', () => {
-					if (li.dataset.userId != "chat_transcendence-internal00000000000000000000") {
-						message.value = `/mp ${user.username} `;
-						message.focus();
-						selectedUsers = user.username;
-					}
-					else{
-						selectedUsers = "";
-					}
+					li.addEventListener('click', () => {
+						if (li.dataset.userId != "chat_transcendence-internal00000000000000000000") {
+							message.value = `/mp ${user.username} `;
+							message.focus();
+							selectedUsers = user.username;
+						}
+						else{
+							selectedUsers = "";
+						}
+					});
+					friendList.appendChild(li);
+				})
+			}
+		}
+
+		chatSocket.onopen = function(e) {
+			// Start authentication
+			// console.log("auth moment");
+			chatSocket.send(JSON.stringify({
+				"type": "chat.authenticate",
+				"token": token
+			}));
+		}
+
+		chatSocket.onmessage = function(e) {
+			const data = JSON.parse(e.data);
+			if (data.type === 'user_list') {
+				updateFriendList(data.user_list);
+			}
+			if (data.type === 'invite') {
+				butterup.toast({
+					title: 'Invite',
+					message: data.sender + " invited you to a pong game",
+					customHTML: '<button class="btn" id="join-game-btn">Sure thing!</button>',
+					location: 'top-left',
+					icon: true,
+					dismissable: true,
+					type: 'info',
 				});
-				friendList.appendChild(li);
-			})
-		}
-	}
-
-	chatSocket.onopen = function(e) {
-		// Start authentication
-		// console.log("auth moment");
-		chatSocket.send(JSON.stringify({
-			"type": "chat.authenticate",
-			"token": token
-		}));
-	}
-
-	chatSocket.onmessage = function(e) {
-		const data = JSON.parse(e.data);
-		if (data.type === 'user_list') {
-			updateFriendList(data.user_list);
-		}
-		if (data.type === 'invite') {
-			butterup.toast({
-				title: 'Invite',
-				message: data.sender + " invited you to a pong game",
-				customHTML: '<button class="btn" id="join-game-btn">Sure thing!</button>',
-				location: 'top-left',
-				icon: true,
-				dismissable: true,
-				type: 'info',
-			});
-		}
-		// console.log(data);
-		if (data["message"] != undefined) {
-			addChatMessage(data.message);
-		}
-	}
-
-	chatSocket.onclose = function(e) {
-		console.warn('Chat socket closed unexpectedly:', e.code, e.reason);
-	}
-
-	if (message) {
-		message.focus();
-		message.onkeyup = function(e) {
-			if (e.key === 'Enter') {  // enter, return
-				document.querySelector('#chat-message-submit').click();
+			}
+			// console.log(data);
+			if (data["message"] != undefined) {
+				addChatMessage(data.message);
 			}
 		}
-	}
 
-	if (message_submit) {
-		message_submit.onclick = function(e) {
-			const messageInputDom = document.querySelector('#message-input');
-			if (messageInputDom) {
-				const message = messageInputDom.value;
-				chatSocket.send(JSON.stringify({
-					'type': 'chat.message',
-					'message': message
-				}));
-			messageInputDom.value = '';
-			}
+		chatSocket.onclose = function(e) {
+			console.warn('Chat socket closed unexpectedly:', e.code, e.reason);
 		}
-	}
 
-	if (invite) {
-		invite.onclick = function(e) {
-			message.value = `/invite ${selectedUsers}`;
+		if (message) {
 			message.focus();
+			message.onkeyup = function(e) {
+				if (e.key === 'Enter') {  // enter, return
+					document.querySelector('#chat-message-submit').click();
+				}
+			}
+		}
+
+		if (message_submit) {
+			message_submit.onclick = function(e) {
+				const messageInputDom = document.querySelector('#message-input');
+				if (messageInputDom) {
+					const message = messageInputDom.value;
+					chatSocket.send(JSON.stringify({
+						'type': 'chat.message',
+						'message': message
+					}));
+				messageInputDom.value = '';
+				}
+			}
+		}
+
+		if (invite) {
+			invite.onclick = function(e) {
+				message.value = `/invite ${selectedUsers}`;
+				message.focus();
+			}
 		}
 	}
 }

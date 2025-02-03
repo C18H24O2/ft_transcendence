@@ -125,7 +125,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if cmd == 'mp' or cmd == 'msg':
             await self._send_message_to(target, extras)
         elif cmd == 'tournament':
-        	await self.send(text_data=json.dumps({"message": extras}))
+            await self.send(text_data=json.dumps({"message": extras}))
         elif cmd == 'block' or cmd == 'ignore':
             await self._block_user(target)
         elif cmd == 'unblock':
@@ -158,7 +158,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         else:
             name = await self.get_id_by_username(target)
             if name == None:
-                await _error("User id not found", disconnect=False)
+                await self._error("User id not found", disconnect=False)
                 return
             channel_layer = get_channel_layer()
             message_from = 'Msg from ' + self.username + ': ' + message
@@ -197,7 +197,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         else:
             name = await self.get_id_by_username(target)
             if name == None:
-                await _error("User id not found", disconnect=False)
+                await self._error("User id not found", disconnect=False)
                 return
             channel_layer = get_channel_layer()
             await channel_layer.send(name, {

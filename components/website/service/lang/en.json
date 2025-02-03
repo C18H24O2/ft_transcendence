@@ -50,12 +50,30 @@
 	},
 	"login": {
 		"error": {
-			"invalid_credentials": "Invalid username or password",
+			"empty_fields": "Please fill in all fields",
+			"invalid_username": "Invalid username",
+			"known_user": "User already registered",
+			"invalid_password": "Invalid password",
+			"invalid_totp": "Invalid TOTP Code",
 			"server_error": "Server error, please try again later",
-			"empty_fields": "Please fill in all fields"
+			"unknown_error": "Unknown error, sorry about that",
+			"ft_api_error": "42 returned an error, please try again later",
+			"invalid_account_type": "You cannot use this login method with this account type"
 		},
 		"qrcode": {
 			"title": "Add this qr code to you authenticator app"
+		}
+	},
+	"register": {
+		"error": {
+			"empty_fields": "Please fill in all fields",
+			"invalid_username": "Invalid username",
+			"known_user": "User already registered",
+			"reserved_username": "Usernames ending in 42 are reserved for 42 auth, please use another",
+			"invalid_password": "Invalid password",
+			"invalid_totp": "Invalid TOTP Code",
+			"server_error": "Server error, please try again later",
+			"unknown_error": "Unknown error, sorry about that"
 		}
 	},
 	"tournament": {
@@ -86,7 +104,8 @@
 			"player_missing": {
 				"title": "Tournament must have at least 2 players"
 			}
-		}
+		},
+		"announcer": "System Message"
 	},
 	"gamemode_cards": {
 		"pong_offline": {
