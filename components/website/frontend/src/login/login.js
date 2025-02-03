@@ -1,3 +1,4 @@
+import { setupOauthButton } from "../oauth42.js";
 import butterup from 'butteruptoasts';
 import { setupPage } from "../shared.js";
 butterup.options.toastLife = 3000;
@@ -10,10 +11,11 @@ let error_messages = {
 	"invalid_password": "{{@ login.error.invalid_password @}}",
 	"invalid_totp": "{{@ login.error.invalid_totp @}}",
 	"server_error": "{{@ login.error.server_error @}}",
-	"unknown_error": "{{@ login.error.unknown_error @}}"
+	"unknown_error": "{{@ login.error.unknown_error @}}",
+	"ft_api_error": "{{@ login.error.42_error @}}"
 };
 
-function loginWarn(message) {
+function warn(message) {
 	try {
 		butterup.toast({
 			title: 'Hey!',
@@ -29,7 +31,7 @@ function loginWarn(message) {
 	}
 }
 
-function loginFailed(message) {
+function failed(message) {
 	try {
 		if (!(message in error_messages)) {
 			message = "unknown_error"
@@ -57,7 +59,7 @@ function tryLogin(event) {
 	let totpCode = form.totpCode.value;
 
 	if (username === "" || password === "" || totpCode === "") {
-		loginWarn("{{@ login.error.empty_fields @}}");
+		warn("{{@ login.error.empty_fields @}}");
 		return;
 	}
 
@@ -76,22 +78,33 @@ function tryLogin(event) {
 	.then((data) => {
 		console.log(data);
 		if ("error" in data) {
-			loginFailed(data.error);
+			failed(data.error);
 		} else if ("token" in data) {
 			// YIPPIEEEEEEEEEEEEEEEEEEEEEEEE
 			setCookie("x-ft-tkn", data.token, 30);
 			window.location.href = "/";
 		} else {
-			loginFailed("unknown_error");
+			failed("unknown_error");
 		}
 	})
 	.catch((error) => {
-		loginFailed(error + "");
+		failed(error + "");
 	});
 }
 
 function handleLoad() {
 	try {
+		// If we came from a redirection (42 oauth callback), check for an error
+		// in the query params.
+		const urlParams = new URLSearchParams(window.location.search);
+		const error = urlParams.get("error");
+		if (error) {
+			failed(error);
+		}
+	} catch (e) {
+	}
+	try {
+		setupOauthButton();
 		const form = document.getElementById("login-form");
 		if (form) {
 			form.onsubmit = tryLogin;

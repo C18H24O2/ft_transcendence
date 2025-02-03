@@ -31,15 +31,6 @@
 				</div>
 			</div>
 		</noscript>
-		{% load ft_trans_tags %}
-		<noscript>
-			<div class="flex justify-center items-center w-full h-svh">
-				<div class="w-full max-w-md">
-					<h1 class="text-2xl font-bold">{% translate 'error.javascript_required.title' %}</h1>
-					<p class="text-lg">{% translate 'error.javascript_required.desc' %}</p>
-				</div>
-			</div>
-		</noscript>
 		{% include "__navbar.html" %}
 		{% include "__chat.html" %}
 		<main id="content">
@@ -53,6 +44,15 @@
 						<input class="bg-surface0/55 focus:outline-none focus:ring-2 focus:ring-lavender text-text rounded-md p-5" type="text" name="totpCode" id="totpCode" placeholder="{% translate 'placeholders.totpCode' %}" required>
 						<input class="bg-surface0/55 focus:outline-none active:bg-crust text-text rounded-md p-6 mx-10 btn" type="submit" value="{% translate 'button.login' %}">
 					</form>
+					<hr class="border-crust opacity-50">
+					<button class="bg-crust/65 focus:outline-none active:bg-crust text-text rounded-md p-4 mx-8 btn"
+						id="oauth42-button"
+					>
+						<div class="flex items-center space-x-2 flex-row">
+							<img class="h-6" src="/assets/img/42.png" alt="42 logo">
+							<span>{% translate 'button.login42' %}</span>
+						</span>
+					</button>
 				</div>
 			</div>
 			<script type="module" src="./login.js"></script>

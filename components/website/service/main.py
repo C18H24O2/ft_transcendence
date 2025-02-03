@@ -17,6 +17,8 @@ DEBUG = True
 SECRET_KEY = os.environ.get('DJANGO_SECRET', get_random_secret_key())
 ROOT_URLCONF = __name__
 
+FT_CLIENT_ID = "u-s4t2ud-" + os.environ.get("AUTH_42_UID", "xxxxxxxx")
+
 ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     # "django.contrib.staticfiles",
@@ -138,6 +140,8 @@ def process_the_shit_out_of_it(req: HttpRequest, contents: str) -> str:
 
     def replace_match(match):
         captured_group = match.group(1)
+        if captured_group == "oauth42.client_id":  # see that's quality code right there oyup
+            return FT_CLIENT_ID
         return translate(captured_group)
 
     return re.sub(pattern, replace_match, contents)
@@ -149,6 +153,8 @@ def fetch_resource_dumb(request, idk):
         if os.path.exists(target):
             abs = os.path.abspath(target)
             extension = abs.split('.')[-1]
+
+            # webserv moment
             type = 'application/octet-stream'
             if extension == 'js':
                 type = 'text/javascript'

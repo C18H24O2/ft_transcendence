@@ -1,5 +1,6 @@
 // @ts-check
 
+import { setupOauthButton } from "../oauth42.js";
 import butterup from 'butteruptoasts';
 import { setupPage } from "../shared.js";
 butterup.options.toastLife = 3000;
@@ -62,7 +63,7 @@ let totpSecret = generateBase32Secret(20);
 /**
  * @param {string} message
  */
-function registerWarn(message) {
+function warn(message) {
 	try {
 		butterup.toast({
 			title: 'Hey!',
@@ -81,7 +82,7 @@ function registerWarn(message) {
 /**
  * @param {string} message
  */
-function registerFailed(message) {
+function failed(message) {
 	try {
 		if (!(message in error_messages)) {
 			message = "unknown_error"
@@ -112,7 +113,7 @@ function tryRegister(event) {
 	let totpCode = form.totpCode.value;
 
 	if (username === "" || password === "" || totpCode === "") {
-		registerWarn("{{@ register.error.empty_fields @}}");
+		warn("{{@ register.error.empty_fields @}}");
 		return;
 	}
 
@@ -130,33 +131,34 @@ function tryRegister(event) {
 	})
 	.then((response) => response.json())
 	.then((data) => {
-		console.log(data);
+		// console.log(data);
 		if ("error" in data) {
-			registerFailed(data.error);
+			failed(data.error);
 		} else if ("token" in data) {
 			// YIPPIEEEEEEEEEEEEEEEEEEEEEEEE (autism reference)
 			setCookie("x-ft-tkn", data.token, 30);
 			window.location.href = "/";
 		} else {
-			registerFailed("unknown_error");
+			failed("unknown_error");
 		}
 	})
 	.catch((error) => {
-		registerFailed(error);
+		failed(error);
 	});
 }
 
 function handleLoad() {
 	try {
+		setupOauthButton();
 		totpSecret = generateBase32Secret(20);
 
 		const qrCanvas = document.getElementById("qr-canvas");
 		if (qrCanvas) {
 			let uri = generateOtpAuthUri("le pongeur", totpSecret);
 			QRCode.toCanvas(qrCanvas, uri, (/** @type {any} */ e) => {
+				console.log("The totp uri is " + uri);
 				if (e) {
 					console.log("Failed to create the QR code, oh well, good luck :3");
-					console.log("The totp uri is " + uri);
 					console.log("debugging info that you definitely should NOT read: " + e);
 					// this is not console errors fuck you doc
 				}
@@ -172,31 +174,3 @@ function handleLoad() {
 }
 
 setupPage(handleLoad, () => {});
-
-
-
-
-// import '../shared.js';
-// import { authenticator } from 'otplib';
-
-
-// const issuer = "ft_trans";
-// let secret;
-
-// function generateQR(username)
-// {
-// 	const otpAuthUrl = authenticator.keyuri(username, issuer, secret);
-// 	//TODO: generate qrcode
-// }
-
-// function ctor()
-// {
-// 	secret = authenticator.generateSecret(20);
-// }
-
-// function dtor()
-// {
-
-// }
-
-// setupPage(ctor, dtor)
