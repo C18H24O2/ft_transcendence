@@ -9,8 +9,8 @@ import './butterup.css';
 import 'htmx-ext-preload';
 import './htmx-spa-tools.js';
 
-import './chat/chat.css';
-import './chat/chat.js';
+import './chat.css';
+import './chat.js';
 
 import * as feather from 'feather-icons';
 feather.replace({});

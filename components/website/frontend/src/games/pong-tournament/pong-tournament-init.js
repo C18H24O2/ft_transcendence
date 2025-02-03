@@ -2,7 +2,7 @@ import { setupPage } from "../../shared";
 import { PongGame } from "./pong-game/3dpong";
 import { PlayerMovementProvider } from "./pong-game/pongNewMovement";
 import butterup from 'butteruptoasts';
-import { chatSocket } from "../../chat/chat";
+import { addChatMessage } from "../../chat.js";
 
 const TIMEOUT = 7;
 const SCORE_TO_WIN = 5;
@@ -241,10 +241,7 @@ function matchEnd()
 		icon: false,
 		type: 'warning',
 	});
-	chatSocket.send(JSON.stringify({
-		'type': 'chat.message',
-		'message': `/tournament message Next game ${playerlist[0]} vs ${playerlist[1]}\n`
-	}));
+	addChatMessage(`Next game ${playerlist[0]} vs ${playerlist[1]}\n`);
 	countdown(TIMEOUT, startGame, matchCountdownToast);
 }
 

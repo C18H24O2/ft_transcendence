@@ -1,4 +1,5 @@
 {% load ft_trans_tags %}
+{% if is_authenticated %}
 <div class="container fixed top-0 right-0 z-10 bg-surface0/75">
     <!-- Button to toggle chat visibility -->
     <button
@@ -46,3 +47,4 @@
         </div>
     </div>
 </div>
+{% endif %}

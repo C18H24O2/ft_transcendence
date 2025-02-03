@@ -64,21 +64,26 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if self.authenticated:
             await self._error("Already authenticated, what?")
             return
+        if "token" not in data:
+            await self._error("No token provided")
+            return
+
+        token = data["token"]
+        if not AuthService.is_valid_token(token=token):
+            await self._error("Invalid token provided")
+            return
+
+        try:
+            user = AuthService.get_user(token=data['token'])
+            self.username = user["username"]
+            self.authenticated = True
+        except Exception as e:
+            print("Got an error while doing user lookup:", e, file=sys.stderr)
+            await self._error("Internal server error")
+            return
+
         global connected
         global connected_user
-
-
-        print(data, file=sys.stderr)
-        #TODO: do auth
-        if (AuthService.is_valid_token(token=data['token'])):
-            user = AuthService.get_user(token=data['token'])
-            self.username = user.username
-        else:
-            self.username = "anonymous" + str(int(uuid.uuid4().int % 900000) + 100000)
-        user = AuthService.get_user(token=data['token'])
-
-        self.authenticated = True
-        self.username = "anonymous" + str(int(uuid.uuid4().int % 900000) + 100000) #"USER OUAISSSS" #TODO: get actual username from userservice
 
         n = 0
         if self.username in connected:
@@ -87,8 +92,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         connected_user.append({"id": self.channel_name, "username": self.username})
         blocked_users[self.username] = []
 
-        print("auth user :D", data)
-        print("auth user :D", data, file=sys.stderr)
+        # print("auth user :D", data, file=sys.stderr)
         # Join room group
         await self.channel_layer.group_add(ROOM_NAME, self.channel_name)
         await self._send_user_list()
@@ -102,6 +106,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self._error("Missing message info")
             return
         message = text_data["message"]
+        if len(message) > 400:
+            message = message[:400] + "... (cut by server)"
 
         if message.startswith("/"):
             # Command message
