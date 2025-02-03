@@ -38,7 +38,8 @@
 		"isAI": "Le joueur est il un Crampté Artificiel",
 		"score_to_win": "Cramptés pour gagner",
 		"start_match": "Commencer le Crampté",
-		"stop_match": "Arreter le Crampté"
+		"stop_match": "Arreter le Crampté",
+		"login42": "Apagnan avec 42"
 	},
 	"welcome_page": {
 			"title": "Bienvenue sur",

@@ -33,7 +33,7 @@ function handleBeforeSwap(event) {
 		}
 	}
 	if (target === undefined) {
-		console.log("Found hx-spa-pick attribute with undefined target on:", requestElement)
+		// console.log("Found hx-spa-pick attribute with undefined target on:", requestElement)
 		return;
 	}
 	const parser = new DOMParser();
@@ -41,7 +41,7 @@ function handleBeforeSwap(event) {
 	const injectedScripts = htmlResponse.querySelectorAll("script");
 	const elem = htmlResponse.querySelector(target);
 	if (!elem) {
-		console.log(`hx-spa-pick attribute {target}' was not found.`);
+		// console.log(`hx-spa-pick attribute {target}' was not found.`);
 		return;
 	}
 	const scripts = [];
@@ -60,7 +60,7 @@ function handleBeforeSwap(event) {
 	} else if (swapType === "outerHTML") {
 		event.detail.serverResponse = elem.outerHTML;
 	} else {
-		console.log("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
+		// console.log("hx-swap attribute must be either 'innerHTML' or 'outerHTML'");
 	}
 	for (const toRemove of document.querySelectorAll("[x-ft-injected]")) {
 		toRemove.remove();
@@ -102,7 +102,7 @@ function cancelDoubleReq(event) {
  * @returns {boolean} Whether this event should fire
  */
 function spaHandleEvent(name, event) {
-	console.log(name);
+	// console.log(name);
 	if (name === "htmx:confirm") {
 		return cancelDoubleReq(event);
 	}

@@ -38,7 +38,8 @@
 		"isAI": "Le joueur est il une IA?",
 		"score_to_win": "Points pour gagner",
 		"start_match": "Commencer la partie",
-		"stop_match": "Arreter la partie"
+		"stop_match": "Arreter la partie",
+		"login42": "S'Authentifier avec 42"
 	},
 	"welcome_page": {
 			"title": "Bienvenue sur",

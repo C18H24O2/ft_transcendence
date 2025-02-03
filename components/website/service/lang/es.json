@@ -38,7 +38,8 @@
 		"isAI": "¿Es el jugador una IA?",
 		"score_to_win": "Puntuación para ganar",
 		"start_match": "Empezar partido",
-		"stop_match": "Detener partido"
+		"stop_match": "Detener partido",
+		"login42": "Autenticar con 42"
 	},
 	"welcome_page": {
 		"title": "Bienvenido a",

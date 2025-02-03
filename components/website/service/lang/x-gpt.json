@@ -35,7 +35,8 @@
 	  "isAI": "Select if AI opponent",
 	  "score_to_win": "Set winning score...",
 	  "start_match": "Start Match",
-	  "stop_match": "Stop Match"
+	  "stop_match": "Stop Match",
+	  "login42": "Level Up With 42!"
 	},
 	"welcome_page": {
 		"title": "Welcome to our Pong-tropolis,",

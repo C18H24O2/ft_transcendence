@@ -38,7 +38,9 @@
 		"isAI": "Is player an AI?",
 		"score_to_win": "Score to win",
 		"start_match": "Start Game",
-		"stop_match": "Stop Game"
+		"stop_match": "Stop Game",
+		"login42": "Authenticate with 42"
+		
 	},
 	"welcome_page": {
 			"title": "Welcome to",
