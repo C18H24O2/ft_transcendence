@@ -108,6 +108,7 @@
 		"password": "Password",
 		"message_send": "Send a message",
 		"friends": "Friends",
-		"add_player": "Add a Player"
+		"add_player": "Add a Player",
+		"totpCode": "OTP Code"
 	}
 }

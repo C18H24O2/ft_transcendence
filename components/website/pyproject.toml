@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.12"
 django = "^5.0.6"
 gunicorn = "^23.0.0"
+service-runtime = { path = "../services/service-runtime", develop = true }
 
 [build-system]
 requires = ["poetry-core"]

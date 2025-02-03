@@ -105,6 +105,7 @@
 	  "password": "Make it strong, like your pong game. 🏓💪",
 	  "message_send": "Type your legendary message here",
 	  "friends": "Search for your future best friend (or your arch-nemesis)",
-	  "add_player": "Add a brave challenger to the arena"
+	  "add_player": "Add a brave challenger to the arena",
+      "totpCode": "Enter your Two-Factor Authentication code"
 	}
 }

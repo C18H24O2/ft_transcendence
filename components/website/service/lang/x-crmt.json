@@ -108,6 +108,7 @@
 		"password": "Mangue (ceux qui savent)",
 		"message_send": "Envoyer un Crampté",
 		"friends": "Sigmas",
-		"add_player":"Ajouter un crampteur"
+		"add_player":"Ajouter un crampteur",
+		"totpCode": "le code la oh"
 	}
 }

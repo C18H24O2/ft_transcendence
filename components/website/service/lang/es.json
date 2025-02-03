@@ -108,6 +108,7 @@
 		"password": "Contraseña",
 		"message_send": "enviar un mensaje",
 		"friends": "Amigos",
-		"add_player": "Agregar un jugador"
+		"add_player": "Agregar un jugador",
+		"totpCode": "Código de autenticación"
 	}
 }

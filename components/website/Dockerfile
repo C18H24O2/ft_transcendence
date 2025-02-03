@@ -11,7 +11,8 @@ LABEL maintainer="kiroussa <ft@xtrm.me>"
 WORKDIR /app
 
 # Add the runtime library to the image.
-ADD services/service-runtime /service-runtime
+# We use /services/ as the base path because of the dev dependency being "../services/service-runtime"
+ADD services/service-runtime /services/service-runtime
 
 # Install stuff
 COPY website/pyproject.toml website/poetry.lock ./
@@ -60,7 +61,7 @@ LABEL maintainer="kiroussa <ft@xtrm.me>"
 
 # yet again, we out here.
 WORKDIR /app
-ADD services/service-runtime /service-runtime
+ADD services/service-runtime /services/service-runtime
 
 # We need that for healthchecks
 RUN apk add --no-cache curl
