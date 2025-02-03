@@ -23,7 +23,7 @@ def oauth_callback(request: HttpRequest) -> HttpResponse:
             return redirect(f"/login?error={res['error']}")
         if "token" in res:
             r = redirect("/")
-            r.set_cookie("x-ft-tkn", res["token"], max_age=30)
+            r.set_cookie("x-ft-tkn", res["token"], max_age=3600 * 24 * 30)
             return r
         raise ValueError("no token in response: " + str(res))
     except Exception as e:
