@@ -23,6 +23,7 @@
 		"select": "Selecctionar modos de juego",
 		"theme": "Cambiar tema",
 		"login": "Iniciar sesión",
+		"logout": "Finalizar la sesión",
 		"register": "Registrar",
 		"view": "Cambiar vista",
 		"home": "Inicio",

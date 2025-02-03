@@ -23,6 +23,7 @@
 		"select": "Select Gamemode",
 		"theme": "Change Theme",
 		"login": "Login",
+		"logout": "Logout",
 		"register": "Register",
 		"view": "Change view",
 		"home": "Home",

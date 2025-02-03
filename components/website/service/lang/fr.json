@@ -23,6 +23,7 @@
 		"select": "Selectionner mode de jeu",
 		"theme": "Changer de Theme",
 		"login": "Connexion",
+		"logout": "Deconnexion",
 		"register": "S'inscrire",
 		"view": "Changer de vue",
 		"home": "Accueil",
