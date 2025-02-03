@@ -1,4 +1,4 @@
-FROM grafana/grafana:11.5.0-ubuntu
+FROM grafana/grafana:11.5.1-ubuntu
 ARG PROM_ADMIN_PASSWD
 ARG DISCORD_WEBHOOK_URL
 
