@@ -82,6 +82,7 @@ services:
       context: grafana
       dockerfile: Dockerfile
       args:
+        DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK}
         PROM_ADMIN_PASSWD: ${PROM_ADMIN_PASSWD}
     volumes:
       - grafana_data:/var/lib/grafana
