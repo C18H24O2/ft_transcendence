@@ -13,21 +13,22 @@ AuthService = remote_service("auth-service")
 def oauth_callback(request: HttpRequest) -> HttpResponse:
     try:
         code = request.GET["code"]
-        # state = request.GET["state"]
         if code is None or code == "":
             raise ValueError("code is empty")
-        # if state is None or state == "":
-        #     raise ValueError("state is empty")
-        res = AuthService.get_or_create_42(code=code)#, state=state)
+
+        res = AuthService.get_or_create_42(code=code)
+
         if "error" in res:
             return redirect(f"/login?error={res['error']}")
+
         if "token" in res:
             r = redirect("/")
             r.set_cookie("x-ft-tkn", res["token"], max_age=3600 * 24 * 30)
             return r
-        raise ValueError("no token in response: " + str(res))
+
+        raise ValueError("No token in response: " + str(res))
     except Exception as e:
-        print("oauth callback error:", e, file=sys.stderr);
+        print("Oauth callback error:", e, file=sys.stderr)
         return redirect("/login?error=server_error")
 
 
