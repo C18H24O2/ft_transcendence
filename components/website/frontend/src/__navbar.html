@@ -17,53 +17,16 @@
 					{% translate 'button.home' %}
 				</span>
 			</button>
-			<!-- test -->
-			<!-- <button -->
-			<!-- 	class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto" -->
-			<!-- 	hx-get="/test/" -->
-			<!-- 	hx-target="#content" -->
-			<!-- 	hx-swap="innerHTML" -->
-			<!-- 	hx-push-url="/test/" -->
-			<!-- 	preload="mouseover" -->
-			<!-- 	preload-images="true" -->
-			<!-- 	hx-spa-pick="#content" -->
-			<!-- > -->
-			<!-- 	<span> -->
-			<!-- 		<i class="inline" data-feather="user-plus"></i> -->
-			<!-- 		{% translate 'button.test' %} -->
-			<!-- 	</span> -->
-			<!-- </button> -->
-			<!-- test -->
-			<button
-				class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
-				hx-get="/register/"
-				hx-target="#content"
-				hx-swap="innerHTML"
-				hx-push-url="/register/"
-				preload="mouseover"
-				preload-images="true"
-				hx-spa-pick="#content"
-			>
-				<span>
-					<i class="inline" data-feather="user-plus"></i>
-					{% translate 'button.register' %}
-				</span>
-			</button>
-			<button
-				class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
-				hx-get="/login/"
-				hx-target="#content"
-				hx-swap="innerHTML"
-				hx-push-url="/login/"
-				preload="mouseover"
-				preload-images="true"
-				hx-spa-pick="#content"
-			>
-				<span>
-					<i class="inline" data-feather="log-in"></i>
-					{% translate 'button.login' %}
-				</span>
-			</button>
+			<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
+				{% for i in languages %}
+					{% if i.0 == lang %}
+						<option value='{{ i.0 }}' selected=true>{{i.1}}</option>
+					{% else %}
+						<option value='{{ i.0 }}'>{{i.1}}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i>{% translate 'button.theme' %} </button>
 		</div>
 		<div id="nav-games">
 			<div class="group relative">
@@ -102,16 +65,52 @@
 			</div>
 		</div>
 		<div id="nav-customize" class="flex flex-row gap-8">
-			<button id="change-theme-button" onclick="toggleTheme()" class="btn bg-surface1/75 hover:bg-surface2 active:bg-mantle px-4 rounded-lg"><i class="inline" data-feather="edit-3"></i>{% translate 'button.theme' %} </button>
-			<select class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 right-0" onchange="change_lang(value)">
-				{% for i in languages %}
-					{% if i.0 == lang %}
-						<option value='{{ i.0 }}' selected=true>{{i.1}}</option>
-					{% else %}
-						<option value='{{ i.0 }}'>{{i.1}}</option>
-					{% endif %}
-				{% endfor %}
-			</select>
+			{% if is_authenticated %}
+				<button
+					class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
+					onclick="window.location.href='/api/v1/auth/logout'"
+				>
+					<span>
+						<i class="inline" data-feather="log-out"></i>
+						{% translate 'button.logout' %}
+					</span>
+				</button>
+
+				<span class="text-surface1 text-sm">
+					{{ auth_user.username }}
+				</span>
+			{% else %}
+				<button
+					class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
+					hx-get="/register/"
+					hx-target="#content"
+					hx-swap="innerHTML"
+					hx-push-url="/register/"
+					preload="mouseover"
+					preload-images="true"
+					hx-spa-pick="#content"
+				>
+					<span>
+						<i class="inline" data-feather="user-plus"></i>
+						{% translate 'button.register' %}
+					</span>
+				</button>
+				<button
+					class="btn bg-surface1/75 hover:bg-surface2 rounded-lg px-4 ml-auto"
+					hx-get="/login/"
+					hx-target="#content"
+					hx-swap="innerHTML"
+					hx-push-url="/login/"
+					preload="mouseover"
+					preload-images="true"
+					hx-spa-pick="#content"
+				>
+					<span>
+						<i class="inline" data-feather="log-in"></i>
+						{% translate 'button.login' %}
+					</span>
+				</button>
+			{% endif %}
 		</div>
 	</nav>
 </header>

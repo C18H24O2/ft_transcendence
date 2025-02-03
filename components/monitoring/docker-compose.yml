@@ -24,6 +24,7 @@ services:
       context: prometheus
       dockerfile: Dockerfile
       args:
+        PROM_ADMIN_PASSWD: ${PROM_ADMIN_PASSWD}
         PROM_ADMIN_PASSWD_HASH: ${PROM_ADMIN_PASSWD_HASH}
     env_file: ../../.env
     volumes:

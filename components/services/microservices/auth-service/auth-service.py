@@ -18,8 +18,16 @@ def is_valid_token(token: str) -> bool:
 
 
 @message
-def get_user(token: str) -> User:
-	return validate_jwt(token)[1]
+def get_user(token: str) -> dict:
+    is_valid, user = validate_jwt(token)
+    if not is_valid:
+        return {"error": "invalid_token"}
+    elif user is not None:
+        print(user, file=sys.stderr)
+        print(dict(user), file=sys.stderr)
+        print(user.__dict__, file=sys.stderr)
+        return dict(user)
+    return {"error": "invalid_token"}
 
 
 @message

@@ -6,13 +6,14 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.urls import re_path
 from .lang import LANGUAGES, get_user_lang, get_translate_function
+from service_runtime.remote_service import remote_service
 import os
 import json
 import re
 import sys
 
 
-DEBUG = False
+DEBUG = True
 SECRET_KEY = os.environ.get('DJANGO_SECRET', get_random_secret_key())
 ROOT_URLCONF = __name__
 
@@ -46,6 +47,9 @@ STATICFILES_DIRS = [  # Sorry mom and dad.
 ]
 STATIC_ROOT = '/app/static/'
 STATIC_URL = 'static/'
+
+
+AuthService = remote_service("auth-service")
 
 
 def _find_template(
@@ -102,11 +106,23 @@ def main(_request):
         _request.path += 'index.html'
 
     user_lang = get_user_lang(_request)
+    token = _request.COOKIES.get('x-ft-tkn', None)
+    auth = False
+    user = None
+    try:
+        auth = token is not None and AuthService.is_valid_token(token=token)
+        if auth:
+            user = AuthService.get_user(token=token)
+    except Exception as e:
+        print("Error checking auth:", e, file=sys.stderr)
+
     translate = get_translate_function(user_lang)
     page_title = translate(f'title.{title}')
     context = {
         'website_title': 'ft_trans',
         'title': page_title,
+        'is_authenticated': auth,
+        'auth_user': user,
         'languages': LANGUAGES,
         'lang': user_lang,
     }
