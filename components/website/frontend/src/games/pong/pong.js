@@ -20,8 +20,8 @@ function start_game()
 	let player1_provider;
 	let player2_provider;
 
-	let player1 = document.getElementById("player1-name")?.value ?? "player1";
-	let player2 = document.getElementById("player2-name")?.value ?? "player2";
+	let player1 = document.getElementById("player1-name")?.value ?? "Player 1";
+	let player2 = document.getElementById("player2-name")?.value ?? "Player 2";
 	let score_to_win = document.getElementById("score-selector")?.value ?? 0;
 	score_to_win = parseInt(score_to_win, 10);
 
@@ -102,7 +102,7 @@ function ctor()
 function dtor()
 {
 	pongInstance.cleanup();
-	console.log("cleanup called!");
+	// console.log("cleanup called!");
 	removeEventListener('click', start_game);
 	removeEventListener('click', stop_game);
 	removeEventListener('click', player_switch);

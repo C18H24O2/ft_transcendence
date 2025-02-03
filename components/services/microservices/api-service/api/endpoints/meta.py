@@ -9,5 +9,5 @@ def get_meta(request: HttpRequest) -> object:
     return {
         "name": "ft_trans-api",
         "version": "0.0.1",
-        "state_id": str(state_id),
+        "instance_id": str(state_id),
     }
