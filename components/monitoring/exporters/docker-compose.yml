@@ -70,7 +70,7 @@ services:
   # Exports metrics from Valkey
   valkey-exporter:
     image: oliver006/redis_exporter:v1.67.0-alpine
-    env_file: ../../.env
+    env_file: ../../../.env
     networks:
       - prometheus-exporters
       - valkey

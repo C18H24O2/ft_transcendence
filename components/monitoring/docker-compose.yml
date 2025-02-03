@@ -1,18 +1,21 @@
 name: ft_trans-monitoring
 
 include:
-  - exporters.docker-compose.yml
+  - exporters/docker-compose.yml
 
 networks:
   # A network to access prometheus exported data
   prometheus:
   # A network dedicated to prometheus exporters
   prometheus-exporters:
+  # A specific network for alertmanager alert dispatching
+  alertmanager:
   # The englobing network for nginx-served services
   nginx:
 
 volumes:
   prometheus_data:
+  alertmanager_data:
   grafana_data:
 
 services:
@@ -40,6 +43,7 @@ services:
     networks:
       - prometheus-exporters
       - prometheus
+      - alertmanager
       - nginx
     restart: unless-stopped
     healthcheck:
@@ -47,6 +51,30 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
+
+  # Alertmanager is a monitoring system that sends alerts to a notification system.
+  alertmanager:
+    build:
+      context: alertmanager
+      dockerfile: Dockerfile
+      args:
+        DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK}
+    volumes:
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+    networks:
+      - alertmanager
+    restart: unless-stopped
+    healthcheck:
+      test: "wget -qO- http://0.0.0.0:9093/-/healthy"
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      prometheus:
+        condition: service_healthy
 
   # Grafana is a dashboarding and data visualization tool.
   grafana:
@@ -61,6 +89,7 @@ services:
     environment:
       - GF_USERS_ALLOW_SIGN_UP=false
     networks:
+      - alertmanager
       - prometheus
       - nginx
     restart: unless-stopped

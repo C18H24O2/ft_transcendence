@@ -25,7 +25,8 @@ def validate_jwt(token: str) -> tuple[bool, User | None]:
         date = datetime.fromtimestamp(payload['exp'])
         if date.timestamp() < datetime.now(timezone.utc).timestamp():
             return (False, None)
-        return (True, User.get(User.id == int(payload['uid'])))
+        user = User.select().where(User.id == int(payload['uid'])).get()
+        return (True, user)
     except jwt.ExpiredSignatureError:
         pass
     except jwt.InvalidTokenError:
