@@ -1,8 +1,9 @@
 from service_runtime.service import message
 from service_runtime.models import User
-from controller import validate_jwt, generate_jwt
+from controller import validate_jwt, get_user_from_jwt, generate_jwt
 from argon2 import PasswordHasher, exceptions as argon_exceptions
 import peewee
+from playhouse.shortcuts import model_to_dict
 import re
 from datetime import datetime, timezone
 import pyotp
@@ -14,20 +15,15 @@ USERNAME_PATTERN = r"^[a-zA-Z0-9_-]{3,32}$"
 
 @message
 def is_valid_token(token: str) -> bool:
-	return validate_jwt(token)[0]
+	return validate_jwt(token)
 
 
 @message
 def get_user(token: str) -> dict:
-    is_valid, user = validate_jwt(token)
-    if not is_valid:
+    user = get_user_from_jwt(token)
+    if user is None:
         return {"error": "invalid_token"}
-    elif user is not None:
-        print(user, file=sys.stderr)
-        print(dict(user), file=sys.stderr)
-        print(user.__dict__, file=sys.stderr)
-        return dict(user)
-    return {"error": "invalid_token"}
+    return model_to_dict(user)
 
 
 @message
@@ -36,7 +32,11 @@ def register(username: str, password: str, totp_secret: str, totp_code: str) -> 
 	if not re.fullmatch(USERNAME_PATTERN, username):
 		return {"error": "invalid_username"}
 
-	if len(password) < 8:
+	last_two_chars = username[-2:]
+	if last_two_chars == "42":
+		return {"error": "reserved_username"}
+
+	if len(password) < 8 or len(password) > 255:
 		return {"error": "invalid_password"}
 
 	try:

@@ -157,7 +157,7 @@ class Service:
                 channel.basic_publish(
                         exchange='',
                         routing_key=props.reply_to,
-                        body=json.dumps(dataclasses.asdict(resp)).encode('utf-8'),
+                        body=json.dumps(dataclasses.asdict(resp), default=str).encode('utf-8'),
                         properties=pika.BasicProperties(
                             content_type='application/json',
                             delivery_mode=1,

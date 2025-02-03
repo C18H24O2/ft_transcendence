@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 import jwt
+import peewee
 from service_runtime.models import User
 import os
 import sys
@@ -18,19 +19,33 @@ def generate_jwt(user: User) -> str:
     }, JWT_SECRET, JWT_ALGORITHM)
 
 
-def validate_jwt(token: str) -> tuple[bool, User | None]:
+def get_user_from_jwt(token: str) -> User:
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return User.get_by_id(payload['uid'])
+    except jwt.ExpiredSignatureError:
+        pass
+    except jwt.InvalidTokenError:
+        pass
+    except peewee.DoesNotExist:
+        pass
+    except Exception as e:
+        print("Error getting user from token", e)
+    return None
+
+
+def validate_jwt(token: str) -> bool:
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         # print("payload:", payload, file=sys.stderr)
         date = datetime.fromtimestamp(payload['exp'])
         if date.timestamp() < datetime.now(timezone.utc).timestamp():
-            return (False, None)
-        user = User.select().where(User.id == int(payload['uid'])).get()
-        return (True, user)
+            return False
+        return True
     except jwt.ExpiredSignatureError:
         pass
     except jwt.InvalidTokenError:
         pass
     except Exception as e:
         print("Error validating token", e)
-    return (False, None)
+    return False
