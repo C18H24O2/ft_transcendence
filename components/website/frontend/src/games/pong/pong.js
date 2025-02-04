@@ -108,7 +108,7 @@ function dtor()
 	removeEventListener('click', player_switch);
 	document.removeEventListener('pong-game-end', reset_scroll);
 	let element = document.getElementById("gameField");
-	element.remove();
+	element?.remove();
 }
 
 setupPage(ctor, dtor);

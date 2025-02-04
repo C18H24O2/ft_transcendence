@@ -326,7 +326,7 @@ function dtor()
 	intervals.forEach(clearInterval);
 
 	let element = document.getElementById("gameField");
-	element.remove();
+	element?.remove();
 }
 
 setupPage(ctor, dtor);
