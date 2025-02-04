@@ -24,7 +24,7 @@ export function getCatppuccinWEBGL(colorName) {
 		}
 	} 
 	else {
-		console.warn("Warning: " + colorName + " is not a valid color");
+		console.log("Notice: " + colorName + " is not a valid color");
 	}
 	return {
 		r: 0,
@@ -45,7 +45,7 @@ export function getCatppuccinRGB(colorName) {
 		return [color.r, color.g, color.b];
 	}
 	else {
-		console.warn("Warning: " + colorName + " is not a valid color");
+		console.log("Notice: " + colorName + " is not a valid color");
 	}
 	return [0, 0, 0];
 }

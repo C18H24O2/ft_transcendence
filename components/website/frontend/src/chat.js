@@ -117,7 +117,7 @@ function chatThing()
 		}
 
 		chatSocket.onclose = function(e) {
-			console.warn('Chat socket closed unexpectedly:', e.code, e.reason);
+			console.log('Chat socket closed unexpectedly:', e.code, e.reason);
 		}
 
 		if (message) {

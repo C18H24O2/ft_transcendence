@@ -14,7 +14,7 @@ function start_game()
 {
 	if (pongInstance === null)
 	{
-		console.warn("your pong instance is invalid");
+		console.log("your pong instance is invalid");
 		return;
 	}
 	let player1_provider;
@@ -50,7 +50,7 @@ function stop_game()
 {
 	if (pongInstance === null)
 	{
-		console.warn("your pong instance is invalid");
+		console.log("your pong instance is invalid");
 		return;
 	}
 	let parameter_section = document.getElementById('parameters')

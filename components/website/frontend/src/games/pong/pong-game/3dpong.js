@@ -98,12 +98,12 @@ export class PongGame {
 	{
 		const canvas = document.getElementById(fieldId);
 		if (!(canvas instanceof HTMLCanvasElement)) {
-			console.warn(`${fieldId} is not a valid canvas element`);
+			console.log(`${fieldId} is not a valid canvas element`);
 			return null;
 		}
 		let gl = canvas.getContext('webgl', {alpha: true});
 		if (!(gl instanceof WebGLRenderingContext)) {
-			console.warn(`Unable to fetch rendering context from ${fieldId}`);
+			console.log(`Unable to fetch rendering context from ${fieldId}`);
 			return null
 		}
 		let scoreP1 = document.getElementById(score1);

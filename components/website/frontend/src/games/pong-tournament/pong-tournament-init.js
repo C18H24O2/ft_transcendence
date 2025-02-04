@@ -259,7 +259,7 @@ function startTournament()
 	if (tournamentStarted) return;
 	if (pongInstance === null)
 	{
-		console.warn('your pong instance is invalid');
+		console.log('your pong instance is invalid');
 		return;
 	}
 	playerlist = [...origPlayerlist];
