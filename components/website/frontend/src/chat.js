@@ -95,8 +95,8 @@ function chatThing()
 			if (data.type === 'invite') {
 				butterup.toast({
 					title: 'Invite',
-					message: data.sender + " {@ chat.pong_invite @}",
-					customHTML: '<button class="btn" id="join-game-btn">{@ chat.pong_accept @}</button>',
+					message: data.sender + " {{@ chat.pong_invite @}}",
+					customHTML: '<button class="btn" id="join-game-btn">{{@ chat.pong_accept @}}</button>',
 					location: 'top-left',
 					icon: true,
 					dismissable: true,
