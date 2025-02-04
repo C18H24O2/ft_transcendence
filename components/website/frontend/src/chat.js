@@ -10,6 +10,22 @@ const friendList = document.querySelector('#users');
 const message = document.querySelector('#message-input');
 const message_submit = document.querySelector('#chat-message-submit');
 
+let error_messages = {
+	"chat_blocked": "{{@ chat.blocked @}}",
+	"chat_unknown_user": "{{@ chat.user_unknown @}}",
+	"chat_unknown_id": "{{@ chat.unknown_id @}}",
+	"chat_unknown_command": "{{@ chat.unknown_command @}}",
+	"chat_help": "{{@ chat.help @}}",
+	"chat_unauthenticated": "{{@ chat.unauthenticated @}}",
+	"chat_missing_info": "{{@ chat.missing_info @}}",
+	"chat_invalid_json": "{{@ chat.invalid_json @}}",
+	"chat_invalid_type": "{{@ chat.invalid_type @}}",
+	"chat_missing_token": "{{@ chat.missing_token @}}",
+	"chat_invalid_token": "{{@ chat.invalid_token @}}",
+	"chat_authenticated": "{{@ chat.authenticated @}}",
+	"chat_server_error": "{{@ chat.server_error @}}"
+}
+
 export function addChatMessage(message) {
 	try {
 		const log = document.querySelector('#chat-log');
@@ -85,13 +101,17 @@ function chatThing()
 			if (data.type === 'invite') {
 				butterup.toast({
 					title: 'Invite',
-					message: data.sender + " invited you to a pong game",
-					customHTML: '<button class="btn" id="join-game-btn">Sure thing!</button>',
+					message: data.sender + " {@ chat.pong_invite @}",
+					customHTML: '<button class="btn" id="join-game-btn">{@ chat.pong_accept @}</button>',
 					location: 'top-left',
 					icon: true,
 					dismissable: true,
 					type: 'info',
 				});
+			}
+			if (data['sys'] != undefined)
+			{
+				addChatMessage(error_messages[data.sys]);
 			}
 			// console.log(data);
 			if (data["message"] != undefined) {

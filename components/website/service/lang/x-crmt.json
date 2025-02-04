@@ -75,6 +75,22 @@
 			"unknown_error": "Crampté inconnu, dsl"
 		}
 	},
+	"chat": {
+		"blocked": "pas de Cramptés",
+		"user_unknown": "Le Crampteur n'est pas connecté ou n'existe pas",
+		"unknown_id": "CramptID inconnu",
+		"help": "/mp <utilisateur> <message>\\n- Envoyer un crampté privé à un autre Crampteur connecté.\\n/(dé)bloquer <utilisateur>\\n- Bloquer ou débloquer un Cramtpeur pour ne pas voir ses messages.\\n/inviter <utilisateur>\\n- Inviter le Crampteur spécifié à une partie de Cramptés.",
+		"unauthenticated": "Vous n'êtes pas Crampthentifié",
+		"missing_info": "Informations du crampté manquantes",
+		"invalid_json": "Le CramptSON que vous avez envoyé est invalide",
+		"invalid_type": "Crampté de type de crampté manquant",
+		"missing_token": "Crampté d'authentification manquant",
+		"invalid_token": "Crampté d'authentification invalide",
+		"authenticated": "Vous êtes déjà authentifié sur le Crampté",
+		"server_error": "Erreur du crampté, veuillez réessayer plus tard",
+		"pong_invite": " vous a invité à crampter",
+		"pong_accept": "Apagaaaaaan!"
+	},
 	"tournament": {
 		"success": {
 			"tournament_won": {

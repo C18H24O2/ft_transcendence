@@ -76,6 +76,22 @@
 			"unknown_error": "Unknown error, sorry about that"
 		}
 	},
+	"chat": {
+		"blocked": "You are blocked",
+		"user_unknown": "User isn't connected or doesn't exist",
+		"unknown_id": "Unknown id",
+		"help": "/mp <username> <msg>\\n- Send a private message to another connected user.\\n/(un)block <username>\\n- Block or unblock a user to no see theyr message.\\n/invite <username>\\n- Invite specified user to a pong game.",
+		"unauthenticated": "you are not authenticated",
+		"missing_info": "Missing message info",
+		"invalid_json": "the JSON you sent is invalid",
+		"invalid_type": "missing message type field",
+		"missing_token": "missing auth token",
+		"invalid_token": "invalid auth token",
+		"authenticated": "you are already authenticated with the chat",
+		"server_error": "Server error, please try again later",
+		"pong_invite": " has invited you to play",
+		"pong_accept": "Sure Thing!"
+	},
 	"tournament": {
 		"success": {
 			"tournament_won": {

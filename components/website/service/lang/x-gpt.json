@@ -72,6 +72,22 @@
 		"unknown_error": "Unknown error, sorry about that"
 	  }
 	},
+	"chat": {
+		"blocked": "You cannot send messages to this user.",
+		"user_unknown": "The specified user could not be found.",
+		"unknown_id": "The provided ID does not match any records.",
+		"help": "/mp <username> <msg>\\n- Send a private message to another connected user.\\n/(un)block <username>\\n- Block or unblock a user to no see theyr message.\\n/invite <username>\\n- Invite specified user to a pong game.",
+		"unauthenticated": "You need to log in to access this feature.",
+		"missing_info": "Required message details are missing.",
+		"invalid_json": "The request contains malformed JSON.",
+		"invalid_type": "Message type is required but was not provided.",
+		"missing_token": "Authentication token is required.",
+		"invalid_token": "The provided token is invalid or expired.",
+		"authenticated": "You are successfully logged in to the chat.",
+		"server_error": "An unexpected error occurred. Please try again later.",
+		"pong_invite": "You have been invited to a game of Pong!",
+		"pong_accept": "Game on! Let's play."
+	},
 	"tournament": {
 		"success": {
 			"tournament_won": {
