@@ -15,6 +15,9 @@ connected = {}
 connected_user = [
     {"id": ROOM_NAME, "username": "General"},
 ]
+#connected_user = [
+#    "General": [ROOM_NAME],
+#]
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -26,7 +29,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         if self.authenticated:
             global connected
-
+#TODO from this
             num_conns = connected[self.username]
             if num_conns == 1:
                 message = self.username + " has left\n"
@@ -36,6 +39,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 connected[self.username] = num_conns - 1
             connected_user.remove({"id": self.channel_name, "username": self.username})
             del blocked_users[self.username]
+#TODO to this
+#			if self.username in connected_user:
+#				connected_user[self.username].remove(self.channel_name)
+#				if not connected_user[self.username]:
+#					del connected_user[self.username]
+#					del blocked_users[self.username]
 
         try:
             # Leave room group
@@ -85,6 +94,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         global connected
         global connected_user
 
+#TODO	FROM this
         n = 0
         if self.username in connected:
             n = connected[self.username]
@@ -92,7 +102,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         connected_user.append({"id": self.channel_name, "username": self.username})
         blocked_users[self.username] = []
 
-        # print("auth user :D", data, file=sys.stderr)
+#TODO	To this
+#		if self.username not in connected_user:
+#			connected_user[self.username] = []
+#			blocked_users[self.username] = []
+#		connected_user[self.username].append(self.channel_name)
+
         # Join room group
         await self.channel_layer.group_add(ROOM_NAME, self.channel_name)
         await self._send_user_list()
@@ -156,6 +171,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         elif self.username in blocked_users[target]:
             await self.send(text_data=json.dumps({"message": f"You're blocked by '{target}'"}))
         else:
+#TODO from this
             name = await self.get_id_by_username(target)
             if name == None:
                 await self._error("User id not found", disconnect=False)
@@ -168,22 +184,43 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "type": "chat.message",
                 "message": message_from
             })
+#TODO to this
+#			names = await self.get_ids_by_username(target)
+#			if not names:
+#				await self._error("User ID not found", disconnect=False)
+#				return
+#			message_from = 'Msg from ' + self.username + ': ' + message
+#			message_to = 'Msg to ' + target + ': ' + message + '\n'
+#			await self.send(text_data=json.dumps({"message": message_to}))
+#			for name in names:
+#				await channel_layer.send(name, {
+#					"type": "chat.message",
+#					"message": message_from
+#				})
 
     async def _block_user(self, blocked):
         global blocked_users
         global connected_user
+#TODO FROM this
         if not any(user["username"] == blocked for user in connected_user):
             await self.send(text_data=json.dumps({"message": "User don't existe or is not connected\n"}))
-
+#TODO to this
+#		if blocked not in connected_user:
+#			await self.send(text_data=json.dumps({"message": "User does not exist or is not connected\n"}))
+#			return
         if blocked not in blocked_users[self.username]:
             blocked_users[self.username].append(blocked)
 
     async def _unblock_user(self, blocked):
         global blocked_users
         global connected_user
+#TODO FROM this
         if not any(user["username"] == blocked for user in connected_user):
             await self.send(text_data=json.dumps({"message": "User don't existe or is not connected\n"}))
-
+#TODO to this
+#		if blocked not in connected_user:
+#			await self.send(text_data=json.dumps({"message": "User does not exist or is not connected\n"}))
+#			return
         if blocked in blocked_users[self.username]:
             blocked_users[self.username].remove(blocked)
 
@@ -195,6 +232,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         elif self.username in blocked_users[target]:
             await self.send(text_data=json.dumps({"message": f"You're blocked by '{target}'\n"}))
         else:
+#TODO from this
             name = await self.get_id_by_username(target)
             if name == None:
                 await self._error("User id not found", disconnect=False)
@@ -205,6 +243,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "target": name,
                 "sender": self.username
             })
+#TODO to this
+#			names = await self.get_ids_by_username(target)
+#			if not names:
+#				await self._error("User ID not found", disconnect=False)
+#				return
+#			for name in names:
+#				await channel_layer.send(name, {
+#					"type": "invite",
+#					"target": name,
+#					"sender": self.username
+#				})
 
 ###         utility          ###
     async def _error(self, error_message, disconnect=True):
@@ -217,19 +266,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def _send_user_list(self):
         global connected_user
         channel_layer = get_channel_layer()
+#TODO FROM this
         for user in connected_user:
             name = user["id"]
             await channel_layer.send(name, {
                 "type": "user_list",
                 "user_list": connected_user
             })
+#TODO to this
+#		user_list = [{"id": ids[0], "username": username} for username, ids in connected_user.items() if ids]
+#		for ids in connected_user.values():
+#			for channel_name in ids:
+#				await channel_layer.send(channel_name, {
+#					"type": "user_list",
+#					"user_list": user_list
+#				})
 
     async def get_id_by_username(self, username):
         global connected_user
+#TODO from this
         for user in connected_user:
             if user["username"] == username:
                 return user["id"]
         return None
+#TODO to this
+#		return connected_user.get(username, [])
 
 ###         type            ###
     async def chat_message(self, event):
