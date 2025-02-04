@@ -79,7 +79,7 @@
     "blocked": "Estás bloqueado",
     "user_unknown": "El usuario no está conectado o no existe",
     "unknown_id": "ID desconocido",
-    "help": "/mp <usuario> <mensaje>\\n- Envía un mensaje privado a otro usuario conectado.\\n/(des)bloquear <usuario>\\n- Bloquea o desbloquea a un usuario para no ver sus mensajes.\\n/invitar <usuario>\\n- Invita al usuario especificado a un juego de pong.",
+    "help": "/msg <usuario> <mensaje>\\n- Envía un mensaje privado a otro usuario conectado.\\n/(un)block <usuario>\\n- Bloquea o desbloquea a un usuario para no ver sus mensajes.\\n/invite <usuario>\\n- Invita al usuario especificado a un juego de pong.",
     "unauthenticated": "No estás autenticado",
     "missing_info": "Falta información del mensaje",
     "invalid_json": "El JSON que enviaste es inválido",
