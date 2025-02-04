@@ -69,14 +69,9 @@ function chatThing()
 					li.textContent = user.username;
 
 					li.addEventListener('click', () => {
-						if (li.dataset.textContent != "chat_transcendence-general00000000000000000000") {
-							message.value = `/mp ${user.username} `;
-							message.focus();
-							selectedUsers = user.username;
-						}
-						else{
-							selectedUsers = "";
-						}
+						message.value = `/mp ${user.username} `;
+						message.focus();
+						selectedUsers = user.username;
 					});
 					friendList.appendChild(li);
 				})
