@@ -67,10 +67,9 @@ function chatThing()
 					const li = document.createElement('li');
 					li.classList.add('btn', 'border-1', 'border-solid', 'border-overlay2', 'bg-overlay1/50', 'hover:bg-overlay1/75');
 					li.textContent = user.username;
-					li.dataset.userId = user.id;
 
 					li.addEventListener('click', () => {
-						if (li.dataset.userId != "chat_transcendence-internal00000000000000000000") {
+						if (li.dataset.textContent != "chat_transcendence-general00000000000000000000") {
 							message.value = `/mp ${user.username} `;
 							message.focus();
 							selectedUsers = user.username;

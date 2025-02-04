@@ -16,7 +16,7 @@ connected = {}
 #     {"id": ROOM_NAME, "username": "General"},
 # ]
 connected_user = [
-    {"chat_transcendence_general0000000000000000000": [ROOM_NAME]},
+    {"chat_transcendence-general00000000000000000000": [ROOM_NAME]},
 ]
 
 
@@ -269,12 +269,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         #         "user_list": connected_user
         #     })
 #TODO to this
-        user_list = [{"id": ids[0], "username": username} for username, ids in connected_user if ids]
         for ids in connected_user.values():
             for channel_name in ids:
                 await channel_layer.send(channel_name, {
                     "type": "user_list",
-                    "user_list": user_list
+                    "user_list": connected_user
                 })
 
     async def get_id_by_username(self, username):
