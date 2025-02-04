@@ -129,8 +129,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self._error("chat_unknown_id", disconnect=False)
                 return
             channel_layer = get_channel_layer()
-            message_from = 'Msg from ' + self.username + ': ' + message
-            message_to = 'Msg to ' + target + ': ' + message + '\n'
+            message_from = '✉️ <= ' + self.username + ': ' + message
+            message_to = '✉️ => ' + target + ': ' + message + '\n'
             await self.send(text_data=json.dumps({"message": message_to}))
             for name in names:
                 await channel_layer.send(name, {

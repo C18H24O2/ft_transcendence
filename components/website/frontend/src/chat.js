@@ -39,6 +39,10 @@ export function addChatMessage(message) {
 
 button_on?.addEventListener('click', () => {
 	chat.classList.toggle('hidden');
+	const log = document.querySelector('#chat-log');
+	if (log !== undefined && log !== null) {
+		log.scrollTop = log.scrollHeight;
+	}
 });
 
 // Close the chat when the close button is clicked
@@ -96,15 +100,14 @@ function chatThing()
 				butterup.toast({
 					title: 'Invite',
 					message: data.sender + " {{@ chat.pong_invite @}}",
-					customHTML: '<button class="btn" id="join-game-btn">{{@ chat.pong_accept @}}</button>',
+					customHTML: '<a href="https://cluster-map.42angouleme.fr/login" target="_blank"><button class="btn" id="join-game-btn">{{@ chat.pong_accept @}}</button></a>',
 					location: 'top-left',
 					icon: true,
 					dismissable: true,
 					type: 'info',
 				});
 			}
-			if (data['sys'] != undefined)
-			{
+			if (data['sys'] != undefined) {
 				addChatMessage(error_messages[data.sys]);
 			}
 			// console.log(data);
