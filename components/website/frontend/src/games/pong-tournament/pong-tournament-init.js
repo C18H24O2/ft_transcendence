@@ -324,6 +324,9 @@ function dtor()
 	window.removeEntry = null;
 	window.startTournament = null;
 	intervals.forEach(clearInterval);
+
+	let element = document.getElementById("gameField");
+	element.remove();
 }
 
 setupPage(ctor, dtor);
