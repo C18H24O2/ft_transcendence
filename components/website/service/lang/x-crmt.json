@@ -1,151 +1,151 @@
 {
-	"__lang_name": "Cramptés",
-	"error": {
-		"javascript_required": {
-		"title": "le CramptéScript est desactivé",
-		"desc": "ft_trans necessite que CramptéScript soit activé dans votre Cramptax."
-		},
-		"html5_required": "Votre Cramptax ne supporte pas certaines balises HTML5, pensez a utiliser un Cramptax compatible HTML5 pour continuer a jouer",
-		"missing_text": "pas de données"
-	},
-	"title": {
-		"main": "Bienvenue sur le feur",
-		"login": "Apagnan",
-		"register": "Quoicoubeh",
-		"games": {
-			"pong": "Quoi? Feur!",
-			"pong-tournament": "Quoi? Feur!"
-		},
-		"chat": "e-dating",
-		"account": "(ceux qui savent)"
-	},
-	"button": {
-		"select": "Selectionner un Crampté",
-		"theme": "Changer de Mangue",
-		"login": "Apagnan",
-		"logout": "ApAgNan",
-		"register": "Quoicoubeh",
-		"view": "Changer de Cramptex",
-		"home": "Eau plate",
-		"chat_on": "Afficher les Cramptés",
-		"chat_off": "Cacher les Cramptés",
-		"chat_send": "envoyer le Crampté",
-		"chat_invite": "Cramptinviter",
-		"add_player": "Ajouter un crampteur",
-		"start_tournament": "Crampter le Crampté",
-		"remove": "enlever",
-		"player_name":"Nom du Crampteur",
-		"isAI": "Le joueur est il un Crampté Artificiel",
-		"score_to_win": "Cramptés pour gagner",
-		"start_match": "Commencer le Crampté",
-		"stop_match": "Arreter le Crampté",
-		"login42": "Apagnan avec 42"
-	},
-	"welcome_page": {
-			"title": "Bienvenue sur",
-			"desc_1": "une plateforme pleine de Cramptés populaires",
-			"desc_2": "et une vaste communauté de crampteurs!",
-			"gamemodes": "Voir nos Cramptés"
-	},
-	"login": {
-		"error": {
-			"empty_fields": "Replissez les cramptés svp",
-			"invalid_username": "Crampté Invalide",
-			"known_user": "Crampté existant",
-			"invalid_password": "Crampté de passe invalide",
-			"invalid_totp": "Crapté TOTP invalide",
-			"server_error": "Erreur de Crampté veuillez crampter plus tard",
-			"unknown_error": "Crampté inconnu, dsl",
-			"ft_api_error": "42 s'est crampt chié dessus",
-			"invalid_account_type": "Ce Crampté peux pas crampter comme ca"
-		},
-		"qrcode": {
-			"title": "Ajoutez ce crampté a votre cramptauthentificateur"
-		}
-	},
-	"register": {
-		"error": {
-			"empty_fields": "Replissez les cramptés svp",
-			"invalid_username": "Crampté Invalide",
-			"known_user": "Crampté existant",
-			"reserved_username": "Les cramptés en 42 c'est pour les crampteurs de 42, cramptberge",
-			"invalid_password": "Crampté de passe invalide",
-			"invalid_totp": "Crapté TOTP invalide",
-			"server_error": "Erreur de Crampté veuillez crampter plus tard",
-			"unknown_error": "Crampté inconnu, dsl"
-		}
-	},
-	"chat": {
-		"blocked": "pas de Cramptés",
-		"user_unknown": "Le Crampteur n'est pas connecté ou n'existe pas",
-		"unknown_id": "CramptID inconnu",
-		"help": "/mp <utilisateur> <message>\\n- Envoyer un crampté privé à un autre Crampteur connecté.\\n/(dé)bloquer <utilisateur>\\n- Bloquer ou débloquer un Cramtpeur pour ne pas voir ses messages.\\n/inviter <utilisateur>\\n- Inviter le Crampteur spécifié à une partie de Cramptés.",
-		"unauthenticated": "Vous n'êtes pas Crampthentifié",
-		"missing_info": "Informations du crampté manquantes",
-		"invalid_json": "Le CramptSON que vous avez envoyé est invalide",
-		"invalid_type": "Crampté de type de crampté manquant",
-		"missing_token": "Crampté d'authentification manquant",
-		"invalid_token": "Crampté d'authentification invalide",
-		"authenticated": "Vous êtes déjà authentifié sur le Crampté",
-		"server_error": "Erreur du crampté, veuillez réessayer plus tard",
-		"pong_invite": " vous a invité à crampter",
-		"pong_accept": "Apagaaaaaan!"
-	},
-	"tournament": {
-		"success": {
-			"tournament_won": {
-				"title": "a gagné ce Tournoi des cramptés",
-				"desc": "ce tournoi crampté s'est fait avoir"
-			}
-		},
-		"info": {
-			"player_won": {
-				"title": "a gagné ce Crampté",
-				"desc": "Prochain Crampté bientot"
-			},
-			"match_countdown": {
-				"title": "Prochain crampté dans"
-			},
-			"tournament_countdown": {
-				"title": "Tournoi crampté dans"
-			}
-		},
-		"warning": {
-			"next_match": {
-				"title": "Le prochain crampté c'est: "
-			}
-		},
-		"error": {
-			"player_missing": {
-				"title": "Le tournoi crampté dois avoir au moins 2 Crampteurs"
-			}
-		},
-		"announcer": "Crampté de nous"
-	},
-	"gamemode_cards": {
-		"pong_offline": {
-			"title": "Crampté local",
-			"desc": "L'experience originale du Crampté, sur votre Cramptax!"
-		},
-		"pong_online": {
-			"title": "Crampté en Ligne",
-			"desc": "Jouez contre d'autres crampteurs et montrez que VOUS êtes le Sigma"
-		},
-		"pong_tournament": {
-			"title": "Tournoi Crampté",
-			"desc": "Jouez contre vos quoicoubebous et devenez le looksmaxxer!"
-		},
-		"pong_crazy": {
-			"title": "Crampté de bz",
-			"desc": "Un crampté sans son quoicoubeh"
-		}
-	},
-	"placeholders": {
-		"username": "Eau Plate",
-		"password": "Mangue (ceux qui savent)",
-		"message_send": "Envoyer un Crampté",
-		"friends": "Sigmas",
-		"add_player":"Ajouter un crampteur",
-		"totpCode": "le code la oh"
-	}
+  "__lang_name": "Cramptés",
+  "error": {
+    "javascript_required": {
+      "title": "le CramptéScript est desactivé",
+      "desc": "ft_trans necessite que CramptéScript soit activé dans votre Cramptax."
+    },
+    "html5_required": "Votre Cramptax ne supporte pas certaines balises HTML5, pensez a utiliser un Cramptax compatible HTML5 pour continuer a jouer",
+    "missing_text": "pas de données"
+  },
+  "title": {
+    "main": "Bienvenue sur le feur",
+    "login": "Apagnan",
+    "register": "Quoicoubeh",
+    "games": {
+      "pong": "Quoi? Feur!",
+      "pong-tournament": "Quoi? Feur!"
+    },
+    "chat": "e-dating",
+    "account": "(ceux qui savent)"
+  },
+  "button": {
+    "select": "Selectionner un Crampté",
+    "theme": "Changer de Mangue",
+    "login": "Apagnan",
+    "logout": "ApAgNan",
+    "register": "Quoicoubeh",
+    "view": "Changer de Cramptex",
+    "home": "Eau plate",
+    "chat_on": "Afficher les Cramptés",
+    "chat_off": "Cacher les Cramptés",
+    "chat_send": "envoyer le Crampté",
+    "chat_invite": "Cramptinviter",
+    "add_player": "Ajouter un crampteur",
+    "start_tournament": "Crampter le Crampté",
+    "remove": "enlever",
+    "player_name": "Nom du Crampteur",
+    "isAI": "Le joueur est il un Crampté Artificiel",
+    "score_to_win": "Cramptés pour gagner",
+    "start_match": "Commencer le Crampté",
+    "stop_match": "Arreter le Crampté",
+    "login42": "Apagnan avec 42"
+  },
+  "welcome_page": {
+    "title": "Bienvenue sur",
+    "desc_1": "une plateforme pleine de Cramptés populaires",
+    "desc_2": "et une vaste communauté de crampteurs!",
+    "gamemodes": "Voir nos Cramptés"
+  },
+  "login": {
+    "error": {
+      "empty_fields": "Replissez les cramptés svp",
+      "invalid_username": "Crampté Invalide",
+      "known_user": "Crampté existant",
+      "invalid_password": "Crampté de passe invalide",
+      "invalid_totp": "Crapté TOTP invalide",
+      "server_error": "Erreur de Crampté veuillez crampter plus tard",
+      "unknown_error": "Crampté inconnu, dsl",
+      "ft_api_error": "42 s'est crampt chié dessus",
+      "invalid_account_type": "Ce Crampté peux pas crampter comme ca"
+    },
+    "qrcode": {
+      "title": "Ajoutez ce crampté a votre cramptauthentificateur"
+    }
+  },
+  "register": {
+    "error": {
+      "empty_fields": "Replissez les cramptés svp",
+      "invalid_username": "Crampté Invalide",
+      "known_user": "Crampté existant",
+      "reserved_username": "Les cramptés en 42 c'est pour les crampteurs de 42, cramptberge",
+      "invalid_password": "Crampté de passe invalide",
+      "invalid_totp": "Crapté TOTP invalide",
+      "server_error": "Erreur de Crampté veuillez crampter plus tard",
+      "unknown_error": "Crampté inconnu, dsl"
+    }
+  },
+  "chat": {
+    "blocked": "pas de Cramptés",
+    "user_unknown": "Le Crampteur n'est pas connecté ou n'existe pas",
+    "unknown_id": "CramptID inconnu",
+    "help": "/mp <utilisateur> <message>\\n- Envoyer un crampté privé à un autre Crampteur connecté.\\n/(dé)bloquer <utilisateur>\\n- Bloquer ou débloquer un Cramtpeur pour ne pas voir ses messages.\\n/inviter <utilisateur>\\n- Inviter le Crampteur spécifié à une partie de Cramptés.",
+    "unauthenticated": "Vous n'êtes pas Crampthentifié",
+    "missing_info": "Informations du crampté manquantes",
+    "invalid_json": "Le CramptSON que vous avez envoyé est invalide",
+    "invalid_type": "Crampté de type de crampté manquant",
+    "missing_token": "Crampté d'authentification manquant",
+    "invalid_token": "Crampté d'authentification invalide",
+    "authenticated": "Vous êtes déjà authentifié sur le Crampté",
+    "server_error": "Erreur du crampté, veuillez réessayer plus tard",
+    "pong_invite": " vous a invité à crampter",
+    "pong_accept": "Apagaaaaaan!"
+  },
+  "tournament": {
+    "success": {
+      "tournament_won": {
+        "title": "a gagné ce Tournoi des cramptés",
+        "desc": "ce tournoi crampté s'est fait avoir"
+      }
+    },
+    "info": {
+      "player_won": {
+        "title": "a gagné ce Crampté",
+        "desc": "Prochain Crampté bientot"
+      },
+      "match_countdown": {
+        "title": "Prochain crampté dans"
+      },
+      "tournament_countdown": {
+        "title": "Tournoi crampté dans"
+      }
+    },
+    "warning": {
+      "next_match": {
+        "title": "Le prochain crampté c'est: "
+      }
+    },
+    "error": {
+      "player_missing": {
+        "title": "Le tournoi crampté dois avoir au moins 2 Crampteurs"
+      }
+    },
+    "announcer": "Crampté de nous"
+  },
+  "gamemode_cards": {
+    "pong_offline": {
+      "title": "Crampté local",
+      "desc": "L'experience originale du Crampté, sur votre Cramptax!"
+    },
+    "pong_online": {
+      "title": "Crampté en Ligne",
+      "desc": "Jouez contre d'autres crampteurs et montrez que VOUS êtes le Sigma"
+    },
+    "pong_tournament": {
+      "title": "Tournoi Crampté",
+      "desc": "Jouez contre vos quoicoubebous et devenez le looksmaxxer!"
+    },
+    "pong_crazy": {
+      "title": "Crampté de bz",
+      "desc": "Un crampté sans son quoicoubeh"
+    }
+  },
+  "placeholders": {
+    "username": "Eau Plate",
+    "password": "Mangue (ceux qui savent)",
+    "message_send": "Envoyer un Crampté",
+    "friends": "Sigmas",
+    "add_player": "Ajouter un crampteur",
+    "totpCode": "le code la oh"
+  }
 }

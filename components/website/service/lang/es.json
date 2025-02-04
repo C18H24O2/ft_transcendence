@@ -1,151 +1,151 @@
 {
-	"__lang_name": "Español",
-	"error": {
-		"javascript_required": {
-			"title": "JavaScript está desactivado",
-			"desc": "ft_trans requiere que JavaScript esté habilitado en tu navegador."
-		},
-		"html5_required": "Tu navegador no soporta algunas funciones de HTML5, por favor considera usar un navegador compatible con HTML5 para continuar jugando",
-		"missing_text": "Sin Datos"
-	},
-	"title": {
-		"main": "Bienvenido al sitio web",
-		"login": "Iniciar sesión",
-		"register": "Registrar",
-		"games": {
-			"pong": "¿Ping? ¡Pong!",
-			"pong-tournament": "¿Ping? ¡Pong!"
-		},
-		"chat": "Chat en vivo",
-		"account": "Cuentas"
-	},
-	"button": {
-		"select": "Selecctionar modos de juego",
-		"theme": "Cambiar tema",
-		"login": "Iniciar sesión",
-		"logout": "Finalizar la sesión",
-		"register": "Registrar",
-		"view": "Cambiar vista",
-		"home": "Inicio",
-		"chat_on": "Mostrar Chat",
-		"chat_off": "Ocultar Chat",
-		"chat_send": "Enviar",
-		"chat_invite": "Invitar",
-		"add_player": "Agregar un jugador",
-		"start_tournament": "Comenzar el torneo",
-		"remove": "Eliminar",
-		"player_name":"Nombre del jugador",
-		"isAI": "¿Es el jugador una IA?",
-		"score_to_win": "Puntuación para ganar",
-		"start_match": "Empezar partido",
-		"stop_match": "Detener partido",
-		"login42": "Autenticar con 42"
-	},
-	"welcome_page": {
-		"title": "Bienvenido a",
-		"desc_1": "una plataforma de juegos gratuita y de código abierto con",
-		"desc_2": "juegos populares y una vasta comunidad de jugadores.",
-		"gamemodes": "Ver nuestros modos de juego"
-	},
-	"login": {
-		"error": {
-			"empty_fields": "Por favor, complete todos los campos",
-			"invalid_username": "Nombre de usuario inválido",
-			"known_user": "El usuario ya está registrado",
-			"invalid_password": "Contraseña inválida",
-			"invalid_totp": "Código TOTP inválido",
-			"server_error": "Error del servidor, por favor intente nuevamente más tarde",
-			"unknown_error": "Error desconocido, lo sentimos",
-			"ft_api_error": "42 devolvió un error, por favor intente nuevamente más tarde",
-			"invalid_account_type": "No puedes usar este método de inicio de sesión con este tipo de cuenta"
-		},
-		"qrcode": {
-			"title": "Agregue este código qr a su aplicación de autenticación"
-		}
-	},
-	"register": {
-		"error": {
-			"empty_fields": "Por favor, complete todos los campos",
-			"invalid_username": "Nombre de usuario inválido",
-			"known_user": "El usuario ya está registrado",
-			"reserved_username": "Los nombres de usuario que terminan en 42 están reservados para la autenticación de 42, por favor, usa otro.",
-			"invalid_password": "Contraseña inválida",
-			"invalid_totp": "Código TOTP inválido",
-			"server_error": "Error del servidor, por favor intente nuevamente más tarde",
-			"unknown_error": "Error desconocido, lo sentimos"
-		}
-	},
-	"chat": {
-		"blocked": "Estás bloqueado",
-		"user_unknown": "El usuario no está conectado o no existe",
-		"unknown_id": "ID desconocido",
-		"help": "/mp <usuario> <mensaje>\\n- Envía un mensaje privado a otro usuario conectado.\\n/(des)bloquear <usuario>\\n- Bloquea o desbloquea a un usuario para no ver sus mensajes.\\n/invitar <usuario>\\n- Invita al usuario especificado a un juego de pong.",
-		"unauthenticated": "No estás autenticado",
-		"missing_info": "Falta información del mensaje",
-		"invalid_json": "El JSON que enviaste es inválido",
-		"invalid_type": "Falta el campo de tipo de mensaje",
-		"missing_token": "Falta el token de autenticación",
-		"invalid_token": "Token de autenticación inválido",
-		"authenticated": "Ya estás autenticado en el chat",
-		"server_error": "Error del servidor, por favor intenta de nuevo más tarde",
-		"pong_invite": " te ha invitado a jugar",
-		"pong_accept": "¡Por supuesto!"
-	},
-	"tournament": {
-		"success": {
-			"tournament_won": {
-				"title": "ha ganado el torneo",
-				"desc": "Este torneo ya ha finalizado."
-			}
-		},
-		"info": {
-			"player_won": {
-				"title": "ha ganado este partido",
-				"desc": "El próximo partido comenzará en breve."
-			},
-			"match_countdown": {
-				"title": "El próximo partido comenzará en"
-			},
-			"tournament_countdown": {
-				"title": "Torneo que comienza en"
-			}
-		},
-		"warning": {
-			"next_match": {
-				"title": "El próximo partido será:"
-			}
-		},
-		"error": {
-			"player_missing": {
-				"title": "El torneo debe tener al menos 2 jugadores."
-			}
-		},
-		"announcer": "Mensaje del Sistema"
-	},
-	"gamemode_cards": {
-		"pong_offline": {
-			"title": "Pong Offline",
-			"desc": "¡La experiencia clásica de pong, ahora en tu navegador!"
-		},
-		"pong_online": {
-			"title": "Pong Online",
-			"desc": "¡Juega contra otros jugadores en una épica batalla en tiempo real!"
-		},
-		"pong_tournament": {
-			"title": "Torneo de Pong",
-			"desc": "¡Lucha contra tus amigos y conviértete en el campeón!"
-		},
-		"pong_crazy": {
-			"title": "Pong loco",
-			"desc": "Una versión con errores del juego que nos pareció divertida"
-		}
-	},
-	"placeholders": {
-		"username": "Nombre de usuario",
-		"password": "Contraseña",
-		"message_send": "enviar un mensaje",
-		"friends": "Amigos",
-		"add_player": "Agregar un jugador",
-		"totpCode": "Código de autenticación"
-	}
+  "__lang_name": "Español",
+  "error": {
+    "javascript_required": {
+      "title": "JavaScript está desactivado",
+      "desc": "ft_trans requiere que JavaScript esté habilitado en tu navegador."
+    },
+    "html5_required": "Tu navegador no soporta algunas funciones de HTML5, por favor considera usar un navegador compatible con HTML5 para continuar jugando",
+    "missing_text": "Sin Datos"
+  },
+  "title": {
+    "main": "Bienvenido al sitio web",
+    "login": "Iniciar sesión",
+    "register": "Registrar",
+    "games": {
+      "pong": "¿Ping? ¡Pong!",
+      "pong-tournament": "¿Ping? ¡Pong!"
+    },
+    "chat": "Chat en vivo",
+    "account": "Cuentas"
+  },
+  "button": {
+    "select": "Selecctionar modos de juego",
+    "theme": "Cambiar tema",
+    "login": "Iniciar sesión",
+    "logout": "Finalizar la sesión",
+    "register": "Registrar",
+    "view": "Cambiar vista",
+    "home": "Inicio",
+    "chat_on": "Mostrar Chat",
+    "chat_off": "Ocultar Chat",
+    "chat_send": "Enviar",
+    "chat_invite": "Invitar",
+    "add_player": "Agregar un jugador",
+    "start_tournament": "Comenzar el torneo",
+    "remove": "Eliminar",
+    "player_name": "Nombre del jugador",
+    "isAI": "¿Es el jugador una IA?",
+    "score_to_win": "Puntuación para ganar",
+    "start_match": "Empezar partido",
+    "stop_match": "Detener partido",
+    "login42": "Autenticar con 42"
+  },
+  "welcome_page": {
+    "title": "Bienvenido a",
+    "desc_1": "una plataforma de juegos gratuita y de código abierto con",
+    "desc_2": "juegos populares y una vasta comunidad de jugadores.",
+    "gamemodes": "Ver nuestros modos de juego"
+  },
+  "login": {
+    "error": {
+      "empty_fields": "Por favor, complete todos los campos",
+      "invalid_username": "Nombre de usuario inválido",
+      "known_user": "El usuario ya está registrado",
+      "invalid_password": "Contraseña inválida",
+      "invalid_totp": "Código TOTP inválido",
+      "server_error": "Error del servidor, por favor intente nuevamente más tarde",
+      "unknown_error": "Error desconocido, lo sentimos",
+      "ft_api_error": "42 devolvió un error, por favor intente nuevamente más tarde",
+      "invalid_account_type": "No puedes usar este método de inicio de sesión con este tipo de cuenta"
+    },
+    "qrcode": {
+      "title": "Agregue este código qr a su aplicación de autenticación"
+    }
+  },
+  "register": {
+    "error": {
+      "empty_fields": "Por favor, complete todos los campos",
+      "invalid_username": "Nombre de usuario inválido",
+      "known_user": "El usuario ya está registrado",
+      "reserved_username": "Los nombres de usuario que terminan en 42 están reservados para la autenticación de 42, por favor, usa otro.",
+      "invalid_password": "Contraseña inválida",
+      "invalid_totp": "Código TOTP inválido",
+      "server_error": "Error del servidor, por favor intente nuevamente más tarde",
+      "unknown_error": "Error desconocido, lo sentimos"
+    }
+  },
+  "chat": {
+    "blocked": "Estás bloqueado",
+    "user_unknown": "El usuario no está conectado o no existe",
+    "unknown_id": "ID desconocido",
+    "help": "/mp <usuario> <mensaje>\\n- Envía un mensaje privado a otro usuario conectado.\\n/(des)bloquear <usuario>\\n- Bloquea o desbloquea a un usuario para no ver sus mensajes.\\n/invitar <usuario>\\n- Invita al usuario especificado a un juego de pong.",
+    "unauthenticated": "No estás autenticado",
+    "missing_info": "Falta información del mensaje",
+    "invalid_json": "El JSON que enviaste es inválido",
+    "invalid_type": "Falta el campo de tipo de mensaje",
+    "missing_token": "Falta el token de autenticación",
+    "invalid_token": "Token de autenticación inválido",
+    "authenticated": "Ya estás autenticado en el chat",
+    "server_error": "Error del servidor, por favor intenta de nuevo más tarde",
+    "pong_invite": " te ha invitado a jugar",
+    "pong_accept": "¡Por supuesto!"
+  },
+  "tournament": {
+    "success": {
+      "tournament_won": {
+        "title": "ha ganado el torneo",
+        "desc": "Este torneo ya ha finalizado."
+      }
+    },
+    "info": {
+      "player_won": {
+        "title": "ha ganado este partido",
+        "desc": "El próximo partido comenzará en breve."
+      },
+      "match_countdown": {
+        "title": "El próximo partido comenzará en"
+      },
+      "tournament_countdown": {
+        "title": "Torneo que comienza en"
+      }
+    },
+    "warning": {
+      "next_match": {
+        "title": "El próximo partido será:"
+      }
+    },
+    "error": {
+      "player_missing": {
+        "title": "El torneo debe tener al menos 2 jugadores."
+      }
+    },
+    "announcer": "Mensaje del Sistema"
+  },
+  "gamemode_cards": {
+    "pong_offline": {
+      "title": "Pong Offline",
+      "desc": "¡La experiencia clásica de pong, ahora en tu navegador!"
+    },
+    "pong_online": {
+      "title": "Pong Online",
+      "desc": "¡Juega contra otros jugadores en una épica batalla en tiempo real!"
+    },
+    "pong_tournament": {
+      "title": "Torneo de Pong",
+      "desc": "¡Lucha contra tus amigos y conviértete en el campeón!"
+    },
+    "pong_crazy": {
+      "title": "Pong loco",
+      "desc": "Una versión con errores del juego que nos pareció divertida"
+    }
+  },
+  "placeholders": {
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "message_send": "enviar un mensaje",
+    "friends": "Amigos",
+    "add_player": "Agregar un jugador",
+    "totpCode": "Código de autenticación"
+  }
 }
