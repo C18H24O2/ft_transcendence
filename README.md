@@ -1,4 +1,4 @@
-# [ft_trans](https://cdn.intra.42.fr/pdf/pdf/133398/en.subject.pdf) [![CodeFactor](https://www.codefactor.io/repository/github/c18h24o2/ft_transcendence/badge/main)](https://www.codefactor.io/repository/github/c18h24o2/ft_transcendence/overview/main) [![Build with Docker Compose](https://github.com/C18H24O2/ft_transcendence/actions/workflows/build-docker.yml/badge.svg)](https://github.com/C18H24O2/ft_transcendence/actions/workflows/build-docker.yml) [![Run tests](https://github.com/C18H24O2/ft_transcendence/actions/workflows/test.yml/badge.svg)](https://github.com/C18H24O2/ft_transcendence/actions/workflows/test.yml)
+# [ft_trans](https://projects.intra.42.fr/ft_transcendence/lvincent) [![CodeFactor](https://www.codefactor.io/repository/github/c18h24o2/ft_transcendence/badge/main)](https://www.codefactor.io/repository/github/c18h24o2/ft_transcendence/overview/main) [![Build with Docker Compose](https://github.com/C18H24O2/ft_transcendence/actions/workflows/build-docker.yml/badge.svg)](https://github.com/C18H24O2/ft_transcendence/actions/workflows/build-docker.yml) [![Run tests](https://github.com/C18H24O2/ft_transcendence/actions/workflows/test.yml/badge.svg)](https://github.com/C18H24O2/ft_transcendence/actions/workflows/test.yml)
 
 > Ping? Pong! Now with a side of `Uncaught TypeError: this.document is undefined`
 
@@ -13,63 +13,59 @@ This monorepo contains the code for `ft_transcendence`, the last project at 42 s
   - `nginx/`
     - HTTP Server configuration and setup files
   - `services/`
-    - The backend services, organized in a micro-services architecture 
-  - `vault/`
-    - HashiCorp Vault configuration and setup files (i hope lol)
+    - The backend services, with custom-built micro-services
   - `website/`
-    - HTML/JavaScript front-end, to be served by the API
+    - HTML/JavaScript front-end & website service
 
 ## Chosen modules
 
-The transcendance project is split into multiple Minor and Major modules; here's a list of what we have chosen.
-
-Note that a checkbox means the module will be implemented, and a checkmark (✅) means it's completed.
+The transcendance project is split into multiple Minor and Major modules; here's a list of what we have chosen:
 
 <!-- MODULES_START -->
 
 - **Web**
-  - [x] (Major) ✅ Use a Framework as backend
+  - [x] (Major) Use a Framework as backend
   - [ ] (Minor) Use a front-end framework or toolkit
-  - [x] (Minor) ✅ Use a database for the backend
+  - [x] (Minor) Use a database for the backend
   - [ ] (Major) Store the score of a tournament in a Blockchain
 
 - **User Management**
-  - [ ] (Major) Standard user management, authentication, users across tournaments `kiroussa` `lvincent`
-  - [x] (Major) Implementing remote authentication (OAuth2) + JWT `kiroussa`
+  - [ ] (Major) Standard user management, authentication, users across tournaments
+  - [x] (Major) Implementing remote authentication (OAuth2) + JWT
 
 - **Gameplay and User Experience**
-  - [ ] (Major) Remote players `lvincent` `gpouzet`
-  - [ ] (Major) :question: Multiplayer (> 2 players)
+  - [ ] (Major) Remote players
+  - [ ] (Major) Multiplayer (> 2 players)
   - [ ] (Major) Add another Game (w/ User History & Matchmaking)
   - [ ] (Minor) Game customization options 
-  - [x] (Major) Live chat `gpouzet`
+  - [x] (Major) Live chat
 
 - **AI / Algorithm**
   - [x] (Major) Introduce an AI opponent
   - [ ] (Minor) User and Game stats dashboard
 
 - **Cybersecurity**
-  - [ ] (Major) :question: Implement WAF/ModSecurity w/ Hardened Configuration and HashiCorp Vault for Secrets Management `kiroussa`
+  - [ ] (Major) Implement WAF/ModSecurity w/ Hardened Configuration and HashiCorp Vault for Secrets Management
   - [ ] (Minor) GDPR Compliance options with User Anonymization, local data management, and account deletion
   - [x] (Major) Implement Two-Factor Authentication (2FA)
 
 - **Devops**
   - [ ] (Major) Infrastructure setup for log management
-  - [x] (Minor) ✅ Monitoring system `kiroussa`
-  - [x] (Major) ✅ Designing the Backend as Microservices `kiroussa` 
+  - [x] (Minor) Monitoring system
+  - [x] (Major) Designing the Backend as Microservices
 
 - **Graphics**
-  - [x] (Major) ✅ Use of ~~advanced~~ 3D techniques. `lvincent`
+  - [x] (Major) Use of advanced 3D techniques
 
 - **Accessibility**
   - [ ] (Minor) Support on all devices
-  - [x] (Minor) ✅ Expanding Browser compatibility `?`
-  - [x] (Minor) ✅ Multiple language support `lvincent`
+  - [x] (Minor) Expanding Browser compatibility
+  - [x] (Minor) Multiple language support
   - [ ] (Minor) Add accessibility for visually impaired users
-  - [x] (Minor) ✅ Server-Side Rendering (SSR) integration `kiroussa`
+  - [x] (Minor) Server-Side Rendering (SSR) integration
 
 - **Server-Side Pong**
-  - [ ] (Major) Replace basic pong with server-side pong and implementing an API `kiroussa` `lvincent`
+  - [ ] (Major) Replace basic pong with server-side pong and implementing an API
   - [ ] (Major) Enabling pong gameplay via CLI against web users with API integration
 
 <!-- MODULES_END -->
@@ -78,7 +74,7 @@ Note that a checkbox means the module will be implemented, and a checkmark (✅)
 
 First off, you'll need to fill a `.env` file. You can use the `.env.example` file as a template, or if you're lazy, just:
 ```bash
-ln -s .env.example .env
+./scripts/create_env_files.sh
 ```
 
 To start everything, simply run:

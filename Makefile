@@ -17,16 +17,11 @@ clean:
 
 re: down up
 
-fuck-you-docker: up
-	docker system prune -f
-
 dev:
 	pnpm run --prefix components/website/frontend dev
 
-ensure-frontend-not-fucked:
+test:
 	pnpm install --prefix components/website/frontend
 	pnpm run --prefix components/website/frontend build
 
-test: ensure-frontend-not-fucked
-
-.PHONY: up down re dev ensure-frontend-not-fucked test
+.PHONY: up down re dev test
