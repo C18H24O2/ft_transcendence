@@ -19,7 +19,7 @@ services:
       - nginx-internal
     ports:
       - "8043:443"      # HTTPS
-      - "6943:6943"     # Vault
+      # - "6943:6943"     # Vault
       # - "14321:14321" # Internal health & metrics (debug)
     restart: always
     healthcheck:

@@ -28,8 +28,6 @@ services:
       - db:/var/lib/postgresql/data
     networks:
       - postgres
-    ports: #TODO: this is for development only, to remove later
-      - "5432:5432"
     restart: unless-stopped
     healthcheck:
       test: "pg_isready -U $POSTGRES_USER"
@@ -48,8 +46,6 @@ services:
       - valkey
     command:
       - /etc/valkey/valkey-custom.conf
-    ports: #TODO: this is for development only, to remove later
-      - "6942:6942"
     restart: unless-stopped
     healthcheck:
       test: "valkey-cli -p 6942 ping"
@@ -67,8 +63,6 @@ services:
       - rabbitmq
       - nginx
       - prometheus-exporters
-    ports: #TODO: this is for development only, to remove later
-      - "7815:7815"
     restart: unless-stopped
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
